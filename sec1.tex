@@ -131,7 +131,7 @@ $\lambda{}x.A$ связывает все свободные вхождения $
     \mathrm{IsEven} &= \lambda{}n.n\ \Not\ \T \\
     \mathrm{Add} &= \lambda{}a.\lambda{}b.\lambda{}f.\lambda{}x.a f (b f x) \\
     \mathrm{Mul} &= \lambda{}a.\lambda{}b.a (\mathrm{Add}\ b) \overline{0} \\
-    \mathrm{Pow} &= \lambda{}a.\lambda{}b.a (\mathrm{Mul}\ b) \overline{1} \\
+    \mathrm{Pow} &= \lambda{}a.\lambda{}b.b (\mathrm{Mul}\ a) \overline{1} \\
     \mathrm{Pow}^{*} &= \lambda{}a.\lambda{}b.b a
 \end{alignat*}
 
