@@ -128,6 +128,7 @@ $\lambda{}x.A$ связывает все свободные вхождения $
 \begin{alignat*}{2}
     (+1) &= \lambda{}n.\lambda{}f.\lambda{}x.f(nfx) \\
     \mathrm{IsZero} &= \lambda{}n.n(\lambda{}x.\T)\F \\
+    \mathrm{IsEven} &= \lambda{}n.n\ \Not\ \T \\
     \mathrm{Add} &= \lambda{}a.\lambda{}b.\lambda{}f.\lambda{}x.a f (b f x) \\
     \mathrm{Mul} &= \lambda{}a.\lambda{}b.a (\mathrm{Add}\ b) \overline{0} \\
     \mathrm{Pow} &= \lambda{}a.\lambda{}b.a (\mathrm{Mul}\ b) \overline{1} \\
@@ -143,7 +144,7 @@ $\lambda{}x.A$ связывает все свободные вхождения $
 
 $n$ раз применим функцию $f\left(\left<a,b\right>\right) = \left<b,b+1\right>$ и возьмём первый элемент пары:
 \[
-    (-1) = \lambda n . \mathrm{First} \left(n\ (\lambda p . \left<\left(\mathrm{Second}\ p\right), (+1)\ \mathrm{Second}\ p\right>)\ \overline{0}\right)
+    (-1) = \lambda n . \mathrm{First} \left(n\ (\lambda p . \left<\left(\mathrm{Second}\ p\right), (+1)\ (\mathrm{Second}\ p)\right>)\ \overline{0}\right)
 \]
 
 Сокращение записи:
