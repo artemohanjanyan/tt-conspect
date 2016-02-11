@@ -1,0 +1,202 @@
+\section{$\lambda$-исчисление}
+
+\begin{definition}[$\lambda$-выражение]
+    $\lambda$-выражение "--- выражение, удовлетворяющее грамматике:
+    \begin{bnf}
+    \begin{alignat*}{3}
+        \Lambda ::= & \lambda{}x.\Lambda{} \qquad && (абстракция) \\
+                  | & \Lambda{}\Lambda{}          && (аппликация) \\
+                  | & x                                           \\
+                  | & \left(\Lambda\right)
+    \end{alignat*}
+    \end{bnf}
+    \begin{enumerate}[label=(\alph*)]
+        \item аппликация левоассоциативна
+        \item абстракция распространяется как можно дальше вправо
+        \item смысла в этом нет
+    \end{enumerate}
+\end{definition}
+
+\begin{example}
+    $((\lambda{} z.(z (y z))) (z x) z) = (\lambda{} z.z (y z)) (z x) z$
+\end{example}
+%[(а)]
+%[(б)]
+%[(в)]
+
+Есть понятия связанного и свободного вхождения переменной (аналогично ИП).
+$\lambda{}x.A$ связывает все свободные вхождения $x$ в $A$.
+Договоримся, что:
+\begin{enumerate}[label=(\alph*)]
+    \item Переменные "--- $x$, $a$, $b$, $c$.
+    \item Термы (части $\lambda$-выражения) "--- $X$, $A$, $B$, $C$.
+    \item Фиксированные переменные обозначаются буквами из начала алфавита, метапеременные "--- из конца.
+\end{enumerate}
+
+\begin{definition}[$\alpha$-эквивалентность]
+    $A$ и $B$ называются $\alpha$-эквивалентными ($A=_{\alpha}B$), если выполнено одно из следующих условий:
+    \begin{enumerate}
+        \item $A\equiv{}x$ и $B\equiv{}x$ .
+        \item $A\equiv{}\lambda{}x.P$ и $B\equiv{}\lambda{}x.Q$. Пусть $t$ "--- новая переменная, тогда
+            $P_{[x:=t]}=_{\alpha}Q_{[y:=t]}$ .
+        \item $A\equiv{}PQ$, $B\equiv{}RS$, $P=_{\alpha}R$, $Q=_{\alpha}S$ .
+    \end{enumerate}
+\end{definition}
+
+\begin{example}
+    $\lambda{}x.\lambda{}y.xy=_{\alpha}\lambda{}y.\lambda{}x.yx$.
+    \begin{proof}
+        \begin{alignat*}{2}
+            \lambda{}y.ty=_{\alpha}\lambda{}x.tx &\implies \lambda{}x.\lambda{}y.xy=_{\alpha}\lambda{}y.\lambda{}x.yx \\
+            tz=_{\alpha}tz &\implies \lambda{}y.ty=_{\alpha}\lambda{}x.tx
+        \end{alignat*}
+        $tz=_{\alpha}tz$ верно по третьему условию.
+    \end{proof}
+\end{example}
+
+\begin{definition}[$\beta$-редекс]
+    Терм вида $\left(\lambda{}a.A\right)B$ называется $\beta$-редексом.
+\end{definition}
+
+\begin{example}
+    В выражении
+    $
+        (
+            \lambda{}f.
+                \underset{A_2}{\underline{
+                    (\lambda{}x.\overset{A_1}{\overline{f(xx)}})
+                    \overset{B_1}{\overline{(\lambda{}x.f(xx))}}
+                }}
+        )\underset{B_2}{\underline{g}}
+    $ два $\beta$-редекса.
+\end{example}
+
+\begin{definition}
+    Множество $\lambda$-термов $\bm{\Lambda}$ назовём множеством классов эквивалентности $\Lambda$ по $(=_{\alpha})$.
+\end{definition}
+
+\begin{definition}[$\beta$-редукция]
+    $A\rightarrow_{\beta}B$ (состоят в отношении $\beta$-редукции), если выполняется одно из условий:
+    \begin{enumerate}
+        \item $A\equiv{}PQ$, $B\equiv{}RS$ и
+        \begin{alignat*}{3}
+            &\text{либо } P\rightarrow_{\beta}R  &&\text{ и } Q=_{\alpha}S \\
+            &\text{либо } P=_{\alpha}R           &&\text{ и } Q\rightarrow_{\beta}S
+        \end{alignat*}
+        \item $A\equiv{}\lambda{}x.P$, $B\equiv{}\lambda{}x.Q$, $P\rightarrow_{\beta}Q$ ($x$ из какого-то класса из $\bm{\Lambda}$).
+        \item $A\equiv{}(\lambda{}x.P)Q$, $B\equiv{}P_{[x:=Q]}$, $Q$ свободно для подстановки в $P$ вместо $x$.
+    \end{enumerate}
+\end{definition}
+
+\paragraph{Итак, лулзы.} Хотите знать, что такое истина?
+\newcommand{\T}{\mathrm{T}}
+\newcommand{\F}{\mathrm{F}}
+\newcommand{\Not}{\mathrm{Not}}
+\begin{alignat*}{2}
+    \T   &= \lambda{}x\lambda{}y.x \\
+    \F   &= \lambda{}x\lambda{}y.y \\
+    \Not &= \lambda{}a.a\F\T
+\end{alignat*}
+
+Похоже на тип boolean, не правда ли?
+\begin{example}
+    \[
+        \Not\ \T = (\lambda{}a.a\F\T)\T \rightarrow_{\beta}
+            \T\F\T = (\lambda{}x.\lambda{}y.x)\F\T \rightarrow_{\beta}
+            (\lambda{}y.\F)\T \rightarrow_{\beta}
+            \F
+    \]
+\end{example}
+
+Можно продолжить:
+\begin{alignat*}{2}
+    \mathrm{And} &= \lambda{}a.\lambda{}b.ab\mathrm{F} \\
+    \mathrm{Or}  &= \lambda{}a.\lambda{}b.a\mathrm{T}b
+\end{alignat*}
+
+Попробуем определить числа:
+\[
+    \overline{n}=\lambda{}f.\lambda{}x.f^{n}x \text{,\quadгде\quad}
+    f^{n}x=
+    \begin{cases}
+        f\left(f^{n-1}x\right) &, n > 0 \\
+        x                      &, n = 0
+    \end{cases}
+\]
+
+Это называют числами Чёрча.
+\begin{alignat*}{2}
+    (+1) &= \lambda{}n.\lambda{}f.\lambda{}x.f(nfx) \\
+    \mathrm{IsZero} &= \lambda{}n.n(\lambda{}x.\T)\F \\
+    \mathrm{Add} &= \lambda{}a.\lambda{}b.\lambda{}f.\lambda{}x.a f (b f x) \\
+    \mathrm{Mul} &= \lambda{}a.\lambda{}b.a (\mathrm{Add}\ b) \overline{0} \\
+    \mathrm{Pow} &= \lambda{}a.\lambda{}b.a (\mathrm{Mul}\ b) \overline{1} \\
+    \mathrm{Pow}^{*} &= \lambda{}a.\lambda{}b.b a
+\end{alignat*}
+
+Для того, чтобы определить $(-1)$, сначала определим "пару":
+\begin{alignat*}{2}
+    \left<a,b\right> &= \lambda f.f a b \\
+    \mathrm{First} &= \lambda p . \T p \\
+    \mathrm{Second} &= \lambda p . \F p
+\end{alignat*}
+
+$n$ раз применим функцию $f\left(\left<a,b\right>\right) = \left<b,b+1\right>$ и возьмём первый элемент пары:
+\[
+    (-1) = \lambda n . \mathrm{First} \left(n\ (\lambda p . \left<\left(\mathrm{Second}\ p\right), (+1)\ \mathrm{Second}\ p\right>)\ \overline{0}\right)
+\]
+
+Сокращение записи:
+\[
+    \lambda x y . A = \lambda x . \lambda y . A
+\]
+
+\begin{definition}[Нормальная форма] \mbox{} \\
+    Терм $A$ "--- нормальная форма (н.ф.), если в нём нет $\beta$-редексов. \\
+    Нормальной формой $A$ называется такой $B$, что $A \twoheadrightarrow_{\beta} B$, $B$ "--- н.ф. \\
+    $\twoheadrightarrow_{\beta}$ "--- транзитивно-рефлексивное замыкание $\rightarrow_{\beta}$.
+\end{definition}
+
+\begin{statement}
+    Существует $\lambda$-выражение, не имеющее н.ф.
+    \begin{gather*}
+        \Omega = \omega \omega \\
+        \omega = \lambda x . x x
+    \end{gather*}
+\end{statement}
+
+\begin{definition}[Комбинатор]
+    Комбинатор "--- $\lambda$-выражение без свободных переменных.
+\end{definition}
+
+Комбинатор неподвижной точки:
+\[
+    Y = \lambda f . (\lambda x . f (x x)) (\lambda x . f (x x))
+\]
+
+\begin{definition}[$\beta$-эквивалентность]
+    $A=_{\beta}B$, если $\exists C : C \twoheadrightarrow_{\beta} A, C \twoheadrightarrow_{\beta}B$
+\end{definition}
+
+\begin{statement}
+    \[
+        Yf =_{\beta} f(Yf)
+    \]
+\end{statement}
+
+\begin{proof} (на лекции не давалось)
+    \begin{align*}
+        Yf &=_{\beta} (\lambda f . (\lambda x . f (x x)) (\lambda x . f (x x))) f \\
+           &=_{\beta} (\lambda x . f (x x)) (\lambda x . f (x x)) \\
+           &=_{\beta} f ((\lambda x . f (x x)) (\lambda x . f (x x))) \\
+           &=_{\beta} f (Y f)
+    \qedhere
+    \end{align*}
+\end{proof}
+
+Таким образом, с помощью $Y$-комбинатора можно определять рекурсивные функции.
+\begin{example}
+    \[
+        \mathrm{Fact} = Y (\lambda{} f n . \mathrm{IsZero}\ n\ \overline{1}\ (\mathrm{Mul}\ n\ (f\ (-1)\ n)))
+    \]
+\end{example}
