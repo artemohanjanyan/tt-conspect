@@ -115,6 +115,7 @@ $\lambda{}x.A$ связывает все свободные вхождения $
 \end{alignat*}
 
 Попробуем определить числа:
+\begin{definition}[Чёрчевский нумерал]
 \[
     \overline{n}=\lambda{}f.\lambda{}x.f^{n}x \text{,\quadгде\quad}
     f^{n}x=
@@ -123,10 +124,38 @@ $\lambda{}x.A$ связывает все свободные вхождения $
         x                      &, n = 0
     \end{cases}
 \]
+\end{definition}
 
-Это называют числами Чёрча.
+\begin{example}
+\[
+    \overline{3} = \lambda f . \lambda x . f (f (f x))
+\]
+\end{example}
+
+Несложно определить прибавление единицы к такому нумералу:
+\[
+    (+1) = \lambda{}n.\lambda{}f.\lambda{}x.f(nfx) \\
+\]
+\begin{example}
+    \[
+        (+1) \overline{1} =
+        (\lambda n . \lambda f . \lambda x . f (n f x)) (\lambda f . \lambda x . f x) \rightarrow_{\beta}
+        \lambda f . \lambda x . f ((\lambda f . \lambda x . f x) f x) \twoheadrightarrow_{\beta}
+        \lambda f . \lambda x . f (f x) =
+        \overline{2}
+    \]
+\end{example}
+
+\begin{definition}[$\eta{}$-эквивалентность]
+    \[
+        \lambda x . f x =_{\eta} f
+    \]
+\end{definition}
+Аналог из C++: если \lstinline$int f(int x)$, то результат её вычисления равен результату вычисления
+    \lstinline$[ ] (int x) { return f(x); }$ .
+
+Арифметические операции:
 \begin{alignat*}{2}
-    (+1) &= \lambda{}n.\lambda{}f.\lambda{}x.f(nfx) \\
     \mathrm{IsZero} &= \lambda{}n.n(\lambda{}x.\T)\F \\
     \mathrm{IsEven} &= \lambda{}n.n\ \Not\ \T \\
     \mathrm{Add} &= \lambda{}a.\lambda{}b.\lambda{}f.\lambda{}x.a f (b f x) \\
