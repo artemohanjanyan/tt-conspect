@@ -156,7 +156,7 @@ $\lambda{}x.A$ связывает все свободные вхождения $
 
 Арифметические операции:
 \begin{alignat*}{2}
-    \mathrm{IsZero} &= \lambda{}n.n(\lambda{}x.\T)\F \\
+    \mathrm{IsZero} &= \lambda{}n.n(\lambda{}x.\F)\T \\
     \mathrm{IsEven} &= \lambda{}n.n\ \Not\ \T \\
     \mathrm{Add} &= \lambda{}a.\lambda{}b.\lambda{}f.\lambda{}x.a f (b f x) \\
     \mathrm{Mul} &= \lambda{}a.\lambda{}b.a (\mathrm{Add}\ b) \overline{0} \\
