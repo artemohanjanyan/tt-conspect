@@ -14,6 +14,7 @@
 \usepackage{enumitem}
 \usepackage{bm}
 \usepackage{listings}
+\usepackage{cancel}
 %\setmainfont[Ligatures=TeX,SmallCapsFont={Times New Roman}]{Palatino Linotype}
 %\renewcommand*\rmdefault{ppl}
 
@@ -33,7 +34,7 @@
 \theoremstyle{definition}
 \newtheorem*{definition}{Определение}
 \theoremstyle{plain}
-\newtheorem{theorem}{Теорема}
+\newtheorem{theorem}{Теорема}[section]
 \newtheorem{axiom}{Аксиома}
 \newtheorem{lemma}[theorem]{Лемма}
 \newtheorem{statement}[theorem]{Утверждение}
@@ -48,6 +49,7 @@
 %\tableofcontents
 %\newpage
 
-\input{sec1.tex}
+\input{lec1.tex}
+\input{lec2.tex}
 
 \end{document}

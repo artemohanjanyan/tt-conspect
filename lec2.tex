@@ -1,0 +1,119 @@
+\section{Вторая лекция}
+
+\begin{definition}[Ромбовидное свойство (diamond)]
+    $G$ обладает ромбовидным свойством, если какие бы ни были $a$, $b$, $c$, что $aGb$, $aGc$, $b \ne c$, найдётся $d$: $bGd$ и $cGd$.
+\end{definition}
+
+\begin{example}
+    $(<)$ на натуральных числах обладает ромбовидным свойством.
+    $(>)$ на натуральных числах не обладает ромбовидным свойством.
+\end{example}
+
+$\beta$-редукция не обладает ромбовидным свойством.
+\begin{example}
+    \begin{gather*}
+        (\lambda x . x x)(Ia) \\
+        ... % TODO
+    \end{gather*}
+\end{example}
+
+\begin{theorem}[Чёрча-Россера]
+    $\beta$-редуцируемость обладает ромбовидным свойством.
+\end{theorem}
+
+\begin{lemma}
+    Если $R$ обладает ромбовидным свойством, то $R^{*}$ обладает ромбовидным свойством.
+\end{lemma}
+
+\begin{proof} \mbox{} \\ % TODO
+    \begin{enumerate}
+        \item $M_{1}RN_{1}$ и $M_{1}RM_{2}...M_{n-1}RM_{n}$ $\Rightarrow$ есть $N_{2}...N_{n}$: \\
+            $N_{1}RN_{2}...N_{n-1}RN_{n}$ и $M_{n}RN_{n}$.
+        \item Покажем ромбовидное свойство.
+    \end{enumerate}
+\end{proof}
+
+\begin{definition}[Параллельная $\beta$-редукция]
+    $A \rightrightarrows_{\beta} B$ \\
+    \begin{enumerate}
+        \item $A =_{\beta} B$, то $A \rightrightarrows_{\beta}B$
+        \item $A \rightrightarrows_{\beta} B$, то $\lambda x.A \rightrightarrows_{\beta} \lambda x . B$
+        \item $P \rightrightarrows_{\beta} Q$ и $R \rightrightarrows_{\beta} S$, то $PR \rightrightarrows_{\beta} QS$
+        \item $(\lambda x . P) Q \rightrightarrows_{\beta} R_{[x:=S]}$, если 
+            $P \rightrightarrows_{\beta}R$ и $Q \rightrightarrows_{\beta} S$.
+    \end{enumerate}
+\end{definition}
+
+\begin{statement}
+    $(\rightrightarrows_{\beta})$ обладает ромбовидным свойством.
+\end{statement}
+
+\begin{statement}[A]
+    Если $A \rightarrow_{\beta} B$, то $A \rightrightarrows_{\beta} B$ (очевидно).
+\end{statement}
+
+\begin{statement}[B]
+    Если $A \rightrightarrows_{\beta} B$, то $A \twoheadrightarrow_{\beta} B$ (упражнение).
+\end{statement}
+
+\begin{example}
+    \begin{gather*}
+        (\lambda x . x x) (\lambda x . x x x) \twoheadrightarrow_{\beta} (\lambda x . x x x)(\lambda x . x x x)(\lambda x . x x x) \\
+        (\lambda x . x x) (\lambda x . x x x) \cancel{\rightrightarrows_{\beta}} (\lambda x . x x x)(\lambda x . x x x)(\lambda x . x x x)
+    \end{gather*}
+\end{example}
+
+\begin{statement}
+    \[
+        (\rightarrow_{\beta})^{*} = (\rightrightarrows_{\beta})^{*}
+    \]
+\end{statement}
+
+\begin{proof}
+    Из последнего утверждения следует теорема Чёрча-Россера.
+\end{proof}
+
+\begin{statement} %следствие TODO
+    Нормальная форма для $\lambda$-выражения единственна, если существует.
+\end{statement}
+
+\begin{theorem}[Тезис Чёрча]
+    Если функция вычислима с помощью механического аппарата, то она вычислима с помощью $\lambda$-выражения.
+\end{theorem}
+
+\paragraph{Порядок редукции}
+\begin{definition}
+    \begin{align*}
+        K &= \lambda x \lambda y . x \\
+        I &= \lambda x . x \\
+        S &= \lambda x y z . x z (y z)
+    \end{align*}
+\end{definition}
+
+\begin{statement}
+    Пусть $A$ "--- замкнутое $\lambda$-выражение. Тогда найдётся выражение $T$, состоящее только из $S$, $K$, что $A =_{\beta}T$.
+\end{statement}
+
+\[
+    I = S K K
+\]
+
+\begin{example}
+    тут какой-то пример с омегой % TODO
+\end{example}
+
+\begin{definition}[Нормальный порядок редукции]
+    Нормальным порядком редукции называется редукция самого левого $\beta$-редекса.
+\end{definition}
+"<Ленивые вычисления"> (ну почти, в них есть меморизация)
+
+\begin{definition}[Аппликативный порядок редукции]
+    Самый левый из самых вложенных.
+\end{definition}
+"<Энергичные вычисления">
+
+\begin{statement}
+    Если нормальная форма существует, она может быть достигнута нормальным порядком редукции.
+\end{statement}
+
+\paragraph{Изоморфизм Карри-Ховарда}
