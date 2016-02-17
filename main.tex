@@ -7,7 +7,8 @@
 \usepackage[T1,T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[russian]{babel}
-\usepackage{geometry}
+%\usepackage{geometry}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm,bindingoffset=0cm]{geometry}
 \usepackage[mathscr]{euscript}
 \usepackage{microtype}
 \usepackage{bnf}
@@ -44,12 +45,10 @@
 \lstset{language=C++}
 
 \maketitle
-%\newpage
+\tableofcontents
+\newpage
 
-%\tableofcontents
-%\newpage
-
-\input{lec1.tex}
-\input{lec2.tex}
+\input{lec1.tex} \newpage
+\input{lec2.tex} \newpage
 
 \end{document}

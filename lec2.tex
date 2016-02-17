@@ -12,9 +12,14 @@
 $\beta$-редукция не обладает ромбовидным свойством.
 \begin{example}
     \begin{gather*}
-        (\lambda x . x x)(Ia) \\
-        ... % TODO
+        a = (\lambda x . x x)(Ia) \\
+        a \rightarrow_{\beta} (Ia)(Ia) = b\\
+        a \rightarrow_{\beta} (\lambda x . x x) a = c \\
+        b \rightarrow_{\beta} (Ia)a \rightarrow_{\beta} aa \\
+        b \rightarrow_{\beta} a(Ia) \rightarrow_{\beta} aa \\
+        c \rightarrow_{\beta} aa
     \end{gather*}
+    Нет $d$, что $b \rightarrow_{\beta} d$ и $c \rightarrow_{\beta} d$.
 \end{example}
 
 \begin{theorem}[Чёрча-Россера]
@@ -25,7 +30,7 @@ $\beta$-редукция не обладает ромбовидным свойс
     Если $R$ обладает ромбовидным свойством, то $R^{*}$ обладает ромбовидным свойством.
 \end{lemma}
 
-\begin{proof} \mbox{} \\ % TODO
+\begin{proof} Упражнение % TODO
     \begin{enumerate}
         \item $M_{1}RN_{1}$ и $M_{1}RM_{2}...M_{n-1}RM_{n}$ $\Rightarrow$ есть $N_{2}...N_{n}$: \\
             $N_{1}RN_{2}...N_{n-1}RN_{n}$ и $M_{n}RN_{n}$.
@@ -34,7 +39,7 @@ $\beta$-редукция не обладает ромбовидным свойс
 \end{proof}
 
 \begin{definition}[Параллельная $\beta$-редукция]
-    $A \rightrightarrows_{\beta} B$ \\
+    $A \rightrightarrows_{\beta} B$
     \begin{enumerate}
         \item $A =_{\beta} B$, то $A \rightrightarrows_{\beta}B$
         \item $A \rightrightarrows_{\beta} B$, то $\lambda x.A \rightrightarrows_{\beta} \lambda x . B$
@@ -48,13 +53,23 @@ $\beta$-редукция не обладает ромбовидным свойс
     $(\rightrightarrows_{\beta})$ обладает ромбовидным свойством.
 \end{statement}
 
-\begin{statement}[A]
-    Если $A \rightarrow_{\beta} B$, то $A \rightrightarrows_{\beta} B$ (очевидно).
+\begin{proof}
+    Упражнение % TODO
+\end{proof}
+
+\begin{statement}
+    Если $A \rightarrow_{\beta} B$, то $A \rightrightarrows_{\beta} B$.
 \end{statement}
 
-\begin{statement}[B]
-    Если $A \rightrightarrows_{\beta} B$, то $A \twoheadrightarrow_{\beta} B$ (упражнение).
+\begin{statement}
+    Если $A \rightrightarrows_{\beta} B$, то $A \twoheadrightarrow_{\beta} B$.
 \end{statement}
+
+\begin{proof}
+    Упражнение % TODO
+\end{proof}
+
+При этом, обратное не всегда верно.
 
 \begin{example}
     \begin{gather*}
@@ -64,16 +79,12 @@ $\beta$-редукция не обладает ромбовидным свойс
 \end{example}
 
 \begin{statement}
-    \[
-        (\rightarrow_{\beta})^{*} = (\rightrightarrows_{\beta})^{*}
-    \]
+    Из предыдущих двух утверждений следует $(\rightarrow_{\beta})^{*} = (\rightrightarrows_{\beta})^{*}$.
 \end{statement}
 
-\begin{proof}
-    Из последнего утверждения следует теорема Чёрча-Россера.
-\end{proof}
+Теорема Чёрча-Россера следует из приведённых утверждений.
 
-\begin{statement} %следствие TODO
+\begin{statement}[Следствие] %следствие TODO
     Нормальная форма для $\lambda$-выражения единственна, если существует.
 \end{statement}
 
@@ -89,14 +100,11 @@ $\beta$-редукция не обладает ромбовидным свойс
         S &= \lambda x y z . x z (y z)
     \end{align*}
 \end{definition}
+$I$ выражается через $S$ и $K$: $I = S K K$.
 
 \begin{statement}
     Пусть $A$ "--- замкнутое $\lambda$-выражение. Тогда найдётся выражение $T$, состоящее только из $S$, $K$, что $A =_{\beta}T$.
 \end{statement}
-
-\[
-    I = S K K
-\]
 
 \begin{example}
     тут какой-то пример с омегой % TODO
@@ -105,7 +113,7 @@ $\beta$-редукция не обладает ромбовидным свойс
 \begin{definition}[Нормальный порядок редукции]
     Нормальным порядком редукции называется редукция самого левого $\beta$-редекса.
 \end{definition}
-"<Ленивые вычисления"> (ну почти, в них есть меморизация)
+"<Ленивые вычисления"> (ну, почти, в них есть меморизация)
 
 \begin{definition}[Аппликативный порядок редукции]
     Самый левый из самых вложенных.
@@ -116,4 +124,42 @@ $\beta$-редукция не обладает ромбовидным свойс
     Если нормальная форма существует, она может быть достигнута нормальным порядком редукции.
 \end{statement}
 
-\paragraph{Изоморфизм Карри-Ховарда}
+\paragraph{Изоморфизм Карри-Ховарда} \mbox{} \\
+
+Хотим построить логику.
+Скажем, что есть импликация, обозначим $(\supset)$. Введём M.P. и правила:
+\begin{enumerate}
+    \item $A \supset A$
+    \item $(A \supset (A \supset B)) \supset (A \supset B)$
+    \item $A =_{\beta} B$, тогда $A \supset B$
+\end{enumerate}
+
+Заметим:
+\[
+    Y_{\supset a} \equiv Y (\lambda t . t \supset a) =_{\beta} Y (\lambda t . t \supset a) \supset a
+\]
+
+\begin{align*}
+    &Y_{\supset a} \supset Y_{\supset a} \\
+    &Y_{\supset a} \supset (Y_{\supset a} \supset a) \\
+    &(Y_{\supset a} \supset Y_{\supset a} \supset a) \supset (Y_{\supset a} \supset a) \\
+    &Y_{\supset a} \supset a \\
+    &(Y_{\supset a} \supset a) \supset Y_{\supset a} \\
+    &Y_{\supset a} \\
+    &a
+\end{align*}
+
+Так можно доказать любое $a$. Парадокс. Нехорошо.
+
+Рассмотрим интуиционистское исчисление высказываний.
+\begin{align*}
+    &\frac{}{\Gamma, \varphi \vdash \varphi} \\
+    &\frac{\Gamma, \varphi \vdash \psi}{\Gamma \vdash \varphi, \varphi} \text{ (Введение)} \\
+    &\frac{\Gamma \vdash \varphi \rightarrow \psi \qquad \Gamma \vdash \varphi}{\Gamma \vdash \psi} \text{ (Удаление)}
+\end{align*}
+
+тут было докво
+
+\begin{theorem}
+    Импликационный фрагмент интуиционистского исчисления высказываний полон в моделях Крипке
+\end{theorem}
