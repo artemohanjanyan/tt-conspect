@@ -16,8 +16,8 @@
 \usepackage{bm}
 \usepackage{listings}
 \usepackage{cancel}
+\usepackage{proof}
 %\setmainfont[Ligatures=TeX,SmallCapsFont={Times New Roman}]{Palatino Linotype}
-%\renewcommand*\rmdefault{ppl}
 
 \selectlanguage{russian}
 
@@ -39,10 +39,13 @@
 \newtheorem{axiom}{Аксиома}
 \newtheorem{lemma}[theorem]{Лемма}
 \newtheorem{statement}[theorem]{Утверждение}
+\newtheorem{corollary}[theorem]{Следствие}
 \theoremstyle{remark}
 \newtheorem*{example}{Пример}
 
 \lstset{language=C++}
+
+\newcommand{\todo}{\textsc{\textbf{TODO}}}
 
 \maketitle
 \tableofcontents
