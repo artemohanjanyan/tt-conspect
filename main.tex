@@ -17,6 +17,8 @@
 \usepackage{listings}
 \usepackage{cancel}
 \usepackage{proof}
+\usepackage{epigraph}
+\usepackage{titlesec}
 %\setmainfont[Ligatures=TeX,SmallCapsFont={Times New Roman}]{Palatino Linotype}
 
 \selectlanguage{russian}
@@ -42,16 +44,22 @@
 \newtheorem{corollary}[theorem]{Следствие}
 \theoremstyle{remark}
 \newtheorem*{example}{Пример}
+\newtheorem{property}[theorem]{Свойство}
 
 \lstset{language=C++}
 
 \newcommand{\todo}{\textsc{\textbf{TODO}}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\xx}{ч}
+\newcommand{\rr}{к}
 
 \maketitle
 \tableofcontents
-\newpage
+%\newpage
+\newcommand{\sectionbreak}{\clearpage}
 
-\input{lec1.tex} \newpage
-\input{lec2.tex} \newpage
+\input{lec1.tex}
+\input{lec2.tex}
+\input{lec3.tex}
 
 \end{document}

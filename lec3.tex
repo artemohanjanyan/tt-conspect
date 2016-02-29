@@ -1,0 +1,239 @@
+\section{Просто типизированное $\lambda$-исчисление}
+
+\begin{definition}[Тип]
+    $T = \{\alpha, \beta, \gamma, \ldots\}$ "--- множество типов. \\
+    $\sigma$, $\tau$ "--- метапеременные для типов. \\
+    Если $\tau$, $\sigma$ "--- типы, то $\sigma \rightarrow \tau$ "--- тип. \\
+    \begin{bnf}
+    \[
+        \Pi ::= T | \Pi \rightarrow \Pi | (\Pi)
+    \]
+    \end{bnf}
+    $\left(\rightarrow\right)$ правоассоциативна.
+\end{definition}
+
+\begin{definition}[Контекст] Контекст "--- $\Gamma$.
+\begin{gather*}
+    \Gamma = \{ \Lambda_{1} : \sigma_{1};\ \Lambda_{2} : \sigma_{2}\ \ldots\ \Lambda_{n} : \sigma_{n} \} \\
+    \abs{\Gamma} = \{ \sigma_{1},\ \sigma_{2}\ \ldots\ \sigma_{n} \} \\
+    \mathrm{dom}\ \Gamma = \{ \Lambda_{1},\ \Lambda_{2}\ \ldots\ \Lambda_{n} \}
+\end{gather*}
+\end{definition}
+
+\subsection{Исчисление по Карри}
+
+\begin{definition}[Типизируемость по Карри]
+    Рассмотрим исчисление со следующими правилами:
+    \begin{enumerate}
+        \item $\infer[(x\ \cancel{\in}\ \mathrm{dom}(\Gamma))]
+            {\Gamma, x:\sigma \vdash x:\sigma}
+            {}$
+        \item $\infer[]
+            {\Gamma \vdash M N : \tau}
+            {\Gamma \vdash M:\sigma \rightarrow \tau & \Gamma \vdash N:\sigma}$
+        \item $\infer[(x\ \cancel{\in}\ \mathrm{dom}(\Gamma))]
+            {\Gamma \vdash \lambda x . M : \sigma \rightarrow \tau}
+            {\Gamma, x : \sigma \vdash M : \tau}$
+    \end{enumerate}
+
+    %\begin{gather*}
+    %\infer[(x\ \cancel{\in}\ \mathrm{dom}(\Gamma))]
+    %    {\Gamma, x:\sigma \vdash x:\sigma}
+    %    {} \\
+    %\infer[]
+    %    {\Gamma \vdash M N : \tau}
+    %    {\Gamma, M:\sigma \rightarrow \tau & \Gamma \vdash N:\sigma} \qquad
+    %\infer[(x\ \cancel{\in}\ \mathrm{dom}(\Gamma))]
+    %    {\Gamma \vdash \lambda x . M : \sigma \rightarrow \tau}
+    %    {\Gamma, x : \sigma \vdash M : \tau}
+    %\end{gather*}
+
+    Если $\lambda$-выражение типизируется этими трёмя правилами, то говорят, что оно типизируется по Карри.
+\end{definition}
+
+\begin{lemma}[subject deduction]
+    Если $\Gamma \vdash M : \sigma$ то $\Gamma \vdash N : \sigma$.
+\end{lemma}
+
+\begin{corollary}
+    Если $\Gamma \vdash M : \sigma$ и $M \twoheadrightarrow_{\beta}N$, то $\Gamma \vdash N : \sigma$.
+\end{corollary}
+
+\begin{theorem}[Чёрча-Россера]
+    Если $\Gamma \vdash M : \sigma$, $M \twoheadrightarrow_{\beta} N$ и $M \twoheadrightarrow_{\beta} P$, тогда найдётся $Q$, что
+    $N \twoheadrightarrow_{\beta} Q$, $P \twoheadrightarrow_{\beta} Q$ и $\Gamma \vdash Q : \sigma$.
+\end{theorem}
+
+\begin{example} Несколько доказательств:
+    \begin{enumerate}
+        \item Докажем $\lambda x . x : \alpha \rightarrow \alpha$:
+        \[
+            \infer[(3)]
+                {\vdash \lambda x . x : \alpha \rightarrow \alpha}
+                { \infer[(1)]
+                    {x : \alpha \vdash x : \alpha}
+                    {}
+                }
+        \]
+
+        \item Докажем $\lambda f . \lambda x . f x : (\alpha \rightarrow \beta) \rightarrow \alpha \rightarrow \beta$:
+        \[
+            \infer[(3)]
+                { \vdash \lambda f . \lambda x . f x : (\sigma \rightarrow \tau) \rightarrow (\sigma \rightarrow \tau) }
+                { \infer[(3)]
+                    { f : \sigma \rightarrow \tau \vdash \lambda x . f x : \sigma \rightarrow \tau }
+                    { \infer[(2)]
+                        {f : \sigma \rightarrow \tau; x : \sigma \vdash f x : \tau}
+                        {
+                            \infer[(1)]{ \Gamma \vdash f : \sigma \rightarrow \tau }{} &
+                            \infer[(1)]{ \Gamma \vdash x : \sigma }{}
+                        }
+                    }
+                }
+        \]
+
+        \item $\Omega = (\lambda x . x x) (\lambda x . x x)$ не типизируемо:
+            \todo % TODO
+    \end{enumerate}
+\end{example}
+
+\begin{lemma}[Свойство subject expansion]
+    Неверно, что если $M \rightarrow_{\beta} N$, $\Gamma \vdash N : \sigma$, то $\Gamma \vdash M : \sigma$.
+\end{lemma}
+Например, для $Ka\Omega$.
+
+\begin{property}
+    В общем случае тип не уникален, бывает, что одновременно $\vdash \lambda x . x : \alpha \rightarrow \alpha$ и $\vdash \lambda x . x : (\beta \rightarrow \beta) \rightarrow (\beta \rightarrow \beta)$.
+\end{property}
+
+\begin{definition}[Сильная нормализация]
+    Назовём исчисление сильно-нормализуемым, если не существует бесконечной последовательности $\beta$-редукций.
+\end{definition}
+
+\begin{definition}[Слабая нормализация]
+    Назовём исчисление слабо-нормализуемым, если для любого терма существует последовательность $\beta$-редукций, приводящая его к нормальной форме.
+\end{definition}
+
+\begin{theorem}[о сильной нормализации]
+    Просто типизируемое $\lambda$-исчисление сильно нормализуемо.
+    Любое просто типизируемое $\lambda$-выражение сильно нормализуемо.
+\end{theorem}
+
+\todo\{
+%\begin{theorem}
+%    Если $\nu = (\alpha \rightarrow \alpha) \rightarrow (\alpha \rightarrow \alpha)$ и $F : \nu \rightarrow \nu \rightarrow \nu$, то $F$ "--- расширенный полином.
+%\end{theorem}
+
+\begin{theorem}
+    Рассмотрим полином $E(m,n) =
+    \begin{cases}
+        \text{Полином}(m,n) & m > 0, n > 0 \\
+        \text{Полином}(m)   & m > 0, n = 0 \\
+        \text{Полином}(n)   & m = 0, n > 0 \\
+        \text{Константа}    & m = 0, n = 0
+    \end{cases}$. \\
+    Если $\nu = (\alpha \rightarrow \alpha) \rightarrow (\alpha \rightarrow \alpha)$ и $F : \nu \rightarrow \nu \rightarrow \nu$, то $F$ "--- рассматриваемый полином.
+\end{theorem}
+\} // \todo
+
+\subsection{Исчисление по Чёрчу}
+
+\begin{definition}[Типизация по Чёрчу]
+    \begin{bnf}
+    \[
+        \Lambda_{\xx} ::= x | \lambda x^{\sigma}.\Lambda_{\xx} | (\Lambda_{\xx}) | \Lambda_{\xx} \Lambda_{\xx}
+    \]
+    \end{bnf}
+
+    Правила:
+    \begin{enumerate}
+        \item $\infer[(x\ \cancel{\in}\ \mathrm{dom}(\Gamma))]
+            {\Gamma, x:\sigma \vdash_{\xx} x:\sigma}
+            {}$
+        \item $\infer[]
+            {\Gamma \vdash_{\xx} M N : \tau}
+            {\Gamma \vdash_{\xx} M:\sigma \rightarrow \tau & \Gamma \vdash_{\xx} N:\sigma}$
+        \item $\infer[(x\ \cancel{\in}\ \mathrm{dom}(\Gamma))]
+            {\Gamma \vdash_{\xx} \lambda x^{\sigma} . M : \sigma \rightarrow \tau}
+            {\Gamma, x : \sigma \vdash_{\xx} M : \tau}$
+    \end{enumerate}
+
+\end{definition}
+
+\begin{definition}
+\[
+    \abs{\Lambda_{\xx}} =
+    \begin{cases}
+        x                                   & \Lambda_{\xx} \equiv x \\
+        \abs{\Lambda_{1}} \abs{\Lambda_{2}} & \Lambda_{\xx} \equiv \Lambda_{1} \Lambda_{2} \\
+        \lambda x . \abs{\Lambda}           & \Lambda_{\xx} \equiv \lambda x^{\sigma} . \Lambda
+    \end{cases}
+\]
+\end{definition}
+
+\begin{lemma}[Subject reduction по Чёрчу]
+    Пусть $\Gamma \vdash_{\xx} M : \sigma$ и $\abs{M} \rightarrow_{\beta} N$. \\
+    Тогда найдётся такое $H$, что $abs{H} = N$, $\Gamma \vdash_{\xx} H:\sigma$.
+\end{lemma}
+
+\begin{theorem}[Чёрча-Россера]
+    Если $\Gamma \vdash_{\xx} M : \sigma$, $\abs{M} \twoheadrightarrow_{\beta} N$, $\abs{M} \twoheadrightarrow_{\beta} T$. \\
+    Тогда найдётся такое $P$, что $\Gamma \vdash_{\xx} P : \sigma$,
+            $N \twoheadrightarrow_{\beta} \abs{P}$ и $T \twoheadrightarrow_{\beta} \abs{P}$.
+\end{theorem}
+
+\begin{theorem}[о стирании] \ 
+    \begin{enumerate}
+        \item Если $M \rightarrow_{\beta} N$ и $\Gamma \vdash_{\xx} M : \sigma$, то $\abs{M} \rightarrow_{\beta} \abs{N}$.
+        \item Если $\Gamma \vdash_{\xx} M : \sigma$, то $\Gamma \vdash_{к} \abs{M} : \sigma$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}[о поднятии]
+    Пусть $P \in \Lambda_{\xx}$, $M, N \in \Lambda_{\rr}$.
+    \begin{enumerate}
+        \item Если $M \rightarrow_{\beta} N$, $\abs{P} = M$, то найдётся такое $Q$, что $\abs{Q} = N$, $P \rightarrow_{\beta} Q$.
+        \item Если $\Gamma \vdash_{\rr} M : \sigma$, то найдётся такое $P \in \Lambda_{\xx}$, что
+                $\Gamma \vdash_{\xx} P : \sigma$, $\abs{P} = M$.
+    \end{enumerate}
+\end{theorem}
+
+\todo \ комментарии про то, зачем мы это делаем.
+
+\begin{gather*}
+    \infer
+        {\Gamma \vdash \left<A,B\right> : \varphi \& \psi}
+        {\Gamma \vdash A : \varphi & \Gamma \vdash B : \psi} \\
+    \infer
+        {\Gamma \vdash \pi_{1} R : \varphi}
+        {\Gamma \vdash R : \varphi \& \psi} \qquad
+    \infer
+        {\Gamma \vdash \pi_{2} R : \psi}
+        {\Gamma \vdash R : \varphi \& \psi}
+\end{gather*}
+
+\begin{gather*}
+    \infer
+        {\Gamma \vdash \varphi \vee \psi}
+        {\Gamma \vdash \varphi} \qquad
+    \infer
+        {\Gamma \vdash \varphi \vee \psi \rightarrow \pi}
+        {\Gamma \vdash \varphi \rightarrow \pi & \Gamma \vdash \psi \rightarrow \pi} \\
+    \infer
+        {\Gamma \vdash \mathrm{inj}_{1} A : \varphi \vee \psi}
+        {\Gamma \vdash A : \varphi}
+\end{gather*}
+
+\todo{} трешак какой-то пошёл :(
+
+\begin{theorem}[об изоморфизме Карри-Ховарда] \ 
+    \begin{enumerate}
+        \item Пусть $\Gamma \vdash \sigma$ "--- и.ф.и.и.в., тогда найдётся такое $\Delta$, что
+                $\abs{\Delta}=\Gamma$, M "--- такой терм, что $\Delta \vdash_{\xx} M : \sigma$.
+        \item Пусть $\Delta \vdash_{\xx} M : \sigma$, тогда $\abs{\Delta} \vdash \sigma$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    Построим $\Delta$. $\Gamma = \{\sigma_{1}, \sigma_{2} \ldots\}$, $\Delta = \{x_{1}:\sigma_{1}, x_{2}:\sigma_{2}, \ldots \}$.
+\end{proof}

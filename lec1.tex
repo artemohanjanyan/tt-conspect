@@ -1,5 +1,8 @@
 \section{$\lambda$-исчисление}
 
+\subsection{Введение}
+\epigraph{Смысла в этом нет.}{Д.Г.}
+
 \begin{definition}[$\lambda$-выражение]
     $\lambda$-выражение "--- выражение, удовлетворяющее грамматике:
     \begin{bnf}
@@ -13,7 +16,7 @@
     \begin{enumerate}[label=(\alph*)]
         \item аппликация левоассоциативна
         \item абстракция распространяется как можно дальше вправо
-        \item смысла в этом нет
+        %\item смысла в этом нет
     \end{enumerate}
 \end{definition}
 
@@ -36,10 +39,9 @@ $\lambda{}x.A$ связывает все свободные вхождения $
 \begin{definition}[$\alpha$-эквивалентность]
     $A$ и $B$ называются $\alpha$-эквивалентными ($A=_{\alpha}B$), если выполнено одно из следующих условий:
     \begin{enumerate}
-        \item $A\equiv{}x$ и $B\equiv{}x$ .
-        \item $A\equiv{}\lambda{}x.P$ и $B\equiv{}\lambda{}x.Q$. Пусть $t$ "--- новая переменная, тогда
-            $P_{[x:=t]}=_{\alpha}Q_{[y:=t]}$ .
-        \item $A\equiv{}PQ$, $B\equiv{}RS$, $P=_{\alpha}R$, $Q=_{\alpha}S$ .
+        \item $A\equiv{}x$ и $B\equiv{}x$.
+        \item $A\equiv{}\lambda{}x.P$, $B\equiv{}\lambda{}y.Q$ и $P_{[x:=t]}=_{\alpha}Q_{[y:=t]}$, где $t$ "--- новая переменная.
+        \item $A\equiv{}PQ$, $B\equiv{}RS$ и $P=_{\alpha}R$, $Q=_{\alpha}S$.
     \end{enumerate}
 \end{definition}
 
@@ -88,7 +90,10 @@ $\lambda{}x.A$ связывает все свободные вхождения $
     \end{enumerate}
 \end{definition}
 
-\paragraph{Итак, лулзы.} Хотите знать, что такое истина?
+\subsection{Числа Чёрча}
+\epigraph{Хотите знать, что такое истина?}{Д.Г.}
+%\paragraph{Итак, лулзы.} Хотите знать, что такое истина?
+
 \newcommand{\T}{\mathrm{T}}
 \newcommand{\F}{\mathrm{F}}
 \newcommand{\Not}{\mathrm{Not}}
