@@ -1,0 +1,110 @@
+\section{Связь с программированием}
+
+\epigraph{Помните, что в $\lambda$-исчислении нет смысла? Здесь смысл отрицательный, скорее.}{Д.Г.}
+
+3 задачи:
+\begin{enumerate}[label=(\alph*)]
+    \item Проверка типа: верно ли $\Gamma \vdash M : \sigma$?
+    \item Вывод типа: $? \vdash M : ?$
+    \item Обитаемость типа: $? \vdash ? : \sigma$
+\end{enumerate}
+
+\subsection{Вывод типа}
+
+\begin{definition}[Алгебраический терм] \ \\
+    \begin{gather*}
+        \begin{bnf}
+            A ::= x | f\left(A, \ldots, A\right)
+        \end{bnf} \\
+        (x \in X)
+    \end{gather*}
+\end{definition}
+
+Уравнение в алгебраических термах: $A = A$.
+
+\begin{definition}[$S$-подстановка]
+    \[
+        S : X \rightarrow A
+    \]
+    $S$ "--- id почти везде. (везде кроме конечного количества) \\
+    $S : A \rightarrow A$ "--- естественное обобщение. $A_1, \ldots, A_n$ "--- термы.
+    $S\left(f\left(A_1, \dots, A_n\right)\right) = f\left(S(f_1), \ldots, S(f_n)\right)$
+\end{definition}
+
+\begin{definition}
+    $S$ "--- решение уравнения $P=Q$, если $S(P)=S(Q)$ (S "--- унификатор).
+\end{definition}
+\begin{definition}
+    $(S \circ T)(A) = S(T(A))$
+\end{definition}
+Задача решения уравнение в алгебраических термах "--- унификация.
+\begin{definition}
+    Существует $S$: $T = S \circ \texttt{U}$, $T$ "--- частный случай $\texttt{U}$.
+\end{definition}
+\begin{definition}
+    Наибольший общий унификатор $\texttt{U}$:
+    \begin{enumerate}
+        \item $\texttt{U}(A)=\texttt{U}(B)$.
+        \item Если $\texttt{U}(A)=\texttt{U}(B)$, то существует $S$: $T = S \circ \texttt{U}$.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}
+    Назовём две системы эквивалентными, если они имеют одно решение.
+\end{definition}
+
+\begin{definition}
+    Назовём систему несовместной, если выполнено одно из условий:
+    \begin{enumerate}
+        \item в ней есть уравнение вида $f(\ldots)=g(\ldots)$.
+        \item в ней есть уравнение вида $x = \ldots x \ldots$.
+    \end{enumerate}
+\end{definition}
+
+\begin{statement}
+    Для любой системы
+    \[
+        \begin{cases} A_1 = B_1 \\ \vdots \\ A_n = B_n \end{cases}
+    \]
+    найдётся эквивалентная ей система из одного уравнения:
+    \[
+        f(A_1, \ldots, A_n) = f(B_1, \ldots, B_n)
+    \]
+    ($f$ "--- новый символ).
+\end{statement}
+
+\begin{definition}
+    Назовём систему разрешённой, если:
+    \begin{enumerate}
+        \item все уравнения имеют вид $x = A$,
+        \item если $x_i = A_i$, то
+        \begin{enumerate}[label=(\alph*)]
+            \item $x_i$ не принадлежит никакому $A_j$.
+            \item $x_i \neq x_j$, если $j \neq j$.
+        \end{enumerate}
+        %\item все переменные в левой части встречаются однократно.
+    \end{enumerate}
+\end{definition}
+
+Решение по системе в разрешённой форме строится так:
+\[
+    S(x_i)=A_i
+\]
+\todo
+
+\begin{statement}
+    $S$ "--- наибольший общий унификатор.
+\end{statement}
+
+\begin{statement}
+    Несовместная система не имеет решений.
+\end{statement}
+
+Рассмотрим следующие 4 преобразования:
+\begin{enumerate}[label=(\alph*)]
+    \item $T=x$, где $T$ не переменная $\Rightarrow$ $x=T$
+    \item $x=x$ $\Rightarrow$ $\varepsilon$
+    \item $s$
+\end{enumerate}
+
+бе

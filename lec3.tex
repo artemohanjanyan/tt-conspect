@@ -25,13 +25,13 @@
 \begin{definition}[Типизируемость по Карри]
     Рассмотрим исчисление со следующими правилами:
     \begin{enumerate}
-        \item $\infer[(x\ \cancel{\in}\ \mathrm{dom}(\Gamma))]
+        \item $\infer[(x \notin \mathrm{dom}(\Gamma))]
             {\Gamma, x:\sigma \vdash x:\sigma}
             {}$
         \item $\infer[]
             {\Gamma \vdash M N : \tau}
             {\Gamma \vdash M:\sigma \rightarrow \tau & \Gamma \vdash N:\sigma}$
-        \item $\infer[(x\ \cancel{\in}\ \mathrm{dom}(\Gamma))]
+        \item $\infer[(x \notin \mathrm{dom}(\Gamma))]
             {\Gamma \vdash \lambda x . M : \sigma \rightarrow \tau}
             {\Gamma, x : \sigma \vdash M : \tau}$
     \end{enumerate}
@@ -101,10 +101,7 @@
     Неверно, что если $M \rightarrow_{\beta} N$, $\Gamma \vdash N : \sigma$, то $\Gamma \vdash M : \sigma$.
 \end{lemma}
 Например, для $Ka\Omega$.
-
-\begin{property}
-    В общем случае тип не уникален, бывает, что одновременно $\vdash \lambda x . x : \alpha \rightarrow \alpha$ и $\vdash \lambda x . x : (\beta \rightarrow \beta) \rightarrow (\beta \rightarrow \beta)$.
-\end{property}
+В общем случае тип не уникален, бывает, что одновременно $\vdash \lambda x . x : \alpha \rightarrow \alpha$ и $\vdash \lambda x . x : (\beta \rightarrow \beta) \rightarrow (\beta \rightarrow \beta)$.
 
 \begin{definition}[Сильная нормализация]
     Назовём исчисление сильно-нормализуемым, если не существует бесконечной последовательности $\beta$-редукций.
@@ -147,13 +144,13 @@
 
     Правила:
     \begin{enumerate}
-        \item $\infer[(x\ \cancel{\in}\ \mathrm{dom}(\Gamma))]
+        \item $\infer[(x \notin \mathrm{dom}(\Gamma))]
             {\Gamma, x:\sigma \vdash_{\xx} x:\sigma}
             {}$
         \item $\infer[]
             {\Gamma \vdash_{\xx} M N : \tau}
             {\Gamma \vdash_{\xx} M:\sigma \rightarrow \tau & \Gamma \vdash_{\xx} N:\sigma}$
-        \item $\infer[(x\ \cancel{\in}\ \mathrm{dom}(\Gamma))]
+        \item $\infer[(x \notin \mathrm{dom}(\Gamma))]
             {\Gamma \vdash_{\xx} \lambda x^{\sigma} . M : \sigma \rightarrow \tau}
             {\Gamma, x : \sigma \vdash_{\xx} M : \tau}$
     \end{enumerate}
@@ -173,7 +170,7 @@
 
 \begin{lemma}[Subject reduction по Чёрчу]
     Пусть $\Gamma \vdash_{\xx} M : \sigma$ и $\abs{M} \rightarrow_{\beta} N$. \\
-    Тогда найдётся такое $H$, что $abs{H} = N$, $\Gamma \vdash_{\xx} H:\sigma$.
+    Тогда найдётся такое $H$, что $\abs{H} = N$, $\Gamma \vdash_{\xx} H:\sigma$.
 \end{lemma}
 
 \begin{theorem}[Чёрча-Россера]
@@ -233,7 +230,25 @@
         \item Пусть $\Delta \vdash_{\xx} M : \sigma$, тогда $\abs{\Delta} \vdash \sigma$.
     \end{enumerate}
 \end{theorem}
-
+% долг с предыдущей лекции
 \begin{proof}
-    Построим $\Delta$. $\Gamma = \{\sigma_{1}, \sigma_{2} \ldots\}$, $\Delta = \{x_{1}:\sigma_{1}, x_{2}:\sigma_{2}, \ldots \}$.
+    Рассмотрим $x_\varphi$, $\varphi \in \Gamma$.
+    $\Gamma = \{\sigma_{1}, \sigma_{2} \ldots\}$,
+    $\uparrow \!\! \Gamma = \Delta = \{x_{1}:\sigma_{1}, x_{2}:\sigma_{2}, \ldots \}$.
+    Индукция по сложности доказательства $\sigma$: \\
+    База: \infer{\Gamma, \varphi \vdash \varphi}{}
+    \begin{enumerate}
+        \item $\varphi \in \Gamma$. Тогда \infer{\Delta \vdash x_\varphi : \varphi}{}
+        \item $\varphi \notin \Gamma$. Тогда \infer{\Delta, x_\varphi : \varphi \vdash x_\varphi : \varphi}{}, $x_\varphi$ "--- новая переменная.
+    \end{enumerate}
+    Переход: \infer{\Gamma \vdash \varphi \rightarrow \psi}{\Gamma, \varphi \vdash \psi}.
+    По индукционному предположению $\Delta, y : \varphi \vdash M : \psi$.
+    \begin{enumerate}
+        \item $\varphi \in \Gamma$. Тогда
+        \infer{\Delta \setminus \left\{x_\varphi\right\} \vdash \lambda x_\varphi . M : \varphi \rightarrow \psi}{\Delta \vdash M : \psi}.
+        \item $\varphi \notin \Gamma$. Тогда
+        \infer{\Delta \vdash \lambda x_\varphi . M : \varphi \rightarrow \psi}{\Delta, x_\varphi : \varphi \vdash M : \psi}.
+    \end{enumerate}
 \end{proof}
+
+\todo
