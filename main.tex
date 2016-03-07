@@ -6,7 +6,6 @@
 \usepackage{mathtext}
 \usepackage[T1,T2A]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
 %\usepackage{geometry}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm,bindingoffset=0cm]{geometry}
 \usepackage[mathscr]{euscript}
@@ -20,14 +19,19 @@
 \usepackage{epigraph}
 \usepackage{titlesec}
 \usepackage[hidelinks]{hyperref}
+
 %\setmainfont[Ligatures=TeX,SmallCapsFont={Times New Roman}]{Palatino Linotype}
 
+\usepackage[russian]{babel}
 \selectlanguage{russian}
 
 \hypersetup{%
     colorlinks=true,
     linkcolor=blue
 }
+
+\AddEnumerateCounter{\Asbuk}{\@Asbuk}{\CYRM}
+\AddEnumerateCounter{\asbuk}{\@asbuk}{\cyrm}
 
 %http://tex.stackexchange.com/questions/31526/macro-for-left-and-right/58641#58641
 

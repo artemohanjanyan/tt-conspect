@@ -13,10 +13,9 @@
                   | & \left(\Lambda\right)
     \end{alignat*}
     \end{bnf}
-    \begin{enumerate}[label=(\alph*)]
+    \begin{enumerate}[label=(\asbuk*)]
         \item аппликация левоассоциативна
         \item абстракция распространяется как можно дальше вправо
-        %\item смысла в этом нет
     \end{enumerate}
 \end{definition}
 
@@ -30,7 +29,7 @@
 Есть понятия связанного и свободного вхождения переменной (аналогично ИП).
 $\lambda{}x.A$ связывает все свободные вхождения $x$ в $A$.
 Договоримся, что:
-\begin{enumerate}[label=(\alph*)]
+\begin{enumerate}[label=(\asbuk*)]
     \item Переменные "--- $x$, $a$, $b$, $c$.
     \item Термы (части $\lambda$-выражения) "--- $X$, $A$, $B$, $C$.
     \item Фиксированные переменные обозначаются буквами из начала алфавита, метапеременные "--- из конца.
@@ -182,7 +181,7 @@ $n$ раз применим функцию $f\left(\left<a,b\right>\right) = \le
     \left<\overline{0},\overline{0}\right>\right)
 \]
 
-Сокращение записи:
+Введём сокращение записи:
 \[
     \lambda x y . A = \lambda x . \lambda y . A
 \]
@@ -195,20 +194,26 @@ $n$ раз применим функцию $f\left(\left<a,b\right>\right) = \le
 
 \begin{statement}
     Существует $\lambda$-выражение, не имеющее н.ф.
-    \begin{gather*}
-        \Omega = \omega \omega \\
-        \omega = \lambda x . x x
-    \end{gather*}
 \end{statement}
 
 \begin{definition}[Комбинатор]
     Комбинатор "--- $\lambda$-выражение без свободных переменных.
 \end{definition}
 
-Комбинатор неподвижной точки:
-\[
-    Y = \lambda f . (\lambda x . f (x x)) (\lambda x . f (x x))
-\]
+\begin{definition}
+    \begin{gather*}
+        \Omega = \omega \omega \\
+        \omega = \lambda x . x x
+    \end{gather*}
+\end{definition}
+
+$\Omega$ не имеет нормальной формы.
+
+\begin{definition}[Комбинатор неподвижной точки]
+    \[
+        Y = \lambda f . (\lambda x . f (x x)) (\lambda x . f (x x))
+    \]
+\end{definition}
 
 \begin{definition}[$\beta$-эквивалентность]
     $A=_{\beta}B$, если $\exists C : C \twoheadrightarrow_{\beta} A, C \twoheadrightarrow_{\beta}B$
@@ -236,3 +241,5 @@ $n$ раз применим функцию $f\left(\left<a,b\right>\right) = \le
         \mathrm{Fact} = Y (\lambda{} f n . \mathrm{IsZero}\ n\ \overline{1}\ (\mathrm{Mul}\ n\ (f\ (-1)\ n)))
     \]
 \end{example}
+
+\todo % пояснение

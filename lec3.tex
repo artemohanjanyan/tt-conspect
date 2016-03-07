@@ -52,7 +52,7 @@
 \end{definition}
 
 \begin{lemma}[subject deduction]
-    Если $\Gamma \vdash M : \sigma$ то $\Gamma \vdash N : \sigma$.
+    Если $\Gamma \vdash M : \sigma$ и $M \rightarrow_{\beta}N$, то $\Gamma \vdash N : \sigma$.
 \end{lemma}
 
 \begin{corollary}
@@ -101,10 +101,11 @@
     Неверно, что если $M \rightarrow_{\beta} N$, $\Gamma \vdash N : \sigma$, то $\Gamma \vdash M : \sigma$.
 \end{lemma}
 Например, для $Ka\Omega$.
+
 В общем случае тип не уникален, бывает, что одновременно $\vdash \lambda x . x : \alpha \rightarrow \alpha$ и $\vdash \lambda x . x : (\beta \rightarrow \beta) \rightarrow (\beta \rightarrow \beta)$.
 
 \begin{definition}[Сильная нормализация]
-    Назовём исчисление сильно-нормализуемым, если не существует бесконечной последовательности $\beta$-редукций.
+    Назовём исчисление сильно-нормализуемым, если любая последовательность редукций неизбежно приводит к нормальной форме (не существует бесконечной последовательности $\beta$-редукций) .
 \end{definition}
 
 \begin{definition}[Слабая нормализация]
@@ -116,7 +117,7 @@
     Любое просто типизируемое $\lambda$-выражение сильно нормализуемо.
 \end{theorem}
 
-\todo\{
+\todo\{ это к чему и о чём вообще?
 %\begin{theorem}
 %    Если $\nu = (\alpha \rightarrow \alpha) \rightarrow (\alpha \rightarrow \alpha)$ и $F : \nu \rightarrow \nu \rightarrow \nu$, то $F$ "--- расширенный полином.
 %\end{theorem}
