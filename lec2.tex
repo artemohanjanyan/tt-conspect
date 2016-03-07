@@ -23,7 +23,7 @@ $\beta$-редукция не обладает ромбовидным свойс
     Нет $d$, что $b \rightarrow_{\beta} d$ и $c \rightarrow_{\beta} d$.
 \end{example}
 
-\begin{theorem}[Чёрча-Россера]
+\begin{theorem}[Чёрча-Россера] \label{church-rosser}
     $\beta$-редуцируемость обладает ромбовидным свойством.
 \end{theorem}
 
@@ -51,7 +51,7 @@ $\beta$-редукция не обладает ромбовидным свойс
     \end{enumerate}
 \end{definition}
 
-\begin{statement}
+\begin{statement} \label{st-star}
     $(\rightrightarrows_{\beta})$ обладает ромбовидным свойством.
 \end{statement}
 
@@ -59,11 +59,11 @@ $\beta$-редукция не обладает ромбовидным свойс
     (Упражнение) \todo % TODO
 \end{proof}
 
-\begin{statement}
+\begin{statement} \label{st-A}
     Если $A \rightarrow_{\beta} B$, то $A \rightrightarrows_{\beta} B$.
 \end{statement}
 
-\begin{statement}
+\begin{statement} \label{st-B}
     Если $A \rightrightarrows_{\beta} B$, то $A \twoheadrightarrow_{\beta} B$.
 \end{statement}
 
@@ -80,11 +80,13 @@ $\beta$-редукция не обладает ромбовидным свойс
     \end{gather*}
 \end{example}
 
-\begin{statement}
-    Из предыдущих двух утверждений следует $(\rightarrow_{\beta})^{*} = (\rightrightarrows_{\beta})^{*}$.
+\begin{statement} \label{st-C}
+    Из \ref{st-A} и \ref{st-B} следует, что $(\rightarrow_{\beta})^{*} = (\rightrightarrows_{\beta})^{*}$.
 \end{statement}
 
-Теорема Чёрча-Россера следует из приведённых утверждений.
+\begin{proof}
+    Теорема \nameref{church-rosser} следует из \ref{st-star} и \ref{st-C}.
+\end{proof}
 
 \begin{corollary}
     Нормальная форма для $\lambda$-выражения единственна, если существует.
@@ -95,7 +97,7 @@ $\beta$-редукция не обладает ромбовидным свойс
 \end{theorem}
 
 \subsection{Порядок редукции}
-\epigraph{"<Завтра! Завтра! Не сегодня!"> "--- так ленивцы говорят.}{sprichwort}
+\epigraph{"<Завтра! Завтра! Не сегодня!"> "--- так ленивцы говорят.}{Das deutsches Sprichwort}
 
 \begin{definition}
     \begin{align*}
