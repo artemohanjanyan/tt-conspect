@@ -1,0 +1,86 @@
+\section{Интуиционистское исчисление предикатов второго порядка}
+
+Обычное $\lambda$-исчисление позволяет слишком много, просто-типизированное "--- слишком мало ($(-1)$ не выразим). Хотелось бы золотую середину.
+
+\subsection{Логика второго порядка}
+
+\begin{definition}
+    \begin{bnf}
+    \[
+        \Phi ::= (\Phi) | p | \Phi \rightarrow \Phi | \forall p . \Phi \color{gray} \underbrace{| \exists p . \Phi | \bot | \Phi \& \Phi | \Phi \vee \Phi}_{\text{сокращения}}
+    \]
+    \end{bnf}
+    Введение кванторов:
+    \begin{gather*}
+        \infer[p \notin \mathrm{FV}(\Gamma)]{\Gamma \vdash \forall p . \varphi}{\Gamma \vdash \varphi} \\
+        \infer{\Gamma \vdash \exists p . \varphi}{\Gamma \vdash \varphi [p := \psi]}
+    \end{gather*}
+    Удаление кванторов:
+    \begin{gather*}
+        \infer{\Gamma \vdash \varphi [p := \sigma]}{\Gamma \vdash \forall p . \varphi} \\
+        \infer[p \notin \mathrm{FV}(\Gamma, \psi)]{\Gamma \vdash \psi}{\Gamma \vdash \exists p . \varphi & \Gamma, \varphi \vdash \psi}
+    \end{gather*}
+    Сокращения:
+    \begin{align*}
+        \bot & \equiv \forall p . p \\
+        \varphi \& \psi & \equiv \forall a . ((\varphi \rightarrow \psi \rightarrow a) \rightarrow a) \\
+        \varphi \vee \psi & \equiv \forall a . (\varphi \rightarrow a) \rightarrow (\psi \rightarrow a) \rightarrow a \\
+        \exists x . \tau & \equiv \forall a . (\forall x . \tau \rightarrow a) \rightarrow a
+    \end{align*}
+\end{definition}
+
+\subsection{Система $F$}
+
+\begin{definition}[Тип в системе $F$]
+\[
+    x =
+    \begin{cases}
+        \alpha, \beta, \gamma, \ldots & \text{(атомарный тип)} \\
+        \tau \rightarrow \sigma \\
+        \forall \alpha . \tau & \text{($\alpha$ "--- переменнная)}
+    \end{cases}
+\]
+\end{definition}
+
+\begin{definition}[Исчисление по Чёрчу в системе $F$]
+    \begin{bnf}
+        \begin{gather*}
+            \mathbf\Lambda ::= x | \lambda p^\alpha . \mathbf\Lambda | \mathbf\Lambda \mathbf\Lambda | (\mathbf\Lambda) \\
+            \underset{\text{(полиморфная абстракция)}}{| \Lambda \alpha . \mathbf\Lambda} \\
+            \underset{\text{(переменная типа)}}{| \mathbf\Lambda \tau}
+        \end{gather*}
+    \end{bnf}
+    Правила вывода:
+    \begin{enumerate}
+        \item $\infer[x \notin \mathrm{dom}(\Gamma)]{\Gamma, x : \sigma \vdash x : \sigma}{}$
+        \item $\infer{\Gamma \vdash MN : \sigma}{\Gamma \vdash M : \tau \rightarrow \sigma & \Gamma \vdash N : \tau}$
+        \item $\infer[(x \notin \mathrm{dom}(\Gamma))]{\Gamma \vdash \lambda x^\tau . M : \tau \rightarrow \sigma}{\Gamma, x : \tau \vdash M : \sigma}$
+        \item $\infer[x \in \mathrm{FV}(\Gamma)]{\Gamma \vdash \Lambda \alpha . M : \forall \alpha : \sigma}{\Gamma \vdash M : \sigma}$
+        \item $\infer[\text{(подстановка типа)}]{\Gamma \vdash M \tau : \sigma [\alpha := \tau]}{\Gamma \vdash M : \forall \alpha . \sigma}$
+    \end{enumerate}
+\end{definition}
+
+\begin{example}
+    \begin{gather*}
+        \mathrm{Pr1} = \lambda x . x T \\
+        \mathrm{Pr1} : \forall \alpha . \forall \beta . \alpha \& \beta \rightarrow \alpha \\
+        \text{\todo}
+    \end{gather*}
+\end{example}
+
+\begin{definition}[$\beta$-редукция в $F$] \ 
+    \begin{enumerate}[label=(\asbuk*)]
+        \item Типовая редукция: $\left(\Lambda \alpha . M^\sigma\right) \tau \rightarrow_\beta M[\alpha:=\tau] : \sigma[\alpha := \tau]$
+        \item Классическая $\beta$-редукция: $\left(\lambda x^\sigma . M\right)^{\sigma \rightarrow \tau} Y \rightarrow_\beta M [x:=Y] : \tau$
+    \end{enumerate}
+\end{definition}
+
+\begin{theorem}[Изоморфизм Карри-Ховарда]
+    $\Gamma \vdash_F M :\tau$ т.и.т.т. $\abs{\Gamma} \vdash \tau$ в интуиционистском исчислении предикатов второго порядка.
+\end{theorem}
+
+\begin{theorem}
+    $F$ сильно нормализуемо.
+\end{theorem}
+
+\subsection{Экзистенциальные тип}

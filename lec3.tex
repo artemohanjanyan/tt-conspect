@@ -142,7 +142,6 @@
         \Lambda_{\xx} ::= x | \lambda x^{\sigma}.\Lambda_{\xx} | (\Lambda_{\xx}) | \Lambda_{\xx} \Lambda_{\xx}
     \]
     \end{bnf}
-
     Правила:
     \begin{enumerate}
         \item $\infer[(x \notin \mathrm{dom}(\Gamma))]
@@ -179,6 +178,10 @@
     Тогда найдётся такое $P$, что $\Gamma \vdash_{\xx} P : \sigma$,
             $N \twoheadrightarrow_{\beta} \abs{P}$ и $T \twoheadrightarrow_{\beta} \abs{P}$.
 \end{theorem}
+
+\begin{lemma}[Уникальность типов]
+    Если $\Gamma \vdash_\xx M : \gamma$ и $\Gamma \vdash_\xx M : \tau$, то $\sigma = \tau$.
+\end{lemma}
 
 \begin{theorem}[о стирании] \ 
     \begin{enumerate}
