@@ -1,9 +1,9 @@
-\section{Просто типизированное $\lambda$-исчисление}
+\section{\texorpdfstring{Просто типизированное $\lambda$-исчисление}{Simply typed lambda calculus}}
 
 \begin{definition}[Тип]
-    $T = \{\alpha, \beta, \gamma, \ldots\}$ "--- множество типов. \\
-    $\sigma$, $\tau$ "--- метапеременные для типов. \\
-    Если $\tau$, $\sigma$ "--- типы, то $\sigma \rightarrow \tau$ "--- тип. \\
+    $T = \{\alpha, \beta, \gamma, \ldots\}$ "--- множество типов.
+    $\sigma$, $\tau$ "--- метапеременные для типов.
+    Если $\tau$, $\sigma$ "--- типы, то $\sigma \rightarrow \tau$ "--- тип.
     \begin{bnf}
     \[
         \Pi ::= T | \Pi \rightarrow \Pi | (\Pi)
@@ -20,7 +20,7 @@
 \end{gather*}
 \end{definition}
 
-\subsection{Исчисление по Карри}
+\subsection{\texorpdfstring{Исчисление по Карри}{Curry-style}}
 
 \begin{definition}[Типизируемость по Карри]
     Рассмотрим исчисление со следующими правилами:
@@ -117,24 +117,24 @@
     Любое просто типизируемое $\lambda$-выражение сильно нормализуемо.
 \end{theorem}
 
-\todo\{ это к чему и о чём вообще?
+%\todo\{ это к чему и о чём вообще?
 %\begin{theorem}
 %    Если $\nu = (\alpha \rightarrow \alpha) \rightarrow (\alpha \rightarrow \alpha)$ и $F : \nu \rightarrow \nu \rightarrow \nu$, то $F$ "--- расширенный полином.
 %\end{theorem}
+%
+%\begin{theorem}
+%    Рассмотрим полином $E(m,n) =
+%    \begin{cases}
+%        \text{Полином}(m,n) & m > 0, n > 0 \\
+%        \text{Полином}(m)   & m > 0, n = 0 \\
+%        \text{Полином}(n)   & m = 0, n > 0 \\
+%        \text{Константа}    & m = 0, n = 0
+%    \end{cases}$. \\
+%    Если $\nu = (\alpha \rightarrow \alpha) \rightarrow (\alpha \rightarrow \alpha)$ и $F : \nu \rightarrow \nu \rightarrow \nu$, то $F$ "--- рассматриваемый полином.
+%\end{theorem}
+%\} // \todo
 
-\begin{theorem}
-    Рассмотрим полином $E(m,n) =
-    \begin{cases}
-        \text{Полином}(m,n) & m > 0, n > 0 \\
-        \text{Полином}(m)   & m > 0, n = 0 \\
-        \text{Полином}(n)   & m = 0, n > 0 \\
-        \text{Константа}    & m = 0, n = 0
-    \end{cases}$. \\
-    Если $\nu = (\alpha \rightarrow \alpha) \rightarrow (\alpha \rightarrow \alpha)$ и $F : \nu \rightarrow \nu \rightarrow \nu$, то $F$ "--- рассматриваемый полином.
-\end{theorem}
-\} // \todo
-
-\subsection{Исчисление по Чёрчу}
+\subsection{\texorpdfstring{Исчисление по Чёрчу}{Church-style}}
 
 \begin{definition}[Типизация по Чёрчу]
     \begin{bnf}
