@@ -174,14 +174,16 @@
 \end{lemma}
 
 \begin{theorem}[Чёрча-Россера]
-    Если $\Gamma \vdash_{\xx} M : \sigma$, $\abs{M} \twoheadrightarrow_{\beta} N$, $\abs{M} \twoheadrightarrow_{\beta} T$. \\
+    Пусть $\Gamma \vdash_{\xx} M : \sigma$, $\abs{M} \twoheadrightarrow_{\beta} N$, $\abs{M} \twoheadrightarrow_{\beta} T$. \\
     Тогда найдётся такое $P$, что $\Gamma \vdash_{\xx} P : \sigma$,
             $N \twoheadrightarrow_{\beta} \abs{P}$ и $T \twoheadrightarrow_{\beta} \abs{P}$.
 \end{theorem}
 
-\begin{lemma}[Уникальность типов]
+\begin{lemma}[Уникальность типов] \label{uniqueness}
     Если $\Gamma \vdash_\xx M : \gamma$ и $\Gamma \vdash_\xx M : \tau$, то $\sigma = \tau$.
 \end{lemma}
+
+Лемма \ref{uniqueness} показывает, чем исчисление по Чёрчу отличается исчислением по Карри.
 
 \begin{theorem}[о стирании] \ 
     \begin{enumerate}
@@ -199,60 +201,81 @@
     \end{enumerate}
 \end{theorem}
 
-\todo \ комментарии про то, зачем мы это делаем.
+\subsection{\texorpdfstring{Изоморфизм Карри-Ховарда}{Curry-style}}
 
-\begin{gather*}
-    \infer
-        {\Gamma \vdash \left<A,B\right> : \varphi \& \psi}
-        {\Gamma \vdash A : \varphi & \Gamma \vdash B : \psi} \\
-    \infer
-        {\Gamma \vdash \pi_{1} R : \varphi}
-        {\Gamma \vdash R : \varphi \& \psi} \qquad
-    \infer
-        {\Gamma \vdash \pi_{2} R : \psi}
-        {\Gamma \vdash R : \varphi \& \psi}
-\end{gather*}
+\todo \ Многими логиками замечалась связь между выражениями типизированного $\lambda$-исчисления и доказательствами выражений ИИВ.
 
-\begin{gather*}
-    \infer
-        {\Gamma \vdash \varphi \vee \psi}
-        {\Gamma \vdash \varphi} \qquad
-    \infer
-        {\Gamma \vdash \varphi \vee \psi \rightarrow \pi}
-        {\Gamma \vdash \varphi \rightarrow \pi & \Gamma \vdash \psi \rightarrow \pi} \\
-    \infer
-        {\Gamma \vdash \mathrm{inj}_{1} A : \varphi \vee \psi}
-        {\Gamma \vdash A : \varphi}
-\end{gather*}
+\renewcommand{\arraystretch}{1.5}
 
-\todo{} трешак какой-то пошёл :(
+\setlength\cellspacetoplimit{5pt}
+\setlength\cellspacebottomlimit{5pt}
+
+\begin{center}
+\begin{tabular}{Sc|Sc}
+    \hline Правило вывода в ИИВ & Правило вывода в типизированном $\lambda$-исчислении \\ \hline
+
+    $\infer{\Gamma \vdash \tau}{\Gamma \vdash \sigma \rightarrow \tau & \Gamma \vdash \sigma}$ &
+    $\infer{\Gamma \vdash AB : \tau}{\Gamma \vdash A : \sigma \rightarrow \tau & \Gamma \vdash B : \sigma}$ \\ \hline
+
+    $\infer{\Gamma \vdash \varphi \& \psi}{\Gamma \vdash \varphi & \Gamma \vdash \psi}$ &
+    $\infer{\Gamma \vdash \left<A,B\right> : \varphi \& \psi}{\Gamma \vdash A : \varphi & \Gamma \vdash B : \psi}$ \\
+
+    $\infer{\Gamma \vdash \varphi}{\Gamma \vdash \varphi \& \psi}$ &
+    $\infer{\Gamma \vdash \pi_1 R : \varphi}{\Gamma \vdash R : \varphi \& \psi}$ \\
+
+    $\infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \& \psi}$ &
+    $\infer{\Gamma \vdash \pi_2 R : \psi}{\Gamma \vdash R : \varphi \& \psi}$ \\ \hline
+
+    $\infer{\Gamma \vdash \varphi \vee \psi}{\Gamma \vdash \varphi}$ &
+    $\infer{\Gamma \vdash \inj_1 A : \varphi \vee \psi}{\Gamma \vdash A : \varphi}$ \\
+
+    $\infer{\Gamma \vdash \varphi \vee \psi}{\Gamma \vdash \psi}$ &
+    $\infer{\Gamma \vdash \inj_2 A : \varphi \vee \psi}{\Gamma \vdash A : \psi}$ \\
+
+    $\infer{\Gamma \vdash \varphi \vee \psi \rightarrow \pi}
+        {\Gamma \vdash \varphi \rightarrow \pi & \Gamma \vdash \psi \rightarrow \pi}$ &
+    $\infer{\Gamma \vdash \case{T}{A}{B} : \pi}{\Gamma \vdash T : \varphi \vee \psi &
+        \Gamma \vdash A : \varphi \rightarrow \pi & \Gamma \vdash B : \psi \rightarrow \pi}$ \\ \hline
+\end{tabular}
+\end{center}
+
+\todo\ Пояснения значений инъекций, проекций и case; примеры.
+
+\begin{tabular}{Sc|Sc}
+    Интуиционистская логика & $\lambda$-исчисление \\ \hline
+    выражение & тип \\
+    доказательство & терм (программа) \\
+    предположение & свободная переменная \\
+    импликация & абстракция (функция)
+\end{tabular}
 
 \begin{theorem}[об изоморфизме Карри-Ховарда] \ 
     \begin{enumerate}
-        \item Пусть $\Gamma \vdash \sigma$ "--- и.ф.и.и.в., тогда найдётся такое $\Delta$, что
-                $\abs{\Delta}=\Gamma$, M "--- такой терм, что $\Delta \vdash_{\xx} M : \sigma$.
+        \item Пусть $\Gamma \vdash \sigma$ "--- и.ф.и.и.в., тогда найдётся такой терм M,
+            что $\Delta \vdash_{\xx} M : \sigma$, где $\Delta=\left\{ \left(x_\varphi : \varphi \right) \mid \varphi \in \Gamma \right\}$.
         \item Пусть $\Delta \vdash_{\xx} M : \sigma$, тогда $\abs{\Delta} \vdash \sigma$.
     \end{enumerate}
 \end{theorem}
-% долг с предыдущей лекции
-\begin{proof}
-    Рассмотрим $x_\varphi$, $\varphi \in \Gamma$.
-    $\Gamma = \{\sigma_{1}, \sigma_{2} \ldots\}$,
-    $\uparrow \!\! \Gamma = \Delta = \{x_{1}:\sigma_{1}, x_{2}:\sigma_{2}, \ldots \}$.
-    Индукция по сложности доказательства $\sigma$: \\
-    База: \infer{\Gamma, \varphi \vdash \varphi}{}
-    \begin{enumerate}
-        \item $\varphi \in \Gamma$. Тогда \infer{\Delta \vdash x_\varphi : \varphi}{}
-        \item $\varphi \notin \Gamma$. Тогда \infer{\Delta, x_\varphi : \varphi \vdash x_\varphi : \varphi}{}, $x_\varphi$ "--- новая переменная.
-    \end{enumerate}
-    Переход: \infer{\Gamma \vdash \varphi \rightarrow \psi}{\Gamma, \varphi \vdash \psi}.
-    По индукционному предположению $\Delta, y : \varphi \vdash M : \psi$.
-    \begin{enumerate}
-        \item $\varphi \in \Gamma$. Тогда
-        \infer{\Delta \setminus \left\{x_\varphi\right\} \vdash \lambda x_\varphi . M : \varphi \rightarrow \psi}{\Delta \vdash M : \psi}.
-        \item $\varphi \notin \Gamma$. Тогда
-        \infer{\Delta \vdash \lambda x_\varphi . M : \varphi \rightarrow \psi}{\Delta, x_\varphi : \varphi \vdash M : \psi}.
-    \end{enumerate}
-\end{proof}
 
-\todo
+%% долг с предыдущей лекции
+\begin{proof} \todo
+    %есть в Curry-Howard Isomorphism, стр 75
+
+    %Рассмотрим $x_\varphi$, $\varphi \in \Gamma$.
+    %$\Gamma = \{\sigma_{1}, \sigma_{2} \ldots\}$,
+    %$\uparrow \!\! \Gamma = \Delta = \{x_{1}:\sigma_{1}, x_{2}:\sigma_{2}, \ldots \}$.
+    %Индукция по сложности доказательства $\sigma$: \\
+    %База: \infer{\Gamma, \varphi \vdash \varphi}{}
+    %\begin{enumerate}
+    %    \item $\varphi \in \Gamma$. Тогда \infer{\Delta \vdash x_\varphi : \varphi}{}
+    %    \item $\varphi \notin \Gamma$. Тогда \infer{\Delta, x_\varphi : \varphi \vdash x_\varphi : \varphi}{}, $x_\varphi$ "--- новая переменная.
+    %\end{enumerate}
+    %Переход: \infer{\Gamma \vdash \varphi \rightarrow \psi}{\Gamma, \varphi \vdash \psi}.
+    %По индукционному предположению $\Delta, y : \varphi \vdash M : \psi$.
+    %\begin{enumerate}
+    %    \item $\varphi \in \Gamma$. Тогда
+    %    \infer{\Delta \setminus \left\{x_\varphi\right\} \vdash \lambda x_\varphi . M : \varphi \rightarrow \psi}{\Delta \vdash M : \psi}.
+    %    \item $\varphi \notin \Gamma$. Тогда
+    %    \infer{\Delta \vdash \lambda x_\varphi . M : \varphi \rightarrow \psi}{\Delta, x_\varphi : \varphi \vdash M : \psi}.
+    %\end{enumerate}
+\end{proof}

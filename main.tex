@@ -20,6 +20,8 @@
 \usepackage{titlesec}
 \usepackage{xcolor}
 \usepackage{stmaryrd}
+\usepackage{cellspace}
+
 \usepackage[hidelinks]{hyperref}
 
 %\setmainfont[Ligatures=TeX,SmallCapsFont={Times New Roman}]{Palatino Linotype}
@@ -36,6 +38,9 @@
 \AddEnumerateCounter{\asbuk}{\@asbuk}{\cyrm}
 
 %http://tex.stackexchange.com/questions/31526/macro-for-left-and-right/58641#58641
+
+\DeclareMathOperator{\rank}{rk}
+\DeclareMathOperator{\inj}{inj}
 
 \title{Теория типов}
 \author{Человек, который поспорил на 2 торта $\heartsuit$}
@@ -64,6 +69,9 @@
 \newcommand{\abs}[1]{\left|#1\right|}
 \newcommand{\xx}{ч}
 \newcommand{\rr}{к}
+\newcommand{\case}[3]{\mathrm{Case}~#1~#2~#3}
+\newcommand{\pack}[2]{\mathrm{pack}~#1~\mathrm{to}~#2}
+\newcommand{\abstype}[4]{\mathrm{abstype}~#1~\mathrm{with}~#2~\mathrm{in}~#3~\mathrm{is}~#4}
 
 \maketitle
 \tableofcontents
