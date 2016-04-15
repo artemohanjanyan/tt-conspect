@@ -171,8 +171,8 @@ $\lambda{}x.A$ связывает все свободные вхождения $
 Для того, чтобы определить $(-1)$, сначала определим "пару":
 \begin{alignat*}{2}
     \left<a,b\right> &= \lambda f.f a b \\
-    \mathrm{First} &= \lambda p . \T p \\
-    \mathrm{Second} &= \lambda p . \F p
+    \mathrm{First} &= \lambda p . p \T \\
+    \mathrm{Second} &= \lambda p . p \F
 \end{alignat*}
 
 $n$ раз применим функцию $f\left(\left<a,b\right>\right) = \left<b,b+1\right>$ и возьмём первый элемент пары:
