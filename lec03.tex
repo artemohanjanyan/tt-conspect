@@ -206,8 +206,8 @@
 \todo \ Многими логиками замечалась связь между выражениями типизированного $\lambda$-исчисления и доказательствами выражений ИИВ.
 
 \begin{center}
-\begin{tabular}{|Sc|Sc|}
-    \hline Правило вывода в ИИВ & Правило вывода в типизированном $\lambda$-исчислении \\ \hline
+\begin{tabular}{|Sc|Sc|} \hline
+    Правило вывода в ИИВ & Правило вывода в типизированном $\lambda$-исчислении \\ \hline
 
     $\infer{\Gamma \vdash \tau}{\Gamma \vdash \sigma \rightarrow \tau & \Gamma \vdash \sigma}$ &
     $\infer{\Gamma \vdash AB : \tau}{\Gamma \vdash A : \sigma \rightarrow \tau & \Gamma \vdash B : \sigma}$ \\
@@ -215,14 +215,14 @@
     $\infer{\Gamma \vdash \sigma \rightarrow \tau}{\Gamma, \sigma \vdash \tau}$ &
     $\infer{\Gamma \vdash \lambda x^\sigma . A : \sigma \rightarrow \tau}{\Gamma, x^\sigma : \sigma \vdash A : \tau}$ \\ \hline
 
-    $\infer{\Gamma \vdash \varphi \& \psi}{\Gamma \vdash \varphi & \Gamma \vdash \psi}$ &
-    $\infer{\Gamma \vdash \left<A,B\right> : \varphi \& \psi}{\Gamma \vdash A : \varphi & \Gamma \vdash B : \psi}$ \\
+    $\infer{\Gamma \vdash \varphi \with \psi}{\Gamma \vdash \varphi & \Gamma \vdash \psi}$ &
+    $\infer{\Gamma \vdash \left<A,B\right> : \varphi \with \psi}{\Gamma \vdash A : \varphi & \Gamma \vdash B : \psi}$ \\
 
-    $\infer{\Gamma \vdash \varphi}{\Gamma \vdash \varphi \& \psi}$ &
-    $\infer{\Gamma \vdash \pi_1 R : \varphi}{\Gamma \vdash R : \varphi \& \psi}$ \\
+    $\infer{\Gamma \vdash \varphi}{\Gamma \vdash \varphi \with \psi}$ &
+    $\infer{\Gamma \vdash \pi_1 R : \varphi}{\Gamma \vdash R : \varphi \with \psi}$ \\
 
-    $\infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \& \psi}$ &
-    $\infer{\Gamma \vdash \pi_2 R : \psi}{\Gamma \vdash R : \varphi \& \psi}$ \\ \hline
+    $\infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \with \psi}$ &
+    $\infer{\Gamma \vdash \pi_2 R : \psi}{\Gamma \vdash R : \varphi \with \psi}$ \\ \hline
 
     $\infer{\Gamma \vdash \varphi \vee \psi}{\Gamma \vdash \varphi}$ &
     $\infer{\Gamma \vdash \inj_1 A : \varphi \vee \psi}{\Gamma \vdash A : \varphi}$ \\
@@ -239,6 +239,7 @@
 
 \todo\ Пояснения значений инъекций, проекций и case; примеры.
 
+\begin{center}
 \begin{tabular}{|Sc|Sc|} \hline
     Интуиционистская логика & $\lambda$-исчисление \\ \hline
     выражение & тип \\
@@ -246,6 +247,7 @@
     предположение & свободная переменная \\
     импликация & абстракция (функция) \\ \hline
 \end{tabular}
+\end{center}
 
 \begin{theorem}[об изоморфизме Карри-Ховарда] \ 
     \begin{enumerate}
