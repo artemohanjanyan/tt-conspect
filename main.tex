@@ -21,6 +21,7 @@
 \usepackage{xcolor}
 \usepackage{stmaryrd}
 \usepackage{cellspace}
+\usepackage{cmll}
 
 \usepackage[hidelinks]{hyperref}
 
@@ -78,10 +79,18 @@
 %\newpage
 \newcommand{\sectionbreak}{\clearpage}
 
-\input{lec1.tex}
-\input{lec2.tex}
-\input{lec3.tex}
-\input{lec4.tex}
-\input{lec5.tex}
+\renewcommand{\arraystretch}{1.5}
+\setlength\cellspacetoplimit{5pt}
+\setlength\cellspacebottomlimit{5pt}
+\setlength{\inferLineSkip}{4pt}
+
+\input{lec01.tex}
+\input{lec02.tex}
+\input{lec03.tex}
+\input{lec04.tex}
+%\input{lec05.tex}
+%\input{lec06.tex}
+
+\input{lec10.tex}
 
 \end{document}

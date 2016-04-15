@@ -1,0 +1,129 @@
+\section{\texorpdfstring{Линейные и уникальные типы}{Linear and unique types}}
+
+Пусть $A \rightarrow_\beta A'$.
+С одной стороны, порядок редукции не важен, % TODO картинка
+$(\lambda x . x x) A \rightarrow_\beta (\lambda x . x x) A' \rightarrow_\beta A' A'$
+и $(\lambda x . x x) A \rightarrow_\beta A A \rightarrow_\beta A' A \rightarrow_\beta A' A'$.
+По теореме \nameref{church-rosser} нормальная форма единственна, если существует.
+С другой стороны, реальный мир на самом деле не таков, в нём есть побочные эффекты.
+% A(b(), unique_ptr<C>(new C))
+
+\subsection{\texorpdfstring{Комбинаторы}{Combinators}}
+
+Рассмотрим комбинаторные логики Моисея Шейнфинкеля и Хаскелла Карри:
+
+Моисей Шейнфинкель:
+\begin{center}
+\begin{tabular}{Sc Sl}
+    $I$ & Identität \\
+    $K$ & Konstanz \\
+    $S$ & VerSchmelzung \\
+    $T$ & VerTauschung
+\end{tabular}
+\end{center}
+
+Хаскел Карри:
+\begin{align*}
+    B &= \lambda x y z . x (y z) \\
+    C &= \lambda x y z . x z y \\
+    K &= \lambda x y . x \\
+    W &= \lambda x y . x y y
+\end{align*}
+
+
+\begin{proof}[Докажем \ref{SK-basis}]
+    Определим $T : \Lambda : \Lambda_{SK} \cup \left\{ \text{свободные переменные} \right\}$:
+    \begin{align*}
+        T[x] &= x \\
+        T[A B] &= T[A]\ T[B]  \\
+        T[\lambda x . P] &= K\ T[P] \text{, если $x \notin FV(P)$} \\
+        T[\lambda x . x] &= I =_\beta SKK \\
+        T[\lambda x . A B] &= S\ T[\lambda x . A]\ T[\lambda x . B] \\
+        T[\lambda x . \lambda y . A] &= T[\lambda x . T[\lambda y . A]]
+    \end{align*}
+
+    $T[\lambda\text{-выражение}]$ завершается и не содержит абстракций.
+    Можно показать, что $T[A] =_\beta A$.
+\end{proof}
+
+Можно доказать аналогичную теорему для комбинаторов $B$, $C$, $K$, $W$, выразив через них $S$ и $K$:
+$K = K$, $S = B (BW) (BBC)$, $I = CKK$.
+
+А теперь выведем типы у $S$ и $K$:
+\begin{align*}
+    S &= \lambda x y z . x z (y z) : (\alpha \rightarrow \beta \rightarrow \gamma) \rightarrow
+        (\alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \gamma) \\
+    K &= \lambda x y . x : \alpha \rightarrow \beta \rightarrow \alpha
+\end{align*}
+Это похоже на вторую и первую схемы аксиом в ИИВ.
+
+Базис $BCKWI$ по изоморфизму Карри-Ховарда порождает интуиционистскую логику.
+Можно рассматривать исчисления, прорджённые базисами $BCKI$ и $BCI$.
+\begin{align*}
+    I &: \alpha \rightarrow \alpha \\
+    B &: (\alpha \rightarrow \beta) \rightarrow (\beta \rightarrow \gamma) \rightarrow (\alpha \rightarrow \gamma) \\
+    C &: (\alpha \rightarrow \beta \rightarrow \gamma) \rightarrow (\beta \rightarrow \alpha \rightarrow \gamma) \\
+    K &: \alpha \rightarrow \beta \rightarrow \alpha \\
+    W &: (\alpha \rightarrow \alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \beta)
+\end{align*}
+
+Сейчас мы выпишем какое-то исчисление.
+\[
+    \infer{\Gamma \vdash A \times B}{\Gamma \vdash A && \Gamma \vdash B} \qquad
+    \infer{\Gamma \vdash A}{\Gamma \vdash A \times B} \qquad
+    \infer{\Gamma \vdash B}{\Gamma \vdash A \times B}
+\]
+
+\todo{}шенька
+
+\subsection{\texorpdfstring{Линейные высказывания}{Linear statements}}
+
+\begin{definition}
+    \begin{bnf}
+    \[
+        T ::= x | T \multimap T | T \otimes T | T \with T | T \oplus T | \oc T
+    \]
+    \end{bnf}
+\end{definition}
+
+Контексты двух сортов. $\left<A\right>$ "--- линейный, $\left[ A \right]$ "--- интуиционистский.
+
+\begin{gather*}
+    \infer{\left<A\right> \vdash A}{} \qquad
+    \infer{\left[A\right] \vdash A}{} \qquad
+    \infer{\Delta, \Gamma \vdash A}{\Gamma, \Delta \vdash A} \qquad
+    \infer{\Gamma, \left[A\right] \vdash B}{\Gamma, \left[A\right], \left[A\right] \vdash B} \qquad
+    \infer{\Gamma, \left[A\right] \vdash B}{\Gamma \vdash B} \\
+\end{gather*}
+
+Докажем закон Де-Моргана:
+\[
+    \infer{\left<\oc (A \with B)\right> \vdash \oc A \otimes \oc B} {
+        \infer{\left<\oc (A \with B)\right> \vdash \oc (A \with B)}{}
+        &&
+        \infer{\left[A \with B\right] \vdash \oc A \otimes \oc B} {
+            \infer{\left[A \with B, A \with B\right] \vdash \oc A \otimes \oc B}{
+                \infer{\left[A \with B\right] \vdash \oc A} {
+                    \infer{\left[A \with B\right] \vdash A} {
+                        \infer{\left[A \with B \right] \vdash A \with B}{}
+                    }
+                }
+                &&
+                \infer{\left[A \with B\right] \vdash \oc B} {
+                    \infer{\left[A \with B\right] \vdash B} {
+                        \infer{\left[A \with B \right] \vdash A \with B}{}
+                    }
+                }
+            }
+        }
+    }
+\]
+
+Вложение интуиционистских связок в нашу логику:
+\begin{align*}
+    A \rightarrow B &= \oc A \multimap B \\
+    A \times B      &= A \with B \\
+    A + B           &= \oc A \oplus \oc B
+\end{align*}
+
+Также можно вкладывать $A \times B$ как $\oc A \otimes \oc B$.

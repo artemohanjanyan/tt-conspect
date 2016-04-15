@@ -1,0 +1,85 @@
+\begin{gather*}
+    \infer{\Gamma \vdash \exists \alpha . \varphi}{\Gamma \vdash \varphi[\alpha := \theta]} \\
+    \infer[\alpha \notin \mathrm{FV}(\Gamma,\psi)]{\Gamma \vdash \psi}
+        {\Gamma \vdash \exists \alpha . \varphi & \Gamma, \varphi \vdash \psi} \\
+    \infer{\Gamma\vdash (\mathrm{pack}~\theta, M~\mathrm{to}~\exists \alpha . \varphi) : \exists \alpha.\varphi}
+        {\Gamma \vdash M : \varphi[\alpha := \theta]} \\
+    \infer[\alpha \notin \mathrm{FV}(\Gamma, \psi)]
+        {\Gamma \vdash~\mathrm{abstype}~\alpha~\mathrm{with}~x:\varphi~\mathrm{in}~M~\mathrm{is}~N:\psi}
+        {\Gamma \vdash M : \exists \alpha . \varphi & \Gamma, x : \varphi \vdash N : \psi} \\
+\end{gather*}
+
+\begin{example} \ 
+    \begin{lstlisting}[language=ML]
+type stack
+val empty : stack
+val push : int * stack -> stack
+val pop : stack -> int * stack
+    \end{lstlisting}
+\end{example}
+
+\begin{gather*}
+    \pack{\theta, M}{\exists \alpha . \varphi} = 
+        \Lambda \beta . \lambda x^{\lambda \alpha . \varphi \rightarrow \beta} . (x \theta M) \\
+    \abstype{\alpha}{x : \varphi}{M}{N^\psi} =
+        M \psi (\Lambda \alpha . \lambda x ^ \varphi . N)
+\end{gather*}
+
+meh \\
+one large \todo
+
+\begin{statement}
+    $F$ сильно нормализуемо.
+\end{statement}
+
+\begin{statement}
+    $F$ неразрешима.
+\end{statement}
+$\Gamma \vdash M : \sigma$ неразрешимо.
+Доказать можно через сведение к проблеме останова.
+
+\begin{definition}[Ранг типа]
+\[
+    \rank(\tau) =
+    \begin{cases}
+        \max(\rank(\sigma)+1, \rank(\rho)) & \tau \equiv \sigma \rightarrow \rho \\
+        \rank(\rho) & \tau \equiv \sigma \rightarrow \rho, \sigma \text{ не содержит } \forall \\
+        0 & \tau \equiv \alpha \\
+        \max(\rank(\rho), 1) & \tau \equiv \forall \alpha . \rho
+    \end{cases}
+\]
+\end{definition}
+
+\subsection{\texorpdfstring{Типовая система Хиндли-Милнера}{\todo}}
+
+\begin{definition} \ \\
+    Тип "--- выражение в грамматике $ \begin{bnf} \tau ::= \alpha | \tau \rightarrow \tau | (\tau) \end{bnf} $ (монотип). \\
+    Типовая схема "--- $\sigma$, соответствующая грамматике $ \begin{bnf} \sigma ::= \tau | \forall \alpha . \sigma \end{bnf} $ (политип).
+\end{definition}
+
+\begin{statement}
+    $\rank(\tau) = 0$, $\rank(\sigma) = 1$.
+\end{statement}
+
+\begin{definition}
+    $\sigma_1$ "--- подтип $\sigma_2$, если существует подстановка
+            $[\alpha_1 := \theta_1, \alpha_2 := \theta_2 \ldots \alpha_n := \theta_n]$:
+    \begin{enumerate}
+        \item $\sigma_1 = \forall \beta_1 \ldots \forall \beta_k . \tau [\alpha_1 := \theta_1 \ldots \alpha_n := \theta_n]$,
+            $\alpha_i$ не входит свободно в $\{ \theta_i \}_{i=1}^n$.
+        \item $\sigma_2 = \forall \alpha_1 \ldots \forall \alpha_n \tau$
+    \end{enumerate}
+\end{definition}
+
+\todo{} правила вывода
+\begin{gather*}
+    \infer[Аксиома]{}{}\\
+\end{gather*}
+
+Задача вывода типов в Х-М разрешима.
+\paragraph{Алгоритм W}
+
+\begin{definition}[обозначения] \ \\
+        $\alpha_1 \ldots \alpha_n \notin \mathrm{FV}(\Gamma)$, $\mathrm{FV}(\overline{\Gamma(\tau)}) \leq \mathrm{FV}(\Gamma)$. \\
+    $\Gamma_x = \text{$\Gamma$ без $x$}$.
+\end{definition}
