@@ -35,7 +35,6 @@
             {\Gamma \vdash \lambda x . M : \sigma \rightarrow \tau}
             {\Gamma, x : \sigma \vdash M : \tau}$
     \end{enumerate}
-
     %\begin{gather*}
     %\infer[(x\ \cancel{\in}\ \mathrm{dom}(\Gamma))]
     %    {\Gamma, x:\sigma \vdash x:\sigma}
@@ -47,7 +46,6 @@
     %    {\Gamma \vdash \lambda x . M : \sigma \rightarrow \tau}
     %    {\Gamma, x : \sigma \vdash M : \tau}
     %\end{gather*}
-
     Если $\lambda$-выражение типизируется этими трёмя правилами, то говорят, что оно типизируется по Карри.
 \end{definition}
 
@@ -104,7 +102,7 @@
 
 В общем случае тип не уникален, бывает, что одновременно $\vdash \lambda x . x : \alpha \rightarrow \alpha$ и $\vdash \lambda x . x : (\beta \rightarrow \beta) \rightarrow (\beta \rightarrow \beta)$.
 
-\begin{definition}[Сильная нормализация]
+\begin{definition}[Сильная нормализация] \label{strong-normalization}
     Назовём исчисление сильно-нормализуемым, если любая последовательность редукций неизбежно приводит к нормальной форме (не существует бесконечной последовательности $\beta$-редукций) .
 \end{definition}
 
@@ -203,7 +201,7 @@
 
 \subsection{\texorpdfstring{Изоморфизм Карри-Ховарда}{Curry-style}}
 
-\todo \ Многими логиками замечалась связь между выражениями типизированного $\lambda$-исчисления и доказательствами выражений ИИВ.
+\todo Многими логиками замечалась связь между выражениями типизированного $\lambda$-исчисления и доказательствами выражений ИИВ.
 
 \begin{center}
 \begin{tabular}{|Sc|Sc|} \hline

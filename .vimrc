@@ -1,5 +1,6 @@
 imap `a \alpha
 imap `b \beta
+imap `f \varphi
 imap `g \gamma
 imap `G \Gamma
 imap `e \varepsilon
@@ -8,6 +9,7 @@ imap `L \Lambda
 imap `t \tau
 imap `p \pi
 imap `P \Pi
+imap `s \sigma
 
 imap `= \equiv
 

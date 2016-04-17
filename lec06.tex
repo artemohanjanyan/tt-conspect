@@ -1,32 +1,53 @@
+\subsection{\texorpdfstring{Экзистенциальные тип}{Existential types}}
+
+Допустим, у нас есть абстрактный тип данных "<Стек">: \\
+\begin{tabular}{l l}
+    empty & $: \alpha$ \\
+    push  & $: \alpha\with\nu\rightarrow\alpha$ \\
+    pop   & $: \alpha\rightarrow\alpha\with\nu$ \\
+\end{tabular} \\
+Можно попробовать сказать это так: "<$\mathrm{stack} :
+    \alpha \with (\alpha\with\nu\rightarrow\alpha) \with (\alpha\rightarrow\alpha\with\nu)$">.
+Но проблема в том, что у нас есть только интерфейс стека, а не его реализация. Поэтому лучше будет сказать так:
+    $\exists \alpha . \alpha \with (\alpha\with\nu\rightarrow\alpha) \with (\alpha\rightarrow\alpha\with\nu)$.
+То есть существует какое-то $\alpha$, реазизовывающее требуемый интерфейс.
+
+По аналогии с правилом удаления квантора существования, можно определить правила вывода для выражений экзистенциальных типов:
 \begin{gather*}
-    \infer{\Gamma \vdash \exists \alpha . \varphi}{\Gamma \vdash \varphi[\alpha := \theta]} \\
-    \infer[\alpha \notin \mathrm{FV}(\Gamma,\psi)]{\Gamma \vdash \psi}
-        {\Gamma \vdash \exists \alpha . \varphi & \Gamma, \varphi \vdash \psi} \\
-    \infer{\Gamma\vdash (\mathrm{pack}~\theta, M~\mathrm{to}~\exists \alpha . \varphi) : \exists \alpha.\varphi}
-        {\Gamma \vdash M : \varphi[\alpha := \theta]} \\
-    \infer[\alpha \notin \mathrm{FV}(\Gamma, \psi)]
-        {\Gamma \vdash~\mathrm{abstype}~\alpha~\mathrm{with}~x:\varphi~\mathrm{in}~M~\mathrm{is}~N:\psi}
-        {\Gamma \vdash M : \exists \alpha . \varphi & \Gamma, x : \varphi \vdash N : \psi} \\
+    \infer{\Gamma\vdash (\pack{M, \theta}{\exists \alpha . \varphi}) : \exists \alpha.\varphi}
+        {\Gamma \vdash M : \varphi[\alpha := \theta]} \qquad
+    \infer[\alpha \notin \FV(\Gamma, \psi)]
+        {\Gamma \vdash~\abstype{\alpha}{x:\varphi}{M}{N:\psi}}
+        {\Gamma \vdash M : \exists \alpha . \varphi && \Gamma, x : \varphi \vdash N : \psi}
 \end{gather*}
-
-\begin{example} \ 
-    \begin{lstlisting}[language=ML]
-type stack
-val empty : stack
-val push : int * stack -> stack
-val pop : stack -> int * stack
-    \end{lstlisting}
+\begin{example} \todo нормально написать пример со стеком.
 \end{example}
-
+%\begin{lstlisting}[language=ML]
+%type 'a stack
+%val empty : 'a stack
+%val push  : 'a * 'a stack -> 'a stack
+%val pop   : 'a stack -> 'a * 'a stack
+%\end{lstlisting}
+%-----------------------------------------
+%\begin{lstlisting}[language=ML]
+%type stack
+%val empty : stack
+%val push : int * stack -> stack
+%val pop : stack -> int * stack
+%\end{lstlisting}
+Если вспомнить, что квантор существования выразим через квантор всеобщности
+($\exists \alpha . x \equiv \forall \beta . (\forall \alpha . x \rightarrow \beta) \rightarrow \beta$),
+то можно попытаться записать типы выражений \textbf{pack} и \textbf{abstype} через квантор существования и выразить их без расширения языка.
 \begin{gather*}
-    \pack{\theta, M}{\exists \alpha . \varphi} = 
-        \Lambda \beta . \lambda x^{\lambda \alpha . \varphi \rightarrow \beta} . (x \theta M) \\
+    \pack{M, \theta}{\exists \alpha . \varphi} = 
+        \Lambda \beta . \lambda x^{\forall \alpha . \varphi \rightarrow \beta} . (x \theta M) \\
     \abstype{\alpha}{x : \varphi}{M}{N^\psi} =
         M \psi (\Lambda \alpha . \lambda x ^ \varphi . N)
 \end{gather*}
-
-meh \\
-one large \todo
+Можно показать, что $\abstype{\alpha}{x:\sigma}{(\pack{M,\tau}{\exists\alpha .\sigma})}{N}\twoheadrightarrow_\beta N[\alpha\coloneqq\tau][x\coloneqq M]$.
+\todo
+\begin{example} \todo
+\end{example}
 
 \begin{statement}
     $F$ сильно нормализуемо.
@@ -35,51 +56,91 @@ one large \todo
 \begin{statement}
     $F$ неразрешима.
 \end{statement}
-$\Gamma \vdash M : \sigma$ неразрешимо.
-Доказать можно через сведение к проблеме останова.
+Ни одна из задач $\lambda$-исчисления в системе $F$ не разрешима, даже задача проверки типизации.
+Доказать это можно через сведение к проблеме останова.
+
+Итак, мы попытались добавить к типизированному $\lambda$-исчислению абстрактные типы данных, и получили слишком сложный язык.
+Давайте попробуем немного его упростить, чтобы с ним можно было работать.
+
+\subsection{\texorpdfstring{Типовая система Хиндли-Милнера}{\todo}}
 
 \begin{definition}[Ранг типа]
 \[
     \rank(\tau) =
     \begin{cases}
-        \max(\rank(\sigma)+1, \rank(\rho)) & \tau \equiv \sigma \rightarrow \rho \\
-        \rank(\rho) & \tau \equiv \sigma \rightarrow \rho, \sigma \text{ не содержит } \forall \\
+        \max(\rank(\sigma)+1, \rank(\rho)) & \tau \equiv \sigma \rightarrow \rho\text{, если }\sigma\text{ содержит }\forall \\
+        \rank(\rho) & \tau \equiv \sigma \rightarrow \rho\text{, если }\sigma \text{ не содержит } \forall \\
         0 & \tau \equiv \alpha \\
         \max(\rank(\rho), 1) & \tau \equiv \forall \alpha . \rho
     \end{cases}
 \]
 \end{definition}
 
-\subsection{\texorpdfstring{Типовая система Хиндли-Милнера}{\todo}}
-
 \begin{definition} \ \\
-    Тип "--- выражение в грамматике $ \begin{bnf} \tau ::= \alpha | \tau \rightarrow \tau | (\tau) \end{bnf} $ (монотип). \\
-    Типовая схема "--- $\sigma$, соответствующая грамматике $ \begin{bnf} \sigma ::= \tau | \forall \alpha . \sigma \end{bnf} $ (политип).
+    Тип (монотип) "--- выражение в грамматике $ \begin{bnf} \tau ::= \alpha | \tau \rightarrow \tau | (\tau) \end{bnf} $. \\
+    Типовая схема (политип) "--- выражение в грамматике $ \begin{bnf} \sigma ::= \tau | \forall \alpha . \sigma \end{bnf} $.
 \end{definition}
 
 \begin{statement}
     $\rank(\tau) = 0$, $\rank(\sigma) = 1$.
 \end{statement}
 
+\begin{example} Ранг экзистенциального типа
+\begin{align*}
+    \rank(\exists \alpha . \beta) &= \rank(\forall \gamma . (\forall \alpha . \beta \rightarrow \gamma) \rightarrow \gamma) \\
+    &= \max(\rank((\forall \alpha . \beta \rightarrow \gamma) \rightarrow \gamma), 1) \\
+    &= \max(\max(\rank(\forall \alpha . \beta \rightarrow \gamma) + 1, \rank(\gamma)), 1) \\
+    &= \max(\max(2, 0), 1) = 2
+\end{align*}
+\end{example}
+
 \begin{definition}
     $\sigma_1$ "--- подтип $\sigma_2$, если существует подстановка
-            $[\alpha_1 := \theta_1, \alpha_2 := \theta_2 \ldots \alpha_n := \theta_n]$:
+            $[\alpha_1 \coloneqq \theta_1, \alpha_2 \coloneqq \theta_2 \ldots \alpha_n \coloneqq \theta_n]$:
     \begin{enumerate}
-        \item $\sigma_1 = \forall \beta_1 \ldots \forall \beta_k . \tau [\alpha_1 := \theta_1 \ldots \alpha_n := \theta_n]$,
-            $\alpha_i$ не входит свободно в $\{ \theta_i \}_{i=1}^n$.
+        \item $\sigma_1 = \forall \beta_1 \ldots \forall \beta_k . \tau [\alpha_1 \coloneqq \theta_1 \ldots \alpha_n := \theta_n]$,
+            $\alpha_i$ не входит свободно в $\theta_j$.
         \item $\sigma_2 = \forall \alpha_1 \ldots \forall \alpha_n \tau$
     \end{enumerate}
 \end{definition}
 
-\todo{} правила вывода
 \begin{gather*}
-    \infer[Аксиома]{}{}\\
+    \infer[\text{(Аксиома)}]{\Gamma, x : \sigma \vdash x : \sigma}{} \qquad
+    \infer[\text{(Уточнение), $\sigma_1$ "--- подтип $\sigma$}]{\Gamma \vdash e : \sigma'}{\Gamma \vdash e : \sigma} \\
+    \infer[\text{(Обобщение), } \sigma\notin\FV(\Gamma)]{\Gamma \vdash e : \forall \alpha . \sigma}{\Gamma \vdash e : \sigma} \qquad
+    \infer[\text{(Абстракция)}]{\Gamma \vdash \lambda x . e : \tau' \rightarrow \tau}{\Gamma, x : \tau' \vdash e : \tau} \\
+    \infer[\text{(Подстановка, применение)}]
+        {\Gamma \vdash e e' : \tau}{\Gamma \vdash e : \tau' \rightarrow \tau && \Gamma \vdash e' : \tau'} \qquad
+    \infer[\text{(Let)}]
+        {\Gamma \vdash \lett{x=e}{e'=\tau}}
+        {\Gamma \vdash e : \sigma && \Gamma \setminus \set{x}, x : \sigma \vdash e' : \tau}
 \end{gather*}
+\todo попросить у Д.Г. оригинальную статью.
 
-Задача вывода типов в Х-М разрешима.
-\paragraph{Алгоритм W}
+Грамматика выражения выглядит следующим образом:
+\[
+\begin{bnf}
+    \Lambda ::= x | \lambda x . \Lambda | \Lambda \Lambda | (\Lambda) | \lett{x=\Lambda}{\Lambda}
+\end{bnf}
+\]
 
-\begin{definition}[обозначения] \ \\
-        $\alpha_1 \ldots \alpha_n \notin \mathrm{FV}(\Gamma)$, $\mathrm{FV}(\overline{\Gamma(\tau)}) \leq \mathrm{FV}(\Gamma)$. \\
-    $\Gamma_x = \text{$\Gamma$ без $x$}$.
-\end{definition}
+\subsection{\texorpdfstring{Алгоритм W}{Algorithm W}}
+\begin{statement}
+    Задача вывода типа в Х-М разрешима.
+\end{statement}
+Обозначения: $\overline{\Gamma(\tau)} = \forall \alpha_1 \ldots \forall \alpha_n . \tau$, где $\alpha_1 \ldots \alpha_n \notin \FV(\Gamma)$
+(замыкание всех несвязанных переменных); $\Gamma_x = \Gamma \setminus \set{x}$.
+
+Определим $W(\Gamma, e) = (S, \tau)$, принимающую контекст и выражение, и возвращающую такую подстановку и тип,
+что $S(\Gamma) \vdash e : \tau$.
+\begin{enumerate}
+    \item $e \equiv x$, $x : \forall \alpha_1 \ldots \alpha_k . \tau' \in \Gamma$, тогда $S'=Id$
+    \item $e \equiv e_1 e_2$, $W(\Gamma, e_2) = (S_2, \tau_2)$, $W(S_2(\Gamma), e_1) = (S_1, \tau_1)$,
+        $U(S_1(\tau_1), \tau_2 \rightarrow \beta) = V$, где $\beta$ "--- новый тип, тогда $W(\Gamma, e)=(V(S_1 \circ S_2),\tau=V(\beta))$
+    \item $e\equiv\lambda x . e$, $\beta$ "--- новая переменная, $W(\Gamma_x \cup \set{x : \beta}, e) = (S_1, \tau_1)$, тогда
+        $W(\Gamma, e) = (S_1, S_1(\beta \rightarrow \tau_1))$.
+    \item $e\equiv\lett{x=e_1}{e_2}$, $W(\Gamma, e_1) = (S_1, \tau_1)$,
+        $W(S_1(\Gamma_x \cup \set{x : S_1(\overline{\Gamma(\tau_1)})}), e_2) = (S_2, \tau_2)$, тогда
+        $W(\Gamma, e) = (S_2 \circ S_1, \tau_2)$.
+\end{enumerate}
+\todo примеры
