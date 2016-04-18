@@ -104,6 +104,7 @@
     \end{enumerate}
 \end{definition}
 
+\begin{definition}[Правила вывода в системе Хиндли-Милнера]
 \begin{gather*}
     \infer[\text{(Аксиома)}]{\Gamma, x : \sigma \vdash x : \sigma}{} \qquad
     \infer[\text{(Уточнение), $\sigma_1$ "--- подтип $\sigma$}]{\Gamma \vdash e : \sigma'}{\Gamma \vdash e : \sigma} \\
@@ -115,6 +116,7 @@
         {\Gamma \vdash \lett{x=e}{e'=\tau}}
         {\Gamma \vdash e : \sigma && \Gamma \setminus \set{x}, x : \sigma \vdash e' : \tau}
 \end{gather*}
+\end{definition}
 \todo попросить у Д.Г. оригинальную статью.
 
 Грамматика выражения выглядит следующим образом:
@@ -133,14 +135,27 @@
 
 Определим $W(\Gamma, e) = (S, \tau)$, принимающую контекст и выражение, и возвращающую такую подстановку и тип,
 что $S(\Gamma) \vdash e : \tau$.
-\begin{enumerate}
-    \item $e \equiv x$, $x : \forall \alpha_1 \ldots \alpha_k . \tau' \in \Gamma$, тогда $S'=Id$
-    \item $e \equiv e_1 e_2$, $W(\Gamma, e_2) = (S_2, \tau_2)$, $W(S_2(\Gamma), e_1) = (S_1, \tau_1)$,
-        $U(S_1(\tau_1), \tau_2 \rightarrow \beta) = V$, где $\beta$ "--- новый тип, тогда $W(\Gamma, e)=(V(S_1 \circ S_2),\tau=V(\beta))$
-    \item $e\equiv\lambda x . e$, $\beta$ "--- новая переменная, $W(\Gamma_x \cup \set{x : \beta}, e) = (S_1, \tau_1)$, тогда
-        $W(\Gamma, e) = (S_1, S_1(\beta \rightarrow \tau_1))$.
-    \item $e\equiv\lett{x=e_1}{e_2}$, $W(\Gamma, e_1) = (S_1, \tau_1)$,
-        $W(S_1(\Gamma_x \cup \set{x : S_1(\overline{\Gamma(\tau_1)})}), e_2) = (S_2, \tau_2)$, тогда
-        $W(\Gamma, e) = (S_2 \circ S_1, \tau_2)$.
-\end{enumerate}
+\begin{center}
+\begin{tabular}{Sl Sl Sl} \hline
+    $e \equiv x$
+        & $x : \forall \alpha_1 \ldots \alpha_k . \tau' \in \Gamma$
+        & $S'=\mathrm{Id}$ \\ \hline
+    $e \equiv e_1 e_2$
+        & \begin{tabular}[t]{@{}Sl@{}}
+            $W(\Gamma, e_2) = (S_2, \tau_2)$ \\
+            $W(S_2(\Gamma), e_1) = (S_1, \tau_1)$ \\
+            $U(S_1(\tau_1), \tau_2 \rightarrow \beta) = V$, где $\beta$ "--- новый тип
+        \end{tabular}
+        & $(V(S_1 \circ S_2), V(\beta))$ \\ \hline
+    $e\equiv\lambda x . e$
+        & $W(\Gamma_x \cup \set{x : \beta}, e) = (S_1, \tau_1)$, $\beta$ "--- новый тип
+        & $(S_1, S_1(\beta \rightarrow \tau_1))$. \\ \hline
+    $e\equiv\lett{x=e_1}{e_2}$
+        & \begin{tabular}[t]{@{}Sl@{}}
+            $W(\Gamma, e_1) = (S_1, \tau_1)$ \\
+            $W(S_1(\Gamma_x \cup \{x : S_1(\overline{\Gamma(\tau_1)})\}), e_2) = (S_2, \tau_2)$
+        \end{tabular}
+        & $(S_2 \circ S_1, \tau_2)$ \\ \hline
+\end{tabular}
+\end{center}
 \todo примеры

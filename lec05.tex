@@ -57,7 +57,7 @@
         \infer{\Gamma \vdash MN : \sigma}{\Gamma \vdash M : \tau \rightarrow \sigma & \Gamma \vdash N : \tau} \qquad
         \infer[(x \notin \mathrm{dom}(\Gamma))]{\Gamma \vdash \lambda x^\tau . M : \tau \rightarrow \sigma}{\Gamma, x : \tau \vdash M : \sigma} \\
         \infer[x \in \FV(\Gamma)]{\Gamma \vdash \Lambda \alpha . M : \forall \alpha : \sigma}{\Gamma \vdash M : \sigma} \qquad
-        \infer[\text{(подстановка типа)}]{\Gamma \vdash M \tau : \sigma [\alpha := \tau]}{\Gamma \vdash M : \forall \alpha . \sigma} \\
+        \infer[\text{(подстановка типа)}]{\Gamma \vdash M \tau : \sigma [\alpha := \tau]}{\Gamma \vdash M : \forall \alpha . \sigma}
     \end{gather*}
 \end{definition}
 

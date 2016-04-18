@@ -100,14 +100,20 @@
     Несовместная система не имеет решений.
 \end{statement}
 
-Рассотрим следующие преобразования, которые не меняют свойства системы: \todo
-\begin{enumerate}[label=(\asbuk*)]
-    \item $T=x$, где $T$ не переменная $\Rightarrow$ $x=T$;
-    \item $x=x$ $\Rightarrow$ убрать это уравнение;
-    \item $f(A_1, \ldots A_n) = g(B_1, \ldots B_n)$ $\Rightarrow$ $ A_1 = B_1 \ldots A_n = B_n$, если $f = g$ (иначе система несовместна);
-    \item $x=T$, $x$ входит ещё в какие-то выражения $\Rightarrow$ заменяем все вхождения $x$ в других выражениях на $T$
-        (если $x$ не входит в $T$, инчае система несовместна).
-\end{enumerate}
+Рассотрим следующие преобразования, которые не меняют свойства системы:
+\begin{center}
+\begin{tabular}{Sl Sl Sl}
+    Выражения                         & Условия             & Новые выражения \\ \hline
+    $T=x$, $T$ не переменная          &                     & $x=T$ \\ \hline
+    $T=T$                             &                     & убрать это уравнение \\ \hline
+    $f(A_1, \ldots A_n) = g(B_1, \ldots B_n)$
+                                      & $f=g$               & $ A_1 = B_1 \ldots A_n = B_n$ \\ \cline{2-3}
+                                      & $f \neq g$          & система несовместна \\ \hline
+    $x=T$, $R=S$, $x$ входит в $S$ или $T$
+                                      & $T$ не содержит $x$ & $x=T$, $R\left[x\coloneqq T\right]=S\left[x\coloneqq T\right]$ \\ \cline{2-3}
+                                      & $T$ содержит $x$    & система несовместна \\ \hline
+\end{tabular}
+\end{center}
 
 \begin{statement}
     Последовательное применение правил либо за конечное число шагов приведёт систему в разрешённый вид, либо сделает её несовместной.
@@ -122,17 +128,19 @@
 \end{proof}
 
 \begin{theorem}
-    Задача вывода типа в $\lambda$-исчислении разрешима
+    Задача вывода типа в $\lambda$-исчислении разрешима.
 \end{theorem}
 
 \begin{proof}
-    Опишем алгоритм.\\
-    Пусть нам дан $\lambda$-терм $M$. Рекурсивно построим по нему систему уравнений $E_m$: \\
-    \begin{tabular}{Sl|Sl|Sl}
-        $M \equiv x$ & $E_m=\set{}$ & $\tau_m=\alpha$ "--- новая переменная. \\
-        $M \equiv PR$ & $E_m=E_p \cup E_r \cup \set{\tau_p=\tau_r\rightarrow\pi}$ & $\tau_m=\pi$ \\
-        $M \equiv \lambda x . P$ & $E_m=E_p$ & $\tau_m=\tau_x\rightarrow\tau_p$ \\
-    \end{tabular} \\
+    Опишем алгоритм. \\
+    Пусть нам дан $\lambda$-терм $M$. Рекурсивно построим по нему систему уравнений $E_m$:
+    \begin{center}
+    \begin{tabular}{Sl Sl Sl} \hline
+        $M \equiv x$ & $E_m=\set{}$ & $\tau_m=\alpha$ "--- новая переменная. \\ \hline
+        $M \equiv PR$ & $E_m=E_p \cup E_r \cup \set{\tau_p=\tau_r\rightarrow\pi}$ & $\tau_m=\pi$ \\ \hline
+        $M \equiv \lambda x . P$ & $E_m=E_p$ & $\tau_m=\tau_x\rightarrow\tau_p$ \\ \hline
+    \end{tabular}
+    \end{center}
     Решим построенную систему уравнений.\\
     Можно показать, что алгоритм корректный.
 \end{proof}
