@@ -102,16 +102,16 @@
 
 Рассотрим следующие преобразования, которые не меняют свойства системы:
 \begin{center}
-\begin{tabular}{Sl Sl Sl}
-    Выражения                         & Условия             & Новые выражения \\ \hline
-    $T=x$, $T$ не переменная          &                     & $x=T$ \\ \hline
-    $T=T$                             &                     & убрать это уравнение \\ \hline
-    $f(A_1, \ldots A_n) = g(B_1, \ldots B_n)$
-                                      & $f=g$               & $ A_1 = B_1 \ldots A_n = B_n$ \\ \cline{2-3}
-                                      & $f \neq g$          & система несовместна \\ \hline
-    $x=T$, $R=S$, $x$ входит в $S$ или $T$
-                                      & $T$ не содержит $x$ & $x=T$, $R\left[x\coloneqq T\right]=S\left[x\coloneqq T\right]$ \\ \cline{2-3}
-                                      & $T$ содержит $x$    & система несовместна \\ \hline
+\begin{tabular}{l l l} \toprule
+    Выражения                         & Условия             & Новые выражения \\ \midrule
+    $T=x$, $T$ не переменная          &                     & $x=T$ \\ \midrule
+    $T=T$                             &                     & убрать это уравнение \\ \midrule
+    \multirow{2}{*}[-\aboverulesep]{$f(A_1, \ldots A_n) = g(B_1, \ldots B_n)$}
+                                      & $f=g$               & $ A_1 = B_1 \ldots A_n = B_n$ \\ \cmidrule{2-3}
+                                      & $f \neq g$          & система несовместна \\ \midrule
+    \multirow{2}{*}[-\aboverulesep]{$x=T$, $R=S$, $x$ входит в $S$ или $R$}
+                                      & $T$ не содержит $x$ & $x=T$,$R\left[x\coloneqq T\right]=S\left[x\coloneqq T\right]$\\ \cmidrule{2-3}
+                                      & $T$ содержит $x$    & система несовместна \\ \bottomrule
 \end{tabular}
 \end{center}
 
@@ -135,13 +135,13 @@
     Опишем алгоритм. \\
     Пусть нам дан $\lambda$-терм $M$. Рекурсивно построим по нему систему уравнений $E_m$:
     \begin{center}
-    \begin{tabular}{Sl Sl Sl} \hline
-        $M \equiv x$ & $E_m=\set{}$ & $\tau_m=\alpha$ "--- новая переменная. \\ \hline
-        $M \equiv PR$ & $E_m=E_p \cup E_r \cup \set{\tau_p=\tau_r\rightarrow\pi}$ & $\tau_m=\pi$ \\ \hline
-        $M \equiv \lambda x . P$ & $E_m=E_p$ & $\tau_m=\tau_x\rightarrow\tau_p$ \\ \hline
+    \begin{tabular}{l l l} \toprule
+        $M \equiv x$ & $E_m=\set{}$ & $\tau_m=\alpha$ "--- новая переменная. \\ \midrule
+        $M \equiv PR$ & $E_m=E_p \cup E_r \cup \set{\tau_p=\tau_r\rightarrow\pi}$ & $\tau_m=\pi$ \\ \midrule
+        $M \equiv \lambda x . P$ & $E_m=E_p$ & $\tau_m=\tau_x\rightarrow\tau_p$ \\ \bottomrule
     \end{tabular}
     \end{center}
-    Решим построенную систему уравнений.\\
+    Решим построенную систему уравнений. \\
     Можно показать, что алгоритм корректный.
 \end{proof}
 

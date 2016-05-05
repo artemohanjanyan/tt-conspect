@@ -136,26 +136,20 @@
 Определим $W(\Gamma, e) = (S, \tau)$, принимающую контекст и выражение, и возвращающую такую подстановку и тип,
 что $S(\Gamma) \vdash e : \tau$.
 \begin{center}
-\begin{tabular}{Sl Sl Sl} \hline
+\begin{tabular}{l l l} \toprule
     $e \equiv x$
         & $x : \forall \alpha_1 \ldots \alpha_k . \tau' \in \Gamma$
-        & $S'=\mathrm{Id}$ \\ \hline
+        & $S'=\mathrm{Id}$ \\ \midrule
     $e \equiv e_1 e_2$
-        & \begin{tabular}[t]{@{}Sl@{}}
-            $W(\Gamma, e_2) = (S_2, \tau_2)$ \\
-            $W(S_2(\Gamma), e_1) = (S_1, \tau_1)$ \\
-            $U(S_1(\tau_1), \tau_2 \rightarrow \beta) = V$, где $\beta$ "--- новый тип
-        \end{tabular}
-        & $(V(S_1 \circ S_2), V(\beta))$ \\ \hline
+            & $W(\Gamma, e_2) = (S_2, \tau_2)$ & $(V(S_1 \circ S_2), V(\beta))$ \\ \addlinespace[0.6ex]
+            & $W(S_2(\Gamma), e_1) = (S_1, \tau_1)$ & \\ \addlinespace[0.6ex]
+            & $U(S_1(\tau_1), \tau_2 \rightarrow \beta) = V$, где $\beta$ "--- новый тип & \\ \midrule
     $e\equiv\lambda x . e$
         & $W(\Gamma_x \cup \set{x : \beta}, e) = (S_1, \tau_1)$, $\beta$ "--- новый тип
-        & $(S_1, S_1(\beta \rightarrow \tau_1))$. \\ \hline
+        & $(S_1, S_1(\beta \rightarrow \tau_1))$. \\ \midrule
     $e\equiv\lett{x=e_1}{e_2}$
-        & \begin{tabular}[t]{@{}Sl@{}}
-            $W(\Gamma, e_1) = (S_1, \tau_1)$ \\
-            $W(S_1(\Gamma_x \cup \{x : S_1(\overline{\Gamma(\tau_1)})\}), e_2) = (S_2, \tau_2)$
-        \end{tabular}
-        & $(S_2 \circ S_1, \tau_2)$ \\ \hline
+        & $W(\Gamma, e_1) = (S_1, \tau_1)$ & $(S_2 \circ S_1, \tau_2)$ \\ \addlinespace[0.6ex]
+        & $W(S_1(\Gamma_x \cup \{x : S_1(\overline{\Gamma(\tau_1)})\}), e_2) = (S_2, \tau_2)$ & \\ \bottomrule
 \end{tabular}
 \end{center}
 \todo примеры

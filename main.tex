@@ -23,9 +23,8 @@
 \usepackage{stmaryrd}
 \usepackage{cellspace}
 \usepackage{cmll}
-\usepackage{tabularx}
-\usepackage{verbatimbox}
 \usepackage{multirow}
+\usepackage{booktabs}
 
 \usepackage[hidelinks]{hyperref}
 
@@ -80,13 +79,14 @@
 \newcommand{\pack}[2]{\text{\textbf{pack}}~#1~\text{\textbf{to}}~#2}
 \newcommand{\abstype}[4]{\text{\textbf{abstype}}~#1~\text{\textbf{with}}~#2~\text{\textbf{in}}~#3~\text{\textbf{is}}~#4}
 \newcommand{\lett}[2]{\text{\textbf{let}}~#1~\text{\textbf{in}}~#2}
+\newcommand{\pair}[2]{\left<#1,#2\right>}
 
 \maketitle
 \tableofcontents
 %\newpage
 \newcommand{\sectionbreak}{\clearpage}
 
-%\renewcommand{\arraystretch}{1.5}
+%\renewcommand{\arraystretch}{1.0}
 \setlength\cellspacetoplimit{5pt}
 \setlength\cellspacebottomlimit{5pt}
 \setlength{\inferLineSkip}{4pt}
@@ -98,5 +98,7 @@
 \input{lec05.tex}
 \input{lec06.tex}
 \input{lec10.tex}
+\input{lec11.tex}
+\input{lec12.tex}
 
 \end{document}
