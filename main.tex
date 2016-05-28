@@ -9,12 +9,12 @@
 \usepackage[utf8]{inputenc}
 %\usepackage{geometry}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm,bindingoffset=0cm]{geometry}
-\usepackage[mathscr]{euscript}
 \usepackage{microtype}
 \usepackage{bnf}
 \usepackage{enumitem}
 \usepackage{bm}
-\usepackage{listings}
+%\usepackage{listings}
+\usepackage{minted}
 \usepackage{cancel}
 \usepackage{proof}
 \usepackage{epigraph}
@@ -46,6 +46,7 @@
 \DeclareMathOperator{\rank}{rk}
 \DeclareMathOperator{\inj}{inj}
 \DeclareMathOperator{\FV}{FV}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 
 \title{Теория типов}
 \author{$\heartsuit$}
@@ -68,9 +69,12 @@
 \newtheorem*{example}{Пример}
 \newtheorem{property}[theorem]{Свойство}
 
-\lstset{language=C++}
+%\lstset{language=C++}
 
 \newcommand{\todo}{\textsc{\textbf{TODO}}\ }
+%\newcommand{\comb}[1]{\mathit{#1}}
+\newcommand{\comb}[1]{\operatorname{\mathpzc{#1}}}
+\newcommand{\combl}[1]{\operatorname{\boldsymbol{#1}}}
 \newcommand{\abs}[1]{\left|#1\right|}
 \newcommand{\set}[1]{\left\{#1\right\}}
 \newcommand{\xx}{ч}
@@ -99,6 +103,6 @@
 \input{lec06.tex}
 \input{lec10.tex}
 \input{lec11.tex}
-\input{lec12.tex}
+\input{lec13.tex}
 
 \end{document}
