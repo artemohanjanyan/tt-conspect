@@ -1,6 +1,6 @@
 \section{\texorpdfstring{Просто типизированное $\lambda$-исчисление}{Simply typed lambda calculus}}
 
-\begin{definition}[Тип]
+\begin{definition}[тип]
     $T = \{\alpha, \beta, \gamma, \ldots\}$ "--- множество типов.
     $\sigma$, $\tau$ "--- метапеременные для типов.
     Если $\tau$, $\sigma$ "--- типы, то $\sigma \rightarrow \tau$ "--- тип.
@@ -12,40 +12,29 @@
     $\left(\rightarrow\right)$ правоассоциативна.
 \end{definition}
 
-\begin{definition}[Контекст] Контекст "--- $\Gamma$.
+\begin{definition}[контекст] Контекст "--- $\Gamma$.
 \begin{gather*}
     \Gamma = \{ \Lambda_{1} : \sigma_{1};\ \Lambda_{2} : \sigma_{2}\ \ldots\ \Lambda_{n} : \sigma_{n} \} \\
     \abs{\Gamma} = \{ \sigma_{1},\ \sigma_{2}\ \ldots\ \sigma_{n} \} \\
-    \mathrm{dom}\ \Gamma = \{ \Lambda_{1},\ \Lambda_{2}\ \ldots\ \Lambda_{n} \}
+    \dom \Gamma = \{ \Lambda_{1},\ \Lambda_{2}\ \ldots\ \Lambda_{n} \}
 \end{gather*}
 \end{definition}
 
 \subsection{\texorpdfstring{Исчисление по Карри}{Curry-style}}
 
-\begin{definition}[Типизируемость по Карри]
+\begin{definition}[типизируемость по Карри]
     Рассмотрим исчисление со следующими правилами:
     \begin{enumerate}
-        \item $\infer[(x \notin \mathrm{dom}(\Gamma))]
+        \item $\infer[(x \notin \dom(\Gamma))]
             {\Gamma, x:\sigma \vdash x:\sigma}
             {}$
         \item $\infer[]
             {\Gamma \vdash M N : \tau}
-            {\Gamma \vdash M:\sigma \rightarrow \tau & \Gamma \vdash N:\sigma}$
-        \item $\infer[(x \notin \mathrm{dom}(\Gamma))]
+            {\Gamma \vdash M:\sigma \rightarrow \tau && \Gamma \vdash N:\sigma}$
+        \item $\infer[(x \notin \dom(\Gamma))]
             {\Gamma \vdash \lambda x . M : \sigma \rightarrow \tau}
             {\Gamma, x : \sigma \vdash M : \tau}$
     \end{enumerate}
-    %\begin{gather*}
-    %\infer[(x\ \cancel{\in}\ \mathrm{dom}(\Gamma))]
-    %    {\Gamma, x:\sigma \vdash x:\sigma}
-    %    {} \\
-    %\infer[]
-    %    {\Gamma \vdash M N : \tau}
-    %    {\Gamma, M:\sigma \rightarrow \tau & \Gamma \vdash N:\sigma} \qquad
-    %\infer[(x\ \cancel{\in}\ \mathrm{dom}(\Gamma))]
-    %    {\Gamma \vdash \lambda x . M : \sigma \rightarrow \tau}
-    %    {\Gamma, x : \sigma \vdash M : \tau}
-    %\end{gather*}
     Если $\lambda$-выражение типизируется этими трёмя правилами, то говорят, что оно типизируется по Карри.
 \end{definition}
 
@@ -77,36 +66,37 @@
         \item Докажем $\lambda f . \lambda x . f x : (\alpha \rightarrow \beta) \rightarrow \alpha \rightarrow \beta$:
         \[
             \infer[(3)]
-                { \vdash \lambda f . \lambda x . f x : (\sigma \rightarrow \tau) \rightarrow (\sigma \rightarrow \tau) }
+                { \vdash \lambda f . \lambda x . f x : (\alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \beta) }
                 { \infer[(3)]
-                    { f : \sigma \rightarrow \tau \vdash \lambda x . f x : \sigma \rightarrow \tau }
+                    { f : \alpha \rightarrow \beta \vdash \lambda x . f x : \alpha \rightarrow \beta }
                     { \infer[(2)]
-                        {f : \sigma \rightarrow \tau; x : \sigma \vdash f x : \tau}
+                        {f : \alpha \rightarrow \beta; x : \alpha \vdash f x : \beta}
                         {
-                            \infer[(1)]{ \Gamma \vdash f : \sigma \rightarrow \tau }{} &
-                            \infer[(1)]{ \Gamma \vdash x : \sigma }{}
+                            \infer[(1)]{ \Gamma \vdash f : \alpha \rightarrow \beta }{} &&
+                            \infer[(1)]{ \Gamma \vdash x : \alpha }{}
                         }
                     }
                 }
         \]
 
-        \item $\Omega = (\lambda x . x x) (\lambda x . x x)$ не типизируемо:
+        \item $\combl \Omega = (\lambda x . x x) (\lambda x . x x)$ не типизируемо:
             \todo % TODO
     \end{enumerate}
 \end{example}
 
-\begin{lemma}[Свойство subject expansion]
+\begin{lemma}[отсутствие subject expansion]
     Неверно, что если $M \rightarrow_{\beta} N$, $\Gamma \vdash N : \sigma$, то $\Gamma \vdash M : \sigma$.
 \end{lemma}
-Например, для $Ka\Omega$.
+Например, для $\comb K a \combl\Omega$.
 
 В общем случае тип не уникален, бывает, что одновременно $\vdash \lambda x . x : \alpha \rightarrow \alpha$ и $\vdash \lambda x . x : (\beta \rightarrow \beta) \rightarrow (\beta \rightarrow \beta)$.
 
-\begin{definition}[Сильная нормализация] \label{strong-normalization}
-    Назовём исчисление сильно-нормализуемым, если любая последовательность редукций неизбежно приводит к нормальной форме (не существует бесконечной последовательности $\beta$-редукций) .
+\begin{definition}[сильная нормализация] \label{strong-normalization}
+    Назовём исчисление сильно-нормализуемым, если любая последовательность $\beta$-редукций неизбежно приводит к нормальной форме.
 \end{definition}
+Или, иными словами, если не существует бесконечной последовательности $\beta$-редукций.
 
-\begin{definition}[Слабая нормализация]
+\begin{definition}[слабая нормализация]
     Назовём исчисление слабо-нормализуемым, если для любого терма существует последовательность $\beta$-редукций, приводящая его к нормальной форме.
 \end{definition}
 
@@ -114,23 +104,6 @@
     Просто типизируемое $\lambda$-исчисление сильно нормализуемо.
     Любое просто типизируемое $\lambda$-выражение сильно нормализуемо.
 \end{theorem}
-
-%\todo\{ это к чему и о чём вообще?
-%\begin{theorem}
-%    Если $\nu = (\alpha \rightarrow \alpha) \rightarrow (\alpha \rightarrow \alpha)$ и $F : \nu \rightarrow \nu \rightarrow \nu$, то $F$ "--- расширенный полином.
-%\end{theorem}
-%
-%\begin{theorem}
-%    Рассмотрим полином $E(m,n) =
-%    \begin{cases}
-%        \text{Полином}(m,n) & m > 0, n > 0 \\
-%        \text{Полином}(m)   & m > 0, n = 0 \\
-%        \text{Полином}(n)   & m = 0, n > 0 \\
-%        \text{Константа}    & m = 0, n = 0
-%    \end{cases}$. \\
-%    Если $\nu = (\alpha \rightarrow \alpha) \rightarrow (\alpha \rightarrow \alpha)$ и $F : \nu \rightarrow \nu \rightarrow \nu$, то $F$ "--- рассматриваемый полином.
-%\end{theorem}
-%\} // \todo
 
 \subsection{\texorpdfstring{Исчисление по Чёрчу}{Church-style}}
 
@@ -142,13 +115,13 @@
     \end{bnf}
     Правила:
     \begin{enumerate}
-        \item $\infer[(x \notin \mathrm{dom}(\Gamma))]
+        \item $\infer[(x \notin \dom(\Gamma))]
             {\Gamma, x:\sigma \vdash_{\xx} x:\sigma}
             {}$
         \item $\infer[]
             {\Gamma \vdash_{\xx} M N : \tau}
-            {\Gamma \vdash_{\xx} M:\sigma \rightarrow \tau & \Gamma \vdash_{\xx} N:\sigma}$
-        \item $\infer[(x \notin \mathrm{dom}(\Gamma))]
+            {\Gamma \vdash_{\xx} M:\sigma \rightarrow \tau && \Gamma \vdash_{\xx} N:\sigma}$
+        \item $\infer[(x \notin \dom(\Gamma))]
             {\Gamma \vdash_{\xx} \lambda x^{\sigma} . M : \sigma \rightarrow \tau}
             {\Gamma, x : \sigma \vdash_{\xx} M : \tau}$
     \end{enumerate}
@@ -166,7 +139,7 @@
 \]
 \end{definition}
 
-\begin{lemma}[Subject reduction по Чёрчу]
+\begin{lemma}[subject reduction по Чёрчу]
     Пусть $\Gamma \vdash_{\xx} M : \sigma$ и $\abs{M} \rightarrow_{\beta} N$. \\
     Тогда найдётся такое $H$, что $\abs{H} = N$, $\Gamma \vdash_{\xx} H:\sigma$.
 \end{lemma}
@@ -199,22 +172,44 @@
     \end{enumerate}
 \end{theorem}
 
-\subsection{\texorpdfstring{Изоморфизм Карри-Ховарда}{Curry-style}}
+\subsection{\texorpdfstring{Изоморфизм Карри-Ховарда}{Curry-Howard correspondence}}
 
-\todo Многими логиками замечалась связь между выражениями типизированного $\lambda$-исчисления и доказательствами выражений ИИВ.
+Можно проследить связь между выражениями типизированного $\lambda$-исчисления и доказательствами выражений ИИВ.
 
-\begin{center}
-\begin{tabular}{c c} \toprule
+Давайте введёём два новых типа данных.
+Первый "--- тип "<пары">. Если $A : \sigma$ и $B : \tau$, то $\pair{A}{B} : \sigma \with \tau$. Пара нам уже знакома.
+Введём также функции доступа к элементам пары: $\pi_1 : \sigma\with\tau\rightarrow\sigma$ и $\pi_2 : \sigma\with\tau\rightarrow\tau$
+"--- левая и правая проекции.
+Например, $\pi_2 \pair{\overline 7}{\overline 5} =_\beta \overline 5$.
+
+Второй "--- алгебраический тип данных. Если $A : \sigma$ и $B : \tau$, то $\inj_1 A : \sigma \vee \tau$ и $\inj_2 : \sigma \vee \tau$.
+$\inj_1$ и $\inj_2$ это левая и правая инъекции.
+Тип $\sigma \vee \tau$ означает, что это либо $\sigma$, либо $\tau$.
+Его можно понимать как \mintinline{C++}{union}, который дополнительно хранит в себе информацию о типе, который в нём записан.
+
+Для доступа к содержимому экземпляра алгебраического типа введём конструкцию case.
+\[
+T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarrow \pi \qquad \case{T}{A}{B} : \pi
+\]
+Рассмотрим такой код на Haskell: \mintinline{Haskell}{data Fruit = Orange Int | Banana Int}.
+В нём \mintinline{Haskell}{Orange :: Int -> Fruit} это левая инъекция, \mintinline{Haskell}{Banana :: Int -> Fruit} "--- правая.
+На нашем языке можно сказать, что $\comb{Fruit} : \mathinner{\mathtt{Int}} \vee \mathinner{\mathtt{Int}}$.
+Тогда $\case{T}{(+1)}{(-1)} \mathinner{:} \mathrel{\mathtt{Int}}$ это число, хранящееся в фрукте, увеличенное на единицу, если это апельсин,
+и уменьшенное на единицу, если это банан.
+
+\begin{figure}
+\centering
+\begin{tabular}{Sc@{\hspace{1.5cm}} Sc} \toprule
     ИИВ & Типизированное $\lambda$-исчисление \\ \midrule
 
-    $\infer{\Gamma \vdash \tau}{\Gamma \vdash \sigma \rightarrow \tau & \Gamma \vdash \sigma}$ &
-    $\infer{\Gamma \vdash AB : \tau}{\Gamma \vdash A : \sigma \rightarrow \tau & \Gamma \vdash B : \sigma}$ \\ \addlinespace
+    $\infer{\Gamma \vdash \tau}{\Gamma \vdash \sigma \rightarrow \tau && \Gamma \vdash \sigma}$ &
+    $\infer{\Gamma \vdash AB : \tau}{\Gamma \vdash A : \sigma \rightarrow \tau && \Gamma \vdash B : \sigma}$ \\ \addlinespace
 
     $\infer{\Gamma \vdash \sigma \rightarrow \tau}{\Gamma, \sigma \vdash \tau}$ &
     $\infer{\Gamma \vdash \lambda x^\sigma . A : \sigma \rightarrow \tau}{\Gamma, x^\sigma : \sigma \vdash A : \tau}$ \\ \midrule
 
-    $\infer{\Gamma \vdash \varphi \with \psi}{\Gamma \vdash \varphi & \Gamma \vdash \psi}$ &
-    $\infer{\Gamma \vdash \left<A,B\right> : \varphi \with \psi}{\Gamma \vdash A : \varphi & \Gamma \vdash B : \psi}$ \\ \addlinespace
+    $\infer{\Gamma \vdash \varphi \with \psi}{\Gamma \vdash \varphi && \Gamma \vdash \psi}$ &
+    $\infer{\Gamma \vdash \left<A,B\right> : \varphi \with \psi}{\Gamma \vdash A : \varphi && \Gamma \vdash B : \psi}$ \\ \addlinespace
 
     $\infer{\Gamma \vdash \varphi}{\Gamma \vdash \varphi \with \psi}$ &
     $\infer{\Gamma \vdash \pi_1 R : \varphi}{\Gamma \vdash R : \varphi \with \psi}$ \\ \addlinespace
@@ -229,51 +224,79 @@
     $\infer{\Gamma \vdash \inj_2 A : \varphi \vee \psi}{\Gamma \vdash A : \psi}$ \\ \addlinespace
 
     $\infer{\Gamma \vdash \varphi \vee \psi \rightarrow \pi}
-        {\Gamma \vdash \varphi \rightarrow \pi & \Gamma \vdash \psi \rightarrow \pi}$ &
-    $\infer{\Gamma \vdash \case{T}{A}{B} : \pi}{\Gamma \vdash T : \varphi \vee \psi &
-        \Gamma \vdash A : \varphi \rightarrow \pi & \Gamma \vdash B : \psi \rightarrow \pi}$ \\ \bottomrule
+        {\Gamma \vdash \varphi \rightarrow \pi && \Gamma \vdash \psi \rightarrow \pi}$ &
+    $\infer{\Gamma \vdash \case{T}{A}{B} : \pi}{\Gamma \vdash T : \varphi \vee \psi &&
+        \Gamma \vdash A : \varphi \rightarrow \pi && \Gamma \vdash B : \psi \rightarrow \pi}$ \\ \bottomrule
 \end{tabular}
-\end{center}
+\captionsetup{labelformat=empty}
+\caption{Соответствие правил вывода}
+\end{figure}
 
-\todo\ Пояснения значений инъекций, проекций и case; примеры.
-
-\begin{center}
-\begin{tabular}{l l} \toprule
+\begin{figure}
+\centering
+\begin{tabular}{Sl Sl} \toprule
     Интуиционистская логика & $\lambda$-исчисление \\ \midrule
     выражение & тип \\
     доказательство & терм (программа) \\
     предположение & свободная переменная \\
     импликация & абстракция (функция) \\ \bottomrule
 \end{tabular}
-\end{center}
+\captionsetup{labelformat=empty}
+\caption{Соответствие сущностей}
+\end{figure}
 
 \begin{theorem}[об изоморфизме Карри-Ховарда] \ 
     \begin{enumerate}
-        \item Пусть $\Gamma \vdash \sigma$ "--- и.ф.и.и.в., тогда найдётся такой терм M,
+        \item Пусть $\Gamma \vdash \sigma$ в и.ф.и.и.в., тогда найдётся такой терм M,
             что $\Delta \vdash_{\xx} M : \sigma$, где $\Delta=\left\{ \left(x^\varphi : \varphi \right) \mid \varphi \in \Gamma \right\}$.
         \item Пусть $\Delta \vdash_{\xx} M : \sigma$, тогда $\abs{\Delta} \vdash \sigma$.
     \end{enumerate}
 \end{theorem}
 
 %% долг с предыдущей лекции
-\begin{proof} \todo
-    %есть в Curry-Howard Isomorphism, стр 75
+\begin{proof} \ 
+\begin{enumerate}
+    \item Индукция по выводу $\Delta \vdash_\xx M : \sigma$. Заменяем каждое правило в выводе соответсвующим правилом из ИИВ и получаем доказательство $\Delta \vdash \sigma$.
 
-    %Рассмотрим $x_\varphi$, $\varphi \in \Gamma$.
-    %$\Gamma = \{\sigma_{1}, \sigma_{2} \ldots\}$,
-    %$\uparrow \!\! \Gamma = \Delta = \{x_{1}:\sigma_{1}, x_{2}:\sigma_{2}, \ldots \}$.
-    %Индукция по сложности доказательства $\sigma$: \\
-    %База: \infer{\Gamma, \varphi \vdash \varphi}{}
-    %\begin{enumerate}
-    %    \item $\varphi \in \Gamma$. Тогда \infer{\Delta \vdash x_\varphi : \varphi}{}
-    %    \item $\varphi \notin \Gamma$. Тогда \infer{\Delta, x_\varphi : \varphi \vdash x_\varphi : \varphi}{}, $x_\varphi$ "--- новая переменная.
-    %\end{enumerate}
-    %Переход: \infer{\Gamma \vdash \varphi \rightarrow \psi}{\Gamma, \varphi \vdash \psi}.
-    %По индукционному предположению $\Delta, y : \varphi \vdash M : \psi$.
-    %\begin{enumerate}
-    %    \item $\varphi \in \Gamma$. Тогда
-    %    \infer{\Delta \setminus \left\{x_\varphi\right\} \vdash \lambda x_\varphi . M : \varphi \rightarrow \psi}{\Delta \vdash M : \psi}.
-    %    \item $\varphi \notin \Gamma$. Тогда
-    %    \infer{\Delta \vdash \lambda x_\varphi . M : \varphi \rightarrow \psi}{\Delta, x_\varphi : \varphi \vdash M : \psi}.
-    %\end{enumerate}
+    \item Индукция по структуре вывода $\Gamma \vdash \sigma$. Пусть $\Gamma = \{\sigma_{1}, \sigma_{2} \ldots\}$,
+        $\Delta = \{x_{1}:\sigma_{1}, x_{2}:\sigma_{2}, \ldots \}$.
+    \begin{enumerate}[label=(\asbuk*)]
+        \item Вывод имеет вид
+        \[
+            \infer{\Gamma, \varphi \vdash \varphi}{}
+        \]
+        \begin{enumerate}[label=\roman*.]
+            \item Если $\varphi \in \Gamma$, то $\Delta \vdash x_\varphi : \varphi$.
+            \item Если $\varphi \notin \Gamma$, то $\Delta, x_\varphi : \varphi \vdash x_\varphi : \varphi$.
+        \end{enumerate}
+
+        \item Вывод заканчивается правилом
+        \[
+            \infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \rightarrow \psi && \Gamma \vdash \varphi}
+        \]
+        По индукционному предположению $\Delta \vdash M : \varphi \rightarrow \psi$ и $\Delta \vdash N : \varphi$. Тогда
+        \[
+            \infer{\Gamma \vdash MN : \psi}{\Gamma \vdash A : \varphi \rightarrow \psi && \Gamma \vdash B : \varphi}
+        \]
+
+        \item Вывод заканчивается правилом
+        \[
+            \infer{\Gamma \vdash \varphi \rightarrow \psi}{\Gamma,\varphi \vdash \psi}
+        \]
+        \begin{enumerate}[label=\roman*.]
+            \item Пусть $\varphi \in \Gamma$. Тогда по индукционному предположению $\Delta \vdash M : \psi$.
+            Пусть $x \notin \dom(\Delta)$ (новая переменная).
+            Тогда можно изменить построенное доказательство и получить $\Delta, x : \varphi \vdash M : \psi$. Тогда
+            \[
+                \infer{\Delta \vdash \lambda x^\varphi . M : \varphi \rightarrow \psi}{\Delta, x : \varphi \vdash M : \psi}
+            \]
+
+            \item Пусть $\varphi \notin \Gamma$. Тогда по индукционному предположению $\Delta, x^\varphi : \varphi \vdash M : \psi$. Тогда
+            \[
+                \infer{\Delta \vdash \lambda x^\varphi . M : \varphi \rightarrow \psi}{\Delta, x^\varphi : \varphi \vdash M : \psi}
+                \qedhere
+            \]
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate} %есть в Curry-Howard Isomorphism, стр 75
 \end{proof}

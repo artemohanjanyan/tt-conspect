@@ -47,9 +47,12 @@
 %http://tex.stackexchange.com/questions/31526/macro-for-left-and-right/58641#58641
 
 \DeclareMathOperator{\rank}{rk}
+\DeclareMathOperator{\dom}{dom}
 \DeclareMathOperator{\inj}{inj}
 \DeclareMathOperator{\FV}{FV}
 \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+
+\setlength\heavyrulewidth{1pt}
 
 \title{Теория типов}
 \author{$\heartsuit$}
@@ -84,10 +87,10 @@
 \newcommand{\set}[1]{\left\{#1\right\}}
 \newcommand{\xx}{ч}
 \newcommand{\rr}{к}
-\newcommand{\case}[3]{\text{\textbf{case}}~#1~#2~#3}
-\newcommand{\pack}[2]{\text{\textbf{pack}}~#1~\text{\textbf{to}}~#2}
-\newcommand{\abstype}[4]{\text{\textbf{abstype}}~#1~\text{\textbf{with}}~#2~\text{\textbf{in}}~#3~\text{\textbf{is}}~#4}
-\newcommand{\lett}[2]{\text{\textbf{let}}~#1~\text{\textbf{in}}~#2}
+\newcommand{\case}[3]{\mathinner{\mathtt{case}}~#1~#2~#3}
+\newcommand{\pack}[2]{\mathinner{\mathtt{pack}}~#1~\mathinner{\mathtt{to}}~#2}
+\newcommand{\abstype}[4]{\mathinner{\mathtt{abstype}}~#1~\mathinner{\mathtt{with}}~#2~\mathinner{\mathtt{in}}~#3~\mathinner{\mathtt{is}}~#4}
+\newcommand{\lett}[2]{\mathinner{\mathtt{let}}~#1~\mathinner{\mathtt{in}}~#2}
 \newcommand{\pair}[2]{\left<#1,#2\right>}
 
 \maketitle
