@@ -7,10 +7,8 @@
 \begin{example}
     $(<)$ на натуральных числах обладает ромбовидным свойством.
     $(>)$ на натуральных числах не обладает ромбовидным свойством.
-\end{example}
 
 $\beta$-редукция не обладает ромбовидным свойством.
-\usetikzlibrary{arrows.meta}
 \begin{figure}[h]
     \centering
     \begin{tikzpicture}[->,>={Stealth[black]},
@@ -33,6 +31,7 @@ $\beta$-редукция не обладает ромбовидным свойс
     \captionsetup{labelformat=empty}
     \caption{Нет такого $d$, что $b \rightarrow_{\beta} d$ и $c \rightarrow_{\beta} d$.}
 \end{figure}
+\end{example}
 
 \begin{theorem}[Чёрча-Россера] \label{church-rosser}
     $\beta$-редуцируемость обладает ромбовидным свойством.
@@ -55,7 +54,7 @@ $\beta$-редукция не обладает ромбовидным свойс
     Тогда $M_{1,n} R^* M_{m,n}$ и $M_{m,1} R^* M_{m,n}$.
 \end{proof}
 
-\begin{definition}[Параллельная $\beta$-редукция]
+\begin{definition}[параллельная $\beta$-редукция]
     $A \rightrightarrows_{\beta} B$
     \begin{enumerate}
         \item Если $A =_\alpha B$, то $A \rightrightarrows_{\beta}B$
@@ -104,12 +103,15 @@ $\beta$-редукция не обладает ромбовидным свойс
     Нормальная форма для $\lambda$-выражения единственна, если существует.
 \end{corollary}
 
-\begin{theorem}[Тезис Чёрча]
+\begin{theorem}[тезис Чёрча]
     Если функция вычислима с помощью механического аппарата, то она вычислима с помощью $\lambda$-выражения.
 \end{theorem}
 
 \subsection{\texorpdfstring{Порядок редукции}{Order of reduction}}
 \epigraph{"<Завтра! Завтра! Не сегодня!"> "--- так ленивцы говорят.}{Das deutsches Sprichwort}
+
+Допустим, мы действительно хотим с помощью $\lambda$-исчисления что-то посчитать.
+Нам надо определиться со стратегией редукции. Если она будет выбрана неудачно, то мы рискуем не дождаться ожидаемого результата.
 
 \begin{definition}
 \[
@@ -125,17 +127,27 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
     Тогда найдётся выражение $T$, состоящее только из $\comb S$ и $\comb K$, что $A =_{\beta}T$.
 \end{statement}
 
-\begin{example}
-    тут какой-то пример с омегой, подскажите чё там было, \todo % TODO
-\end{example}
+\begin{wrapfigure}[2]{r}{0pt}
+\centering
+\begin{tikzpicture}[->,>={Stealth[black]},
+            every edge/.style={draw=black,thick}]
+    \node at (0, 0) (A)  {$\comb K a \combl \Omega$};
+    \node at (2, 0) (B)  {$a$};
 
-\begin{definition}[Нормальный порядок редукции]
-    Нормальным порядком редукции называется редукция самого левого $\beta$-редекса.
+    \path (A) edge [loop left] ()
+              edge             (B);
+\end{tikzpicture}
+\caption*{}
+\end{wrapfigure}
+Нормальная форма некоторых $\lambda$-выражений может не достигаться при неудачном выборе порядка редукции.
+
+\begin{definition}[нормальный порядок редукции]
+    Редукция самого левого $\beta$-редекса.
 \end{definition}
 "<Ленивые вычисления"> (ну, почти, в ленивых ещё есть меморизация)
 
-\begin{definition}[Аппликативный порядок редукции]
-    Самый левый из самых вложенных.
+\begin{definition}[аппликативный порядок редукции]
+    Редукция самого левого $\beta$-редекса из самых вложенных.
 \end{definition}
 "<Энергичные вычисления">
 
@@ -214,15 +226,27 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
 \begin{proof}
     Рассмотрим модель Крипке вида $W = \left\{\Delta \mid \Gamma \subseteq \Delta, \Delta\text{ замкнуто относительно }\vdash\right\}$,
     $\Gamma \leq \Delta$ если $\Gamma \subseteq \Delta$.
-    Индукцией по структуре $\varphi$ покажем, что $\Delta \Vdash \varphi$ т.и.т.т., когда $\Delta \vdash \varphi$:
+    Индукцией по структуре $\varphi$ покажем, что $\Delta \Vdash \varphi$ т.и.т.т., когда $\Delta \vdash \varphi$.
     \begin{enumerate}
-        \item Пусть $\varphi \equiv x$ "--- переменная. Тогда $\Gamma \vdash \varphi$ эквивалентно $x \in \Gamma$, что эквивалентно $\Vdash x$ (по определению).
+        \item Пусть $\varphi \equiv x$ "--- переменная. Тогда $\Gamma \vdash \varphi$ эквивалентно $x \in \Gamma$, что эквивалентно $\Gamma\Vdash x$ (по определению).
         \item Пусть $\varphi \equiv \alpha \rightarrow \beta$.
         \begin{enumerate}[label=(\asbuk*)]
-            \item Пусть $\Delta \vdash \varphi$.
-            Рассмотрим такое $\Delta'$, что $\Delta \leq \Delta'$ и $\Delta' \Vdash \alpha$.
+            \item Пусть $\Delta \vdash \alpha\rightarrow\beta$.
+                Рассмотрим такое $\Delta'$, что $\Delta \leq \Delta'$ и $\Delta' \Vdash \alpha$.
+                Так как $\Delta \vdash \alpha\rightarrow\beta$, то $\Delta' \vdash \alpha\rightarrow\beta$.
+                Так как $\Delta' \Vdash \alpha$, то по индукционному предположению $\Delta' \vdash \alpha$.
+                \[
+                    \infer{\Delta' \vdash \beta}{\Delta' \vdash \alpha \rightarrow \beta && \Delta' \vdash \alpha}
+                \]
+                Значит, $\Delta' \Vdash \beta$, по индуционному предположению. Тогда и $\Delta' \Vdash \alpha\rightarrow\beta$.
+            \item Пусть $\Delta \Vdash \alpha\rightarrow\beta$.
+                Пусть $\Delta'$ "--- замыкание относительно выводимости $\Delta \cup \set \alpha$.
+                Тогда $\Delta' \Vdash \beta$. Тогда $\Delta' \vdash \beta$ по предположению индукции.
+                \[
+                    \infer{\Delta' \vdash \alpha \rightarrow \beta}{\Delta', \alpha \vdash \beta} 
+                    \qedhere
+                \]
         \end{enumerate}
-        ой всё \todo
     \end{enumerate}
 \end{proof}
 
