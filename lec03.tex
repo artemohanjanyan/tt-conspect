@@ -79,8 +79,16 @@
                 }
         \]
 
-        \item $\combl \Omega = (\lambda x . x x) (\lambda x . x x)$ не типизируемо:
-            \todo % TODO
+        \item $\combl \Omega и \comb Y$ не типизируемы. Допустим обратное.
+        Тогда в выводе должен будет присутствовать вывод подвыражения $xx$:
+        \[
+            \infer{\Gamma, x : \sigma \rightarrow \tau, x : \sigma \vdash x x : \tau}
+            {  \Gamma, x : \sigma \rightarrow \tau, x : \sigma \vdash x : \sigma \rightarrow \tau
+            && \Gamma, x : \sigma \rightarrow \tau, x : \sigma \vdash x : \sigma
+            }
+        \]
+        Однако первое правило вывода запрещает повторение переменных в контексте. Значит, такой вывод не может быть корректным.
+
     \end{enumerate}
 \end{example}
 
@@ -174,8 +182,6 @@
 
 \subsection{\texorpdfstring{Изоморфизм Карри-Ховарда}{Curry-Howard correspondence}}
 
-Можно проследить связь между выражениями типизированного $\lambda$-исчисления и доказательствами выражений ИИВ.
-
 Давайте введёём два новых типа данных.
 Первый "--- тип "<пары">. Если $A : \sigma$ и $B : \tau$, то $\pair{A}{B} : \sigma \with \tau$. Пара нам уже знакома.
 Введём также функции доступа к элементам пары: $\pi_1 : \sigma\with\tau\rightarrow\sigma$ и $\pi_2 : \sigma\with\tau\rightarrow\tau$
@@ -193,20 +199,23 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
 \]
 Рассмотрим такой код на Haskell: \mintinline{Haskell}{data Fruit = Orange Int | Banana Int}.
 В нём \mintinline{Haskell}{Orange :: Int -> Fruit} это левая инъекция, \mintinline{Haskell}{Banana :: Int -> Fruit} "--- правая.
-На нашем языке можно сказать, что $\comb{Fruit} : \mathinner{\mathtt{Int}} \vee \mathinner{\mathtt{Int}}$.
-Тогда $\case{T}{(+1)}{(-1)} \mathinner{:} \mathrel{\mathtt{Int}}$ это число, хранящееся в фрукте, увеличенное на единицу, если это апельсин,
-и уменьшенное на единицу, если это банан.
+На нашем языке можно сказать, что $\mathinner\mathtt{Fruit} = \mathinner{\mathtt{Int}} \vee \mathinner{\mathtt{Int}}$.
+Тогда если $T \mathinner{:} \mathtt{Fruit}$, то $\case{T}{(+1)}{(-1)} \mathinner{:} \mathrel{\mathtt{Int}}$ это число,
+хранящееся в фрукте, увеличенное на единицу, если это апельсин, и уменьшенное на единицу, если это банан.
 
-\begin{figure}
+Можно отчётливо проследить связь между аксиомами типизированного $\lambda$-исчисления и аксиомами ИИВ
+(таблицы \ref{correspondence-table}, \ref{correspondence-terms-table}).
+
+\begin{table}
 \centering
 \begin{tabular}{Sc@{\hspace{1.5cm}} Sc} \toprule
     ИИВ & Типизированное $\lambda$-исчисление \\ \midrule
 
-    $\infer{\Gamma \vdash \tau}{\Gamma \vdash \sigma \rightarrow \tau && \Gamma \vdash \sigma}$ &
-    $\infer{\Gamma \vdash AB : \tau}{\Gamma \vdash A : \sigma \rightarrow \tau && \Gamma \vdash B : \sigma}$ \\ \addlinespace
+    $\infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \rightarrow \psi && \Gamma \vdash \varphi}$ &
+    $\infer{\Gamma \vdash AB : \psi}{\Gamma \vdash A : \varphi \rightarrow \psi && \Gamma \vdash B : \varphi}$ \\ \addlinespace
 
-    $\infer{\Gamma \vdash \sigma \rightarrow \tau}{\Gamma, \sigma \vdash \tau}$ &
-    $\infer{\Gamma \vdash \lambda x^\sigma . A : \sigma \rightarrow \tau}{\Gamma, x^\sigma : \sigma \vdash A : \tau}$ \\ \midrule
+    $\infer{\Gamma \vdash \varphi \rightarrow \psi}{\Gamma, \varphi \vdash \psi}$ &
+    $\infer{\Gamma \vdash \lambda x^\varphi . A : \varphi \rightarrow \psi}{\Gamma, x : \varphi \vdash A : \psi}$ \\ \midrule
 
     $\infer{\Gamma \vdash \varphi \with \psi}{\Gamma \vdash \varphi && \Gamma \vdash \psi}$ &
     $\infer{\Gamma \vdash \left<A,B\right> : \varphi \with \psi}{\Gamma \vdash A : \varphi && \Gamma \vdash B : \psi}$ \\ \addlinespace
@@ -228,11 +237,12 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
     $\infer{\Gamma \vdash \case{T}{A}{B} : \pi}{\Gamma \vdash T : \varphi \vee \psi &&
         \Gamma \vdash A : \varphi \rightarrow \pi && \Gamma \vdash B : \psi \rightarrow \pi}$ \\ \bottomrule
 \end{tabular}
-\captionsetup{labelformat=empty}
+%\captionsetup{labelformat=empty}
 \caption{Соответствие правил вывода}
-\end{figure}
+\label{correspondence-table}
+\end{table}
 
-\begin{figure}
+\begin{table}
 \centering
 \begin{tabular}{Sl Sl} \toprule
     Интуиционистская логика & $\lambda$-исчисление \\ \midrule
@@ -241,9 +251,10 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
     предположение & свободная переменная \\
     импликация & абстракция (функция) \\ \bottomrule
 \end{tabular}
-\captionsetup{labelformat=empty}
+%\captionsetup{labelformat=empty}
 \caption{Соответствие сущностей}
-\end{figure}
+\label{correspondence-terms-table}
+\end{table}
 
 \begin{theorem}[об изоморфизме Карри-Ховарда] \ 
     \begin{enumerate}
@@ -254,7 +265,7 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
 \end{theorem}
 
 %% долг с предыдущей лекции
-\begin{proof} \ 
+\begin{proof}
 \begin{enumerate}
     \item Индукция по выводу $\Delta \vdash_\xx M : \sigma$. Заменяем каждое правило в выводе соответсвующим правилом из ИИВ и получаем доказательство $\Delta \vdash \sigma$.
 
@@ -293,7 +304,7 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
 
             \item Пусть $\varphi \notin \Gamma$. Тогда по индукционному предположению $\Delta, x^\varphi : \varphi \vdash M : \psi$. Тогда
             \[
-                \infer{\Delta \vdash \lambda x^\varphi . M : \varphi \rightarrow \psi}{\Delta, x^\varphi : \varphi \vdash M : \psi}
+                \infer{\Delta \vdash \lambda x^\varphi . M : \varphi \rightarrow \psi}{\Delta, x : \varphi \vdash M : \psi}
                 \qedhere
             \]
         \end{enumerate}

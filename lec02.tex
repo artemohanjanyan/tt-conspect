@@ -8,7 +8,7 @@
     $(<)$ на натуральных числах обладает ромбовидным свойством.
     $(>)$ на натуральных числах не обладает ромбовидным свойством.
 
-$\beta$-редукция не обладает ромбовидным свойством.
+$\beta$-редукция не обладает ромбовидным свойством (см. \ref{no-diamond}).
 \begin{figure}[h]
     \centering
     \begin{tikzpicture}[->,>={Stealth[black]},
@@ -28,8 +28,9 @@ $\beta$-редукция не обладает ромбовидным свойс
               (B2) edge (D)
               (C)  edge (D);
     \end{tikzpicture}
-    \captionsetup{labelformat=empty}
+    %\captionsetup{labelformat=empty}
     \caption{Нет такого $d$, что $b \rightarrow_{\beta} d$ и $c \rightarrow_{\beta} d$.}
+    \label{no-diamond}
 \end{figure}
 \end{example}
 
@@ -88,7 +89,7 @@ $\beta$-редукция не обладает ромбовидным свойс
 При этом, обратное не всегда верно.
 \begin{gather*}
     (\lambda x . x x) (\lambda x . x x x) \twoheadrightarrow_{\beta} (\lambda x . x x x)(\lambda x . x x x)(\lambda x . x x x) \\
-    (\lambda x . x x) (\lambda x . x x x) \cancel{\rightrightarrows_{\beta}} (\lambda x . x x x)(\lambda x . x x x)(\lambda x . x x x)
+    (\lambda x . x x) (\lambda x . x x x) \mathrel{\cancel{\rightrightarrows_{\beta}}} (\lambda x . x x x)(\lambda x . x x x)(\lambda x . x x x)
 \end{gather*}
 
 \begin{statement} \label{st-C}
@@ -134,8 +135,8 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
     \node at (0, 0) (A)  {$\comb K a \combl \Omega$};
     \node at (2, 0) (B)  {$a$};
 
-    \path (A) edge [loop left] ()
-              edge             (B);
+    \path (A) edge [loop left] node[auto] {$\reduction{\combl\Omega}$} ()
+              edge             node[auto] {$\reduction{\comb K}$}      (B);
 \end{tikzpicture}
 \caption*{}
 \end{wrapfigure}
