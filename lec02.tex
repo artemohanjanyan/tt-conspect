@@ -1,6 +1,6 @@
 \subsection{\texorpdfstring{Ромбовидное свойство и параллельная редукция}{Diamond property and parallel reduction}}
 
-\begin{definition}[Ромбовидное свойство (diamond)]
+\begin{definition}[ромбовидное свойство]
     $G$ обладает ромбовидным свойством, если какие бы ни были $a$, $b$, $c$, что $aGb$, $aGc$, $b \ne c$, найдётся такое $d$, что $bGd$ и $cGd$.
 \end{definition}
 
@@ -10,17 +10,29 @@
 \end{example}
 
 $\beta$-редукция не обладает ромбовидным свойством.
-\begin{example} % TODO запилить картинку
-    \begin{gather*}
-        a = (\lambda x . x x)(Ia) \\
-        a \rightarrow_{\beta} (Ia)(Ia) = b\\
-        a \rightarrow_{\beta} (\lambda x . x x) a = c \\
-        b \rightarrow_{\beta} (Ia)a \rightarrow_{\beta} aa \\
-        b \rightarrow_{\beta} a(Ia) \rightarrow_{\beta} aa \\
-        c \rightarrow_{\beta} aa
-    \end{gather*}
-    Нет $d$, что $b \rightarrow_{\beta} d$ и $c \rightarrow_{\beta} d$.
-\end{example}
+\usetikzlibrary{arrows.meta}
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[->,>={Stealth[black]},
+                every edge/.style={draw=black,thick}]
+        \node[label={\scriptsize\tikz\node[circle,draw]{$a$};}]     at (0,   0) (A)  {$(\lambda x . x x)(\comb Ia)$};
+        \node[label={135:\scriptsize\tikz\node[circle,draw]{$b$};}] at (-2, -1) (B)  {$(\comb Ia)(\comb Ia)$};
+        \node[label={45:\scriptsize\tikz\node[circle,draw]{$c$};}]  at (2,  -1) (C)  {$(\lambda x . x x) a$};
+        \node                                                       at (-3, -2) (B1) {$(\comb Ia)a$};
+        \node                                                       at (-1, -2) (B2) {$a(\comb Ia)$};
+        \node                                                       at (0,  -3) (D)  {$aa$};
+
+        \path (A)  edge (B)
+                   edge (C)
+              (B)  edge (B1)
+                   edge (B2)
+              (B1) edge (D)
+              (B2) edge (D)
+              (C)  edge (D);
+    \end{tikzpicture}
+    \captionsetup{labelformat=empty}
+    \caption{Нет такого $d$, что $b \rightarrow_{\beta} d$ и $c \rightarrow_{\beta} d$.}
+\end{figure}
 
 \begin{theorem}[Чёрча-Россера] \label{church-rosser}
     $\beta$-редуцируемость обладает ромбовидным свойством.
@@ -30,23 +42,27 @@ $\beta$-редукция не обладает ромбовидным свойс
     Если $R$ обладает ромбовидным свойством, то $R^{*}$ обладает ромбовидным свойством.
 \end{lemma}
 
-\begin{proof} (Упражнение) \todo % TODO
-    \begin{enumerate}
-        \item $M_{1}RN_{1}$ и $M_{1}RM_{2}...M_{n-1}RM_{n}$ $\Rightarrow$ есть $N_{2}...N_{n}$: \\
-            $N_{1}RN_{2}...N_{n-1}RN_{n}$ и $M_{n}RN_{n}$.
-        \item Покажем ромбовидное свойство.
-        \qedhere
-    \end{enumerate}
+\begin{proof}
+    Пусть $M_1 R^* M_n$ и $M_1 R N_1$. Тогда существуют такие $M_2 \ldots M_{n-1}$, что $M_1 R M_2$ \ldots $M_{n-1} R M_n$.
+    Так как $R$ обладает ромбовидным свойством, $M_1 R M_2$ и $M_1 R N_1$, то существует такое $N_2$,
+    что $N_1 R N_2$ и $M_2 R N_2$. Аналогично, существуют такие $N_3 \ldots N_n$, что $N_{i-1} R N_{i}$ и $M_i R N_i$.
+    Мы получили такое $N_n$, что $N_1 R^* N_n$ и $M_n R^* N_n$.
+
+    Пусть теперь $M_{1,1}R^*M_{1,n}$ и $M_{1,1}R^*M_{m,1}$, то есть имеются $M_{1,2}$\ldots$M_{1,n-1}$ и $M_{2,1}$\ldots$M_{m-1,1}$,
+    что $M_{1,i-1} R M_{1,i}$ и $M_{i-1, 1} R M_{i, 1}$.
+    Тогда существует такое $M_{2,n}$, что $M_{2,1} R^* M_{2,n}$ и $M_{1,n} R^* M_{2,n}$.
+    Аналогично, существуют такие $M_{3,n}\ldots M_{m,n}$, что $M_{i,1} R^* M_{i,n}$ и $M_{1,n} R^* M_{i,n}$.
+    Тогда $M_{1,n} R^* M_{m,n}$ и $M_{m,1} R^* M_{m,n}$.
 \end{proof}
 
 \begin{definition}[Параллельная $\beta$-редукция]
     $A \rightrightarrows_{\beta} B$
     \begin{enumerate}
-        \item $A =_{\beta} B$, то $A \rightrightarrows_{\beta}B$
-        \item $A \rightrightarrows_{\beta} B$, то $\lambda x.A \rightrightarrows_{\beta} \lambda x . B$
-        \item $P \rightrightarrows_{\beta} Q$ и $R \rightrightarrows_{\beta} S$, то $PR \rightrightarrows_{\beta} QS$
-        \item $(\lambda x . P) Q \rightrightarrows_{\beta} R_{[x\coloneqq{}S]}$, если 
-            $P \rightrightarrows_{\beta}R$ и $Q \rightrightarrows_{\beta} S$.
+        \item Если $A =_\alpha B$, то $A \rightrightarrows_{\beta}B$
+        \item Если $A \rightrightarrows_{\beta} B$, то $\lambda x.A \rightrightarrows_{\beta} \lambda x . B$
+        \item Если $P \rightrightarrows_{\beta} Q$ и $R \rightrightarrows_{\beta} S$, то $PR \rightrightarrows_{\beta} QS$
+        \item Если $P \rightrightarrows_{\beta}R$ и $Q \rightrightarrows_{\beta} S$,
+            то $(\lambda x . P) Q \rightrightarrows_{\beta} R_{[x\coloneqq{}S]}$.
     \end{enumerate}
 \end{definition}
 
@@ -55,7 +71,7 @@ $\beta$-редукция не обладает ромбовидным свойс
 \end{statement}
 
 \begin{proof}
-    (Упражнение) \todo % TODO
+    \todo % TODO
 \end{proof}
 
 \begin{statement} \label{st-A}
@@ -67,17 +83,14 @@ $\beta$-редукция не обладает ромбовидным свойс
 \end{statement}
 
 \begin{proof}
-    (Упражнение) \todo % TODO
+    \todo % TODO
 \end{proof}
 
 При этом, обратное не всегда верно.
-
-\begin{example}
-    \begin{gather*}
-        (\lambda x . x x) (\lambda x . x x x) \twoheadrightarrow_{\beta} (\lambda x . x x x)(\lambda x . x x x)(\lambda x . x x x) \\
-        (\lambda x . x x) (\lambda x . x x x) \cancel{\rightrightarrows_{\beta}} (\lambda x . x x x)(\lambda x . x x x)(\lambda x . x x x)
-    \end{gather*}
-\end{example}
+\begin{gather*}
+    (\lambda x . x x) (\lambda x . x x x) \twoheadrightarrow_{\beta} (\lambda x . x x x)(\lambda x . x x x)(\lambda x . x x x) \\
+    (\lambda x . x x) (\lambda x . x x x) \cancel{\rightrightarrows_{\beta}} (\lambda x . x x x)(\lambda x . x x x)(\lambda x . x x x)
+\end{gather*}
 
 \begin{statement} \label{st-C}
     Из \ref{st-A} и \ref{st-B} следует, что $(\rightarrow_{\beta})^{*} = (\rightrightarrows_{\beta})^{*}$.
@@ -99,16 +112,17 @@ $\beta$-редукция не обладает ромбовидным свойс
 \epigraph{"<Завтра! Завтра! Не сегодня!"> "--- так ленивцы говорят.}{Das deutsches Sprichwort}
 
 \begin{definition}
-    \begin{align*}
-        K &= \lambda x \lambda y . x \\
-        I &= \lambda x . x \\
-        S &= \lambda x y z . x z (y z)
-    \end{align*}
+\[
+    \comb K = \lambda x \lambda y . x \qquad
+    \comb I = \lambda x . x \qquad
+    \comb S = \lambda x y z . x z (y z)
+\]
 \end{definition}
-$I$ выражается через $S$ и $K$: $I = S K K$.
+$\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \comb S \comb K \comb K$.
 
 \begin{statement} \label{SK-basis}
-    Пусть $A$ "--- замкнутое $\lambda$-выражение. Тогда найдётся выражение $T$, состоящее только из $S$ и $K$, что $A =_{\beta}T$.
+    Пусть $A$ "--- замкнутое $\lambda$-выражение.
+    Тогда найдётся выражение $T$, состоящее только из $\comb S$ и $\comb K$, что $A =_{\beta}T$.
 \end{statement}
 
 \begin{example}
@@ -130,8 +144,6 @@ $I$ выражается через $S$ и $K$: $I = S K K$.
 \end{statement}
 
 \subsection{\texorpdfstring{Парадокс Карри}{Curry's paradox}}
-
-\epigraph{Если это утверждение верно, то русалки существуют.}
 
 Попробуем построить логику на основе $\lambda$-исчисления.
 Введём комбнатор-импликацию, обозначим $(\supset)$. Введём M.P. и правила:
@@ -173,7 +185,7 @@ $I$ выражается через $S$ и $K$: $I = S K K$.
         \]
         \item И правило удаления импликации:
         \[
-            \infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \rightarrow \psi & \Gamma \vdash \varphi}
+            \infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \rightarrow \psi && \Gamma \vdash \varphi}
         \]
     \end{enumerate}
 
