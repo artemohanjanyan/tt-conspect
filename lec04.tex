@@ -4,7 +4,7 @@
 В $\lambda$-исчислении выделяют 3 задачи:
 \begin{enumerate}[label=(\asbuk*)]
     \item Проверка типа: верно ли $\Gamma \vdash M : \sigma$?
-    \item Вывод типа: $? \vdash M : ?$
+    \item Вывод типа: $? \vdash M : \mathinner{?}$
     \item Обитаемость типа: $? \vdash ? : \sigma$
 \end{enumerate}
 
@@ -12,43 +12,43 @@
 
 \subsection{\texorpdfstring{Вывод типа}{Type deduction}}
 
-\begin{definition}[Алгебраический терм]
-    \begin{gather*}
-        \begin{bnf}
-            A ::= x | f\left(A, \ldots, A\right)
-        \end{bnf} \\
-        (x \in X)
-    \end{gather*}
+\begin{definition}[алгебраический терм]
+    \begin{bnf}
+    \[
+        A ::= x | f\left(A, \ldots, A\right)
+    \]
+    \end{bnf}
+    Где $x \in X$.
 \end{definition}
 
 Уравнение в алгебраических термах: $A = A$.
 
 \begin{definition}[$S$-подстановка]
     \[
-        S : X \rightarrow A
+        S : A \rightarrow A
     \]
-    Причём $S$ "--- id почти везде. (везде кроме конечного количества)
+    Причём $S$ "--- id почти везде (везде кроме конечного количества).
 \end{definition}
 
-\begin{definition}[Естественное обобщение]
-    Естественное обобщение "--- такая подстановка $S : A \rightarrow A$, что
+\begin{definition}[естественное обобщение]
+    Естественное обобщение "--- такая подстановка $S : A \rightarrow A$, получаемая из $S : X \rightarrow A$, что
     $S\left(f\left(A_1, \dots, A_n\right)\right) = f\left(S(f_1), \ldots, S(f_n)\right)$
 \end{definition}
 
-\begin{definition}[Унификатор]
+\begin{definition}[унификатор]
     $S$ "--- унификатор (решение уравнения) $P=Q$, если $S(P)=S(Q)$.
 \end{definition}
 Задача решения уравнение в алгебраических термах "--- унификация.
 
-\begin{definition}[Композиция]
+\begin{definition}[композиция]
     $(S \circ T)(A) = S(T(A))$
 \end{definition}
 
-\begin{definition}[Частный случай]
+\begin{definition}[частный случай]
     $T$ "--- частный случай $U$, если существует такое $S$, что $T = S \circ U$.
 \end{definition}
 
-\begin{definition}[Наибольший общий унификатор]
+\begin{definition}[наибольший общий унификатор]
     Наибольший общий унификатор $U$ для уравнения $A=B$ "--- такой унификатор, что:
     \begin{enumerate}
         \item $U(A)=U(B)$.
@@ -56,7 +56,7 @@
     \end{enumerate}
 \end{definition}
 
-\begin{definition}[Несовместная система]
+\begin{definition}[несовместная система]
     Назовём систему несовместной, если выполнено одно из условий:
     \begin{enumerate}
         \item в ней есть уравнение вида $f(\ldots)=g(\ldots)$
@@ -64,7 +64,7 @@
     \end{enumerate}
 \end{definition}
 
-\begin{definition}[Эквивалентные системы]
+\begin{definition}[эквивалентные системы]
     Назовём две системы эквивалентными, если они имеют одинаковые решения.
 \end{definition}
 
@@ -80,7 +80,7 @@
     где $f$ "--- новый символ.
 \end{statement}
 
-\begin{definition}[Разрешённая система]
+\begin{definition}[разрешённая система]
     Назовём систему разрешённой, если:
     \begin{enumerate}
         \item все уравнения имеют вид $x = A$;
@@ -88,9 +88,7 @@
     \end{enumerate}
 \end{definition}
 
-Решение по системе в разрешённой форме строится так:
 По системе в разрешённой форме мы можем построить решение $S$, определив $S(x_i) = A_i$ для каждого $i$.
-\todo
 
 \begin{statement}
     Построенный по системе в разрешённой форме унификатор $S$ "--- наибольший общий унификатор.
@@ -121,7 +119,7 @@
 
 \begin{proof} \todo
     Пусть $(n_1, n_2, n_3)$ "--- характеристика системы, где
-    $n_1$ "--- количество переменных не входящих слева в систему слева от знака равенства только один раз,
+    $n_1$ "--- количество переменных не входящих систему только слева от знака равенства один раз,
     $n_2$ "--- общее количество вхождений функциональных символов в $S$,
     $n_3$ "--- количество выражений вида $x=x$ или $T=x$.
     Каждое преобразование уменьшает эту тройку (если сравнивать лексикографически).
@@ -137,18 +135,19 @@
     \begin{center}
     \begin{tabular}{l l l} \toprule
         $M \equiv x$ & $E_m=\set{}$ & $\tau_m=\alpha$ "--- новая переменная. \\ \midrule
-        $M \equiv PR$ & $E_m=E_p \cup E_r \cup \set{\tau_p=\tau_r\rightarrow\pi}$ & $\tau_m=\pi$ \\ \midrule
+        $M \equiv PR$ & $E_m=E_p \cup E_r \cup \set{\tau_p=\tau_r\rightarrow\pi}$ & $\tau_m=\pi$ "--- новая переменная \\ \midrule
         $M \equiv \lambda x . P$ & $E_m=E_p$ & $\tau_m=\tau_x\rightarrow\tau_p$ \\ \bottomrule
     \end{tabular}
     \end{center}
-    Решим построенную систему уравнений. \\
+    Решим построенную систему уравнений.
+
     Можно показать, что алгоритм корректный.
 \end{proof}
 
-\begin{example}
-    \todo %todo
-\end{example}
+%\begin{example}
+%    \todo %todo
+%\end{example}
 
-\subsection{\texorpdfstring{Про ложь}{About false}}
-
-\todo\ послушать запись. %todo
+%\subsection{\texorpdfstring{Про ложь}{About false}}
+%
+%\todo\ послушать запись. %todo
