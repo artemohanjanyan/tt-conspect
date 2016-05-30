@@ -5,4 +5,5 @@ all: main.tex
 	#touch ~/Dropbox/main.pdf
 
 clean : 
-	rm -rf build
+	$(RM) -r build/_minted-main
+	$(RM) build/*
