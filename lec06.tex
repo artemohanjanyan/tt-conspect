@@ -1,52 +1,51 @@
 \subsection{\texorpdfstring{Экзистенциальные типы}{Existential types}}
 
+\todo
 Допустим, у нас есть абстрактный тип данных "<Стек">: \\
 \begin{tabular}{l l}
-    empty & $: \alpha$ \\
-    push  & $: \alpha\with\nu\rightarrow\alpha$ \\
-    pop   & $: \alpha\rightarrow\alpha\with\nu$ \\
+    $\comb{empty}$ & $: \alpha$ \\
+    $\comb{push}$  & $: \alpha\with\nu\rightarrow\alpha$ \\
+    $\comb{pop}$   & $: \alpha\rightarrow\alpha\with\nu$ \\
 \end{tabular} \\
-Можно попробовать сказать это так: "<$\mathrm{stack} :
-    \alpha \with (\alpha\with\nu\rightarrow\alpha) \with (\alpha\rightarrow\alpha\with\nu)$">.
+Можно попробовать сказать это так: $\mathtt{stack} =
+    \alpha \with (\alpha\with\nu\rightarrow\alpha) \with (\alpha\rightarrow\alpha\with\nu)$.
 Но проблема в том, что у нас есть только интерфейс стека, а не его реализация. Поэтому лучше будет сказать так:
     $\exists \alpha . \alpha \with (\alpha\with\nu\rightarrow\alpha) \with (\alpha\rightarrow\alpha\with\nu)$.
 То есть существует какое-то $\alpha$, реазизовывающее требуемый интерфейс.
+\todo 
+
+\ 
 
 По аналогии с правилом удаления квантора существования, можно определить правила вывода для выражений экзистенциальных типов:
-\begin{gather*}
+\[
     \infer{\Gamma\vdash (\pack{M, \theta}{\exists \alpha . \varphi}) : \exists \alpha.\varphi}
         {\Gamma \vdash M : \varphi[\alpha := \theta]} \qquad
-    \infer[\alpha \notin \FV(\Gamma, \psi)]
-        {\Gamma \vdash~\abstype{\alpha}{x:\varphi}{M}{N:\psi}}
+    \infer[(\alpha \notin \FV(\Gamma, \psi))]
+        {\Gamma \vdash \abstype{\alpha}{x:\varphi}{M}{N:\psi}}
         {\Gamma \vdash M : \exists \alpha . \varphi && \Gamma, x : \varphi \vdash N : \psi}
-\end{gather*}
-\begin{example} \todo нормально написать пример со стеком.
-\end{example}
-%\begin{lstlisting}[language=ML]
-%type 'a stack
-%val empty : 'a stack
-%val push  : 'a * 'a stack -> 'a stack
-%val pop   : 'a stack -> 'a * 'a stack
-%\end{lstlisting}
-%-----------------------------------------
-%\begin{lstlisting}[language=ML]
-%type stack
-%val empty : stack
-%val push : int * stack -> stack
-%val pop : stack -> int * stack
-%\end{lstlisting}
-Если вспомнить, что квантор существования выразим через квантор всеобщности
-($\exists \alpha . x \equiv \forall \beta . (\forall \alpha . x \rightarrow \beta) \rightarrow \beta$),
-то можно попытаться записать типы выражений \textbf{pack} и \textbf{abstype} через квантор существования и выразить их без расширения языка.
+\]
+Если вспомнить, что квантор существования выразим через квантор всеобщности, то можно попытаться записать типы выражений
+\texttt{pack} и \texttt{abstype} через квантор существования и выразить их без расширения языка.
 \begin{gather*}
     \pack{M, \theta}{\exists \alpha . \varphi} = 
-        \Lambda \beta . \lambda x^{\forall \alpha . \varphi \rightarrow \beta} . (x \theta M) \\
-    \abstype{\alpha}{x : \varphi}{M}{N^\psi} =
+        \Lambda \beta . \lambda x^{\forall \alpha . \varphi \rightarrow \beta} . x \theta M \\
+    \abstype{\alpha}{x : \varphi}{M}{N}:\psi =
         M \psi (\Lambda \alpha . \lambda x ^ \varphi . N)
 \end{gather*}
-Можно показать, что $\abstype{\alpha}{x:\sigma}{(\pack{M,\tau}{\exists\alpha .\sigma})}{N}\twoheadrightarrow_\beta N[\alpha\coloneqq\tau][x\coloneqq M]$.
-\todo
-\begin{example} \todo
+Можно показать, что $\abstype{\alpha}{x:\varphi}{(\pack{M,\theta}{\exists\alpha .\varphi})}{N}$
+        редуцируется в $N[\alpha\coloneqq\theta][x\coloneqq M]$:
+\begin{align*}
+    \abstype{\alpha}{x:\varphi}{(\pack{M,\theta}{\exists\alpha .\varphi})}{N}
+    &= (\reduction{\Lambda \beta} . \lambda x^{\forall \alpha . \varphi \rightarrow \beta} . x \theta M)
+        \reduction{\psi} (\Lambda \alpha . \lambda x ^ \varphi . N) \\
+    &\rightarrow_\beta (\reduction{\lambda x^{\forall \alpha . \varphi \rightarrow \psi}} . x \theta M)
+        \reduction{(\Lambda \alpha . \lambda x ^ \varphi . N)} \\
+    &\rightarrow_\beta (\reduction{\Lambda \alpha} . \lambda x^\varphi . N) \reduction\theta M \\
+    &\rightarrow_\beta (\reduction{\lambda x^\varphi} . N)[\alpha\coloneqq\theta] \reduction M \\
+    &\rightarrow_\beta N[\alpha\coloneqq\theta][x\coloneqq M]
+\end{align*}
+
+\begin{example} \todo там чёрт ногу сломит \textbf{:/}
 \end{example}
 
 \begin{statement}
@@ -59,10 +58,10 @@
 Ни одна из задач $\lambda$-исчисления в системе $F$ не разрешима, даже задача проверки типизации.
 Доказать это можно через сведение к проблеме останова.
 
-Итак, мы попытались добавить к типизированному $\lambda$-исчислению абстрактные типы данных и получили слишком сложный язык.
+Итак, мы попытались добавить к типизированному $\lambda$-исчислению полиморфизм и абстрактные типы данных и получили слишком сложный язык.
 Давайте попробуем немного его упростить, чтобы с ним можно было работать.
 
-\subsection{\texorpdfstring{Типовая система Хиндли-Милнера}{\todo}}
+\subsection{\texorpdfstring{Типовая система Хиндли-Милнера}{Hindley and Milner’s type system}}
 
 \begin{definition}[Ранг типа]
 \[

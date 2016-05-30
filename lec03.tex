@@ -83,8 +83,8 @@
         Тогда в выводе должен будет присутствовать вывод подвыражения $xx$:
         \[
             \infer{\Gamma, x : \sigma \rightarrow \tau, x : \sigma \vdash x x : \tau}
-            {  \Gamma, x : \sigma \rightarrow \tau, x : \sigma \vdash x : \sigma \rightarrow \tau
-            && \Gamma, x : \sigma \rightarrow \tau, x : \sigma \vdash x : \sigma
+            {  \infer{\Gamma, x : \sigma \rightarrow \tau, x : \sigma \vdash x : \sigma \rightarrow \tau}{}
+            && \infer{\Gamma, x : \sigma \rightarrow \tau, x : \sigma \vdash x : \sigma}{}
             }
         \]
         Однако первое правило вывода запрещает повторение переменных в контексте. Значит, такой вывод не может быть корректным.

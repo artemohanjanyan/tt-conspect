@@ -1,78 +1,111 @@
-\section{\texorpdfstring{Система $F$}{System F}}
+\section{\texorpdfstring{Логика второго порядка и полиморфизм}{Second-order logic and polymorphism}}
 
 Обычное $\lambda$-исчисление позволяет слишком много, просто-типизированное "--- слишком мало ($(-1)$ не выразим). Хотелось бы золотую середину.
 
 \subsection{\texorpdfstring{Интуиционистское исчисление предикатов второго порядка}{Second order intuitionistic logic}}
 
-\begin{definition}
+\begin{definition}[грамматика ИИП второго порядка]
     \begin{bnf}
     \[
         \Phi ::= (\Phi) | p | \Phi \rightarrow \Phi | \forall p . \Phi \color{gray}
             \underbrace{| \exists p . \Phi | \bot | \Phi \with \Phi | \Phi \vee \Phi}_{\text{не существенные}}
     \]
     \end{bnf}
-    Введение кванторов:
-    \begin{gather*}
-        \infer[p \notin \FV(\Gamma)]{\Gamma \vdash \forall p . \varphi}{\Gamma \vdash \varphi} \qquad
-        \infer{\Gamma \vdash \exists p . \varphi}{\Gamma \vdash \varphi \left[p \coloneqq \psi\right]}
-    \end{gather*}
-    Удаление кванторов:
-    \begin{gather*}
-        \infer{\Gamma \vdash \varphi \left[p \coloneqq \sigma\right]}{\Gamma \vdash \forall p . \varphi} \qquad
-        \infer[p \notin \FV(\Gamma, \psi)]{\Gamma \vdash \psi}{\Gamma \vdash \exists p . \varphi && \Gamma, \varphi \vdash \psi}
-    \end{gather*}
-    Последние четыре связки можно выразить через первые:
-    \begin{align*}
-        \bot & \equiv \forall p . p \\
-        \varphi \with \psi & \equiv \forall a . ((\varphi \rightarrow \psi \rightarrow a) \rightarrow a) \\
-        \varphi \vee \psi & \equiv \forall a . (\varphi \rightarrow a) \rightarrow (\psi \rightarrow a) \rightarrow a \\
-        \exists x . \tau & \equiv \forall a . (\forall x . \tau \rightarrow a) \rightarrow a
-    \end{align*}
 \end{definition}
 
+\begin{definition}[правила вывода в ИИП второго порядка]
+    К правилам обычного ИИВ добавляются правила вывода для квантора всеобщности:
+    \[
+        \infer[p \notin \FV(\Gamma)]{\Gamma \vdash \forall p . \varphi}{\Gamma \vdash \varphi} \qquad
+        \infer{\Gamma \vdash \varphi \left[p \coloneqq \sigma\right]}{\Gamma \vdash \forall p . \varphi}
+    \]
+    И для квантора существования:
+    \[
+        \infer{\Gamma \vdash \exists p . \varphi}{\Gamma \vdash \varphi \left[p \coloneqq \psi\right]} \qquad
+        \infer[p \notin \FV(\Gamma, \psi)]{\Gamma \vdash \psi}{\Gamma \vdash \exists p . \varphi && \Gamma, \varphi \vdash \psi}
+    \]
+\end{definition}
+
+Последние четыре связки можно выразить через первые:
+\begin{align*}
+    \bot & \equiv \forall p . p \\
+    \varphi \with \psi & \equiv \forall a . ((\varphi \rightarrow \psi \rightarrow a) \rightarrow a) \\
+    \varphi \vee \psi & \equiv \forall a . (\varphi \rightarrow a) \rightarrow (\psi \rightarrow a) \rightarrow a \\
+    \exists x . \tau & \equiv \forall a . (\forall x . \tau \rightarrow a) \rightarrow a
+\end{align*}
+
+$\bot$ утверждает "<любое утверждение верно">, что является критерием противоречивости.
+
+Выражение конъюнкции можно читать как "<если всё, что выводимо из $\set{\varphi,\psi}$, выполняется,
+то тогда выполняется $\varphi\with\psi$">.
+Также для неё можно проверить, что правила вывода действительно выводятся через такое определение. Например:
+\[
+    \infer{\Gamma \vdash \varphi}
+    {
+        \infer{\Gamma \vdash (\varphi\rightarrow\psi\rightarrow\varphi)\rightarrow\varphi}
+            {\Gamma \vdash \forall \gamma.(\varphi\rightarrow\psi\rightarrow\gamma)\rightarrow\gamma}
+        &&
+        \infer{\Gamma\vdash\varphi\rightarrow\psi\rightarrow\varphi}
+        {\infer{\Gamma,\varphi\vdash\psi\rightarrow\varphi}
+        {\infer{\Gamma,\varphi,\psi\vdash\varphi}
+        {}}}
+    }
+\]
+
+Формулу для дизъюнкции можно читать как "<$\varphi \vee \psi$ выполняется,
+если любое $a$, которое выводимо из $\varphi$ или из $\psi$, выполняется">.
+Ещё её можно понимать как следствие из формулы де Моргана $\varphi\vee\psi=\neg(\neg\varphi\with\neg\psi)$.
+
+Формула для квантора существования получается из того, что $\exists x . \tau = \neg \forall x . \neg \tau$.
+
 \subsection{\texorpdfstring{Система $F$}{System F}}
-\begin{definition}[Тип в системе $F$]
+\begin{definition}[тип в системе $F$]
 \[
     \tau =
     \begin{cases}
         \alpha, \beta, \gamma, \ldots & \text{(атомарный тип)} \\
-        \tau \rightarrow \sigma \\
+        \tau \rightarrow \tau \\
         \forall \alpha . \tau & \text{($\alpha$ "--- переменнная)}
     \end{cases}
 \]
 \end{definition}
 
-\begin{definition}[Исчисление по Чёрчу в системе $F$]
+\begin{definition}[грамматика исчисления по Чёрчу в системе $F$]
     \begin{bnf}
         \begin{gather*}
             \mathbf\Lambda ::= x | \lambda p^\alpha . \mathbf\Lambda | \mathbf\Lambda \mathbf\Lambda | (\mathbf\Lambda)
             | \Lambda \alpha . \mathbf\Lambda | \mathbf\Lambda \tau
         \end{gather*}
     \end{bnf}
-    $\Lambda \alpha . \mathbf\Lambda$ "--- типовая (полиморфная абстракция), $\mathbf\Lambda \tau$ "--- применение типа.
+    $\Lambda \alpha . \mathbf\Lambda$ "--- полиморфная абстракция, $\mathbf\Lambda \tau$ "--- применение типа.
+\end{definition}
 
-    Правила вывода:
+\begin{definition}[правила вывода в системе $F$]
     \begin{gather*}
-        \infer[x \notin \mathrm{dom}(\Gamma)]{\Gamma, x : \sigma \vdash x : \sigma}{} \\
-        \infer{\Gamma \vdash MN : \sigma}{\Gamma \vdash M : \tau \rightarrow \sigma & \Gamma \vdash N : \tau} \qquad
-        \infer[(x \notin \mathrm{dom}(\Gamma))]{\Gamma \vdash \lambda x^\tau . M : \tau \rightarrow \sigma}{\Gamma, x : \tau \vdash M : \sigma} \\
-        \infer[x \in \FV(\Gamma)]{\Gamma \vdash \Lambda \alpha . M : \forall \alpha : \sigma}{\Gamma \vdash M : \sigma} \qquad
-        \infer[\text{(подстановка типа)}]{\Gamma \vdash M \tau : \sigma [\alpha := \tau]}{\Gamma \vdash M : \forall \alpha . \sigma}
+        \infer[(x \notin \mathrm{dom}(\Gamma))]{\Gamma, x : \sigma \vdash x : \sigma}{} \\
+        \infer{\Gamma \vdash MN : \sigma}{\Gamma \vdash M : \tau \rightarrow \sigma && \Gamma \vdash N : \tau} \qquad
+        \infer[(x \notin \mathrm{dom}(\Gamma))]
+                {\Gamma \vdash \lambda x^\tau . M : \tau \rightarrow \sigma}{\Gamma, x : \tau \vdash M : \sigma} \\
+        \infer[(\alpha \notin \FV(\Gamma))]{\Gamma \vdash \Lambda \alpha . M : \forall \alpha : \sigma}{\Gamma \vdash M : \sigma} \qquad
+        \infer{\Gamma \vdash M \tau : \sigma [\alpha := \tau]}{\Gamma \vdash M : \forall \alpha . \sigma}
     \end{gather*}
 \end{definition}
 
-\begin{example} Левая проекция: \\
-    \begin{tabular}{l l l}
-        & Просто типизированное $\lambda$-исчисление & Система $F$ \\
+\begin{example} Левая проекция:
+    \begin{center}
+    \begin{tabular}{l l l} \toprule
+        & Просто типизированное $\lambda$-исчисление & Система $F$ \\ \midrule
         Тип & $\pi_1:\alpha\with\beta\rightarrow\alpha$ & $\pi_1:\forall \alpha . \forall \beta . \alpha \with \beta \rightarrow \alpha$ \\
         Выражение & $\pi_1 = \lambda p . p T$ & $\pi_1 = \Lambda \varphi . \Lambda \psi . \lambda p^{\varphi\with\psi} . p T$
+        \\ \bottomrule
     \end{tabular}
+    \end{center}
 \end{example}
 
 \begin{definition}[$\beta$-редукция в $F$] \ 
-    \begin{enumerate}[label=(\asbuk*)]
+    \begin{enumerate}
         \item Типовая редукция: $\left(\Lambda \alpha . M^\sigma\right) \tau \rightarrow_\beta M[\alpha:=\tau] : \sigma[\alpha := \tau]$
-        \item Классическая $\beta$-редукция: $\left(\lambda x^\sigma . M\right)^{\sigma \rightarrow \tau} X \rightarrow_\beta M [x:=X] : \tau$
+        \item Классическая $\beta$-редукция: $\left(\lambda x^\sigma.M\right)^{\sigma\rightarrow\tau} X \rightarrow_\beta M [x:=X] : \tau$
     \end{enumerate}
 \end{definition}
 
