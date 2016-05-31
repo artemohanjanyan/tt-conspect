@@ -27,7 +27,7 @@
 Если вспомнить, что квантор существования выразим через квантор всеобщности, то можно попытаться записать типы выражений
 \texttt{pack} и \texttt{abstype} через квантор существования и выразить их без расширения языка.
 \begin{gather*}
-    \pack{M, \theta}{\exists \alpha . \varphi} = 
+    \pack{M, \theta}{\exists \alpha . \varphi} =
         \Lambda \beta . \lambda x^{\forall \alpha . \varphi \rightarrow \beta} . x \theta M \\
     \abstype{\alpha}{x : \varphi}{M}{N}:\psi =
         M \psi (\Lambda \alpha . \lambda x ^ \varphi . N)
@@ -138,31 +138,42 @@ $\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alp
 \begin{statement}
     Задача вывода типа в Х-М разрешима.
 \end{statement}
-Обозначения: $\overline{\Gamma(\tau)} = \forall \alpha_1 \ldots \forall \alpha_n . \tau$,
-где $\alpha_i \in \tau$ и $\alpha_i \notin \FV(\Gamma)$
-(замыкание всех несвязанных переменных); $\Gamma_x = \Gamma \setminus \set{x}$.
+Приведём алгоритм, решающий эту задачу.
+Он будет принимать выражение $e$ в контексте $\Gamma$ и возвращать такую подстановку $S$ и тип $\tau$, что
+\[
+    S(\Gamma) \vdash e : \tau
+\]
 
-Определим $W(\Gamma, e) = (S, \tau)$, принимающую контекст и выражение и возвращающую такую подстановку и тип,
-что $S(\Gamma) \vdash e : \tau$.
-\begin{enumerate}
-    \item Если $e \equiv x$ и $x : \forall \alpha_1 \ldots \alpha_k . \tau' \in \Gamma$, то $S$
-\end{enumerate}
+В алгоритме будем пользоваться \hyperref[unificator]{унификацией} ($U(\tau_1, \tau_2)$ "--- унификатор $\tau_1$ и $\tau_2$),
+будем обозначать контекст $\Gamma$ без типа $x$ как $\Gamma_x$
+и определим замыкание всех несвязанных типовых переменных в контексте:
+\[
+    \overline{\Gamma}(\tau) = \forall \alpha_1 \ldots \forall \alpha_n . \tau
+\]
+где $\alpha_i \in \FV(\tau)$ и $\alpha_i \notin \FV(\Gamma)$.
 
 \begin{center}
-\begin{tabular}{l l l} \toprule
-    $e \equiv x$
-        & $x : \forall \alpha_1 \ldots \alpha_k . \tau' \in \Gamma$
-        & $S'=\mathrm{Id}$ \\ \midrule
-    $e \equiv e_1 e_2$
-            & $W(\Gamma, e_2) = (S_2, \tau_2)$ & $(V(S_1 \circ S_2), V(\beta))$ \\ \addlinespace[0.6ex]
-            & $W(S_2(\Gamma), e_1) = (S_1, \tau_1)$ & \\ \addlinespace[0.6ex]
-            & $U(S_1(\tau_1), \tau_2 \rightarrow \beta) = V$, где $\beta$ "--- новый тип & \\ \midrule
-    $e\equiv\lambda x . e$
-        & $W(\Gamma_x \cup \set{x : \beta}, e) = (S_1, \tau_1)$, $\beta$ "--- новый тип
-        & $(S_1, S_1(\beta \rightarrow \tau_1))$. \\ \midrule
-    $e\equiv\lett{x=e_1}{e_2}$
-        & $W(\Gamma, e_1) = (S_1, \tau_1)$ & $(S_2 \circ S_1, \tau_2)$ \\ \addlinespace[0.6ex]
-        & $W(S_1(\Gamma_x \cup \{x : S_1(\overline{\Gamma(\tau_1)})\}), e_2) = (S_2, \tau_2)$ & \\ \bottomrule
+\begin{tabular}{Sl Sl Sl} \toprule
+    Вид $e$ & Условия & $\mathrm{W}(\Gamma, e)$ \\ \toprule
+    $x$
+        & $x : \forall \alpha_1 \ldots \alpha_k . \tau' \in \Gamma$ & $S =\mathrm{Id}$ \\
+        & $\beta_i$ "--- новые переменные                           & $\tau = \tau'[\alpha_i \coloneqq \beta_i]$ \\
+        \midrule
+    $e_1 e_2$
+            & $W(\Gamma, e_2) = (S_2, \tau_2)$                                       & $S = V \circ S_1 \circ S_2$ \\
+            & $W(S_2(\Gamma), e_1) = (S_1, \tau_1)$                                  & $\tau = S(\beta)$ \\
+            & $U(S_1(\tau_1), \tau_2 \rightarrow \beta) = V$, $\beta$ "--- новый тип & \\ \midrule
+    $\lambda x . e$
+        & $W(\Gamma_x \cup \set{x : \beta}, e) = (S_1, \tau_1)$ & $S = S_1$  \\
+        & $\beta$ "--- новый тип                                & $\tau = S(\beta) \rightarrow \tau_1$ \\ \midrule
+    $\lett{x=e_1}{e_2}$
+        & $W(\Gamma, e_1) = (S_1, \tau_1)$                                                     & $S = S_2 \circ S_1$ \\
+        & $W(S_1 \Gamma_x \cup \set{x : \overline{S_1 \Gamma} (\tau_1)}, e_2) = (S_2, \tau_2)$ & $\tau = \tau_2$ \\ \bottomrule
 \end{tabular}
 \end{center}
-\todo примеры
+
+Если какие-то условия не могут быть соблюдены, то тип выражения не может быть выведен.
+
+\begin{example}
+\todo
+\end{example}

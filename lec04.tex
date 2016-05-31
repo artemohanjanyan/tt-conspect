@@ -35,9 +35,20 @@
     $S\left(f\left(A_1, \dots, A_n\right)\right) = f\left(S(f_1), \ldots, S(f_n)\right)$
 \end{definition}
 
-\begin{definition}[унификатор]
+\begin{definition}[унификатор] \label{unificator}
     $S$ "--- унификатор (решение уравнения) $P=Q$, если $S(P)=S(Q)$.
 \end{definition}
+\begin{example}
+    Пусть
+    \[
+        \sigma = \beta\rightarrow\alpha\rightarrow\beta \qquad \tau = (\gamma\rightarrow\gamma)\rightarrow\delta
+    \]
+    Их унификатор это
+    \[
+        S = [\beta \coloneqq \gamma\rightarrow\gamma, \delta \coloneqq \alpha\rightarrow\gamma\rightarrow\gamma]
+        \qquad S(\sigma) \equiv S(\tau) = (\gamma\rightarrow\gamma)\rightarrow\alpha\rightarrow\gamma\rightarrow\gamma
+    \]
+\end{example}
 Задача решения уравнение в алгебраических термах "--- унификация.
 
 \begin{definition}[композиция]
@@ -101,7 +112,7 @@
 Рассотрим следующие преобразования, которые не меняют свойства системы:
 \begin{center}
 \begin{tabular}{l l l} \toprule
-    Выражения                         & Условия             & Новые выражения \\ \midrule
+    Выражения                         & Условия             & Новые выражения \\ \toprule
     $T=x$, $T$ не переменная          &                     & $x=T$ \\ \midrule
     $T=T$                             &                     & убрать это уравнение \\ \midrule
     \multirow{2}{*}[-\aboverulesep]{$f(A_1, \ldots A_n) = g(B_1, \ldots B_n)$}

@@ -95,7 +95,7 @@ $\bot$ утверждает "<любое утверждение верно">, ч
 \begin{example} Левая проекция:
     \begin{center}
     \begin{tabular}{l l l} \toprule
-        & Просто типизированное $\lambda$-исчисление & Система $F$ \\ \midrule
+        & Просто типизированное $\lambda$-исчисление & Система $F$ \\ \toprule
         Тип & $\pi_1:\alpha\with\beta\rightarrow\alpha$ & $\pi_1:\forall \alpha . \forall \beta . \alpha \with \beta \rightarrow \alpha$ \\
         Выражение & $\pi_1 = \lambda p . p T$ & $\pi_1 = \Lambda \varphi . \Lambda \psi . \lambda p^{\varphi\with\psi} . p T$
         \\ \bottomrule
@@ -118,4 +118,5 @@ $\bot$ утверждает "<любое утверждение верно">, ч
     $F$ \hyperref[strong-normalization]{сильно нормализуемо}.
 \end{theorem}
 
-\todo 
+\todo упражнения $\alpha\with\beta$ и тип чёрчевского нумерала
+$\forall\alpha.(\alpha\rightarrow\alpha)\rightarrow(\alpha\rightarrow\alpha)$
