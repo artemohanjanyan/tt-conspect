@@ -16,13 +16,13 @@
 \begin{definition}[правила вывода в ИИП второго порядка]
     К правилам обычного ИИВ добавляются правила вывода для квантора всеобщности:
     \[
-        \infer[p \notin \FV(\Gamma)]{\Gamma \vdash \forall p . \varphi}{\Gamma \vdash \varphi} \qquad
+        \infer[(p \notin \FV(\Gamma))]{\Gamma \vdash \forall p . \varphi}{\Gamma \vdash \varphi} \qquad
         \infer{\Gamma \vdash \varphi \left[p \coloneqq \sigma\right]}{\Gamma \vdash \forall p . \varphi}
     \]
     И для квантора существования:
     \[
         \infer{\Gamma \vdash \exists p . \varphi}{\Gamma \vdash \varphi \left[p \coloneqq \psi\right]} \qquad
-        \infer[p \notin \FV(\Gamma, \psi)]{\Gamma \vdash \psi}{\Gamma \vdash \exists p . \varphi && \Gamma, \varphi \vdash \psi}
+        \infer[(p \notin \FV(\Gamma, \psi))]{\Gamma \vdash \psi}{\Gamma \vdash \exists p . \varphi && \Gamma, \varphi \vdash \psi}
     \]
 \end{definition}
 
@@ -81,6 +81,7 @@ $\bot$ утверждает "<любое утверждение верно">, ч
 \end{definition}
 
 \begin{definition}[правила вывода в системе $F$]
+    \inferspacing
     \begin{gather*}
         \infer[(x \notin \mathrm{dom}(\Gamma))]{\Gamma, x : \sigma \vdash x : \sigma}{} \\
         \infer{\Gamma \vdash MN : \sigma}{\Gamma \vdash M : \tau \rightarrow \sigma && \Gamma \vdash N : \tau} \qquad

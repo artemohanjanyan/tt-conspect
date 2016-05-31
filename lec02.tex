@@ -8,11 +8,10 @@
     $(<)$ на натуральных числах обладает ромбовидным свойством.
     $(>)$ на натуральных числах не обладает ромбовидным свойством.
 
-$\beta$-редукция не обладает ромбовидным свойством (см. \ref{no-diamond}).
+$\beta$-редукция не обладает ромбовидным свойством.
 \begin{figure}[h]
     \centering
-    \begin{tikzpicture}[->,>={Stealth[black]},
-                every edge/.style={draw=black,thick}]
+    \begin{tikzpicture}[->,>={Stealth[black]}, every edge/.style={draw=black,thick}]
         \node[label={\scriptsize\tikz\node[circle,draw]{$a$};}]     at (0,   0) (A)  {$(\lambda x . x x)(\comb Ia)$};
         \node[label={135:\scriptsize\tikz\node[circle,draw]{$b$};}] at (-2, -1) (B)  {$(\comb Ia)(\comb Ia)$};
         \node[label={45:\scriptsize\tikz\node[circle,draw]{$c$};}]  at (2,  -1) (C)  {$(\lambda x . x x) a$};
@@ -30,7 +29,6 @@ $\beta$-редукция не обладает ромбовидным свойс
     \end{tikzpicture}
     %\captionsetup{labelformat=empty}
     \caption{Нет такого $d$, что $b \rightarrow_{\beta} d$ и $c \rightarrow_{\beta} d$.}
-    \label{no-diamond}
 \end{figure}
 \end{example}
 
@@ -86,11 +84,25 @@ $\beta$-редукция не обладает ромбовидным свойс
     \todo % TODO
 \end{proof}
 
-При этом, обратное не всегда верно.
-\begin{gather*}
-    (\lambda x . x x) (\lambda x . x x x) \twoheadrightarrow_{\beta} (\lambda x . x x x)(\lambda x . x x x)(\lambda x . x x x) \\
-    (\lambda x . x x) (\lambda x . x x x) \mathrel{\cancel{\rightrightarrows_{\beta}}} (\lambda x . x x x)(\lambda x . x x x)(\lambda x . x x x)
-\end{gather*}
+При этом, обратное, очевидно, не всегда верно.
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[>={Stealth[black]}]
+        \node[label={180:\scriptsize\tikz\node[circle,draw]{$a$};}] at (0, -0.5) (A)  {$(\lambda x . x x) (\lambda x . x x x)$};
+        \node[label={180:\scriptsize\tikz\node[circle,draw]{$b$};}] at (0, -2) (B)  {$(\lambda x . x x x) (\lambda x . x x x)$};
+        \node[label={0:\scriptsize\tikz\node[circle,draw]{$c$};}] at (5,  -2) (C)  {$(\lambda x . x x x)(\lambda x . x x x)(\lambda x . x x x)$};
+
+        \draw[transform canvas={xshift=3pt},->,style={draw=black,semithick}]  (A) -- (B);
+        \draw[transform canvas={xshift=-3pt},->,style={draw=black,semithick}] (A) -- (B);
+        \draw[->>,style={draw=black,thick}]                                   (A) -- (C);
+        \draw[transform canvas={yshift=3pt},->,style={draw=black,semithick}]  (B) -- (C);
+        \draw[transform canvas={yshift=-3pt},->,style={draw=black,semithick}] (B) -- (C);
+        %\path (A) edge[->] (B)
+        %          edge[->>] (C)
+        %      (B) edge[->] (C);
+    \end{tikzpicture}
+    \caption{$a \twoheadrightarrow_\beta c$, но $a \mathrel{\cancel{\rightrightarrows_\beta}} c$}
+\end{figure}
 
 \begin{statement} \label{st-C}
     Из \ref{st-A} и \ref{st-B} следует, что $(\rightarrow_{\beta})^{*} = (\rightrightarrows_{\beta})^{*}$.
@@ -145,12 +157,18 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
 \begin{definition}[нормальный порядок редукции]
     Редукция самого левого $\beta$-редекса.
 \end{definition}
-"<Ленивые вычисления"> (ну, почти, в ленивых ещё есть меморизация)
+Если добавить меморизацию к нормальному порядку редукции, то мы получим "<ленивые вычисления">.
+То есть, если значение выражения запрашивается много раз, то вычисляться оно будет только один раз.
+Например, пусть $\comb{Mul2} = \lambda a . \comb{Add} a a$.
+Тогда при вычислении $\comb{Mul2} (\comb{Add} \mathinner{\overline 2} \overline 2)$ в $\comb{Mul2}$ будет передана ссылка
+на выражение $\comb{Add} \mathinner{\overline 2} \overline 2$,
+во время первого запроса значения выражение будет вычислено и результат будет сохранён по ссылке,
+и во время второго запроса будет возвращён уже посчитанный результат.
 
 \begin{definition}[аппликативный порядок редукции]
     Редукция самого левого $\beta$-редекса из самых вложенных.
 \end{definition}
-"<Энергичные вычисления">
+"<Энергичные вычисления">.
 
 \begin{statement}
     Если нормальная форма существует, она может быть достигнута нормальным порядком редукции.

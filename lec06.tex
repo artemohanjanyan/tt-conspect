@@ -75,16 +75,7 @@
 \]
 \end{definition}
 
-\begin{definition} \ \\
-    Тип (монотип) "--- выражение в грамматике $ \begin{bnf} \tau ::= \alpha | \tau \rightarrow \tau | (\tau) \end{bnf} $. \\
-    Типовая схема (политип) "--- выражение в грамматике $ \begin{bnf} \sigma ::= \tau | \forall \alpha . \sigma \end{bnf} $.
-\end{definition}
-
-\begin{statement}
-    $\rank(\tau) = 0$, $\rank(\sigma) = 1$.
-\end{statement}
-
-\begin{example} Ранг экзистенциального типа
+\begin{example} Ранг экзистенциального типа:
 \begin{align*}
     \rank(\exists \alpha . \beta) &= \rank(\forall \gamma . (\forall \alpha . \beta \rightarrow \gamma) \rightarrow \gamma) \\
     &= \max(\rank((\forall \alpha . \beta \rightarrow \gamma) \rightarrow \gamma), 1) \\
@@ -93,47 +84,70 @@
 \end{align*}
 \end{example}
 
+\begin{definition}[грамматика типа в системе Хиндли-Милнера] \ \\
+    Тип (монотип) "--- выражение в грамматике $ \begin{bnf} \tau ::= \alpha | \tau \rightarrow \tau | (\tau) \end{bnf} $. \\
+    Типовая схема (политип) "--- выражение в грамматике $ \begin{bnf} \sigma ::= \tau | \forall \alpha . \sigma \end{bnf} $.
+\end{definition}
+
+$\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alpha\rightarrow\forall\beta.\beta$ "--- некорректный в Х-М тип.
+
+\begin{statement}
+    $\rank(\tau) = 0$, $\rank(\sigma) = 1$.
+\end{statement}
+
 \begin{definition}
-    $\sigma_1$ "--- подтип $\sigma_2$, если существует подстановка
-            $[\alpha_1 \coloneqq \theta_1, \alpha_2 \coloneqq \theta_2 \ldots \alpha_n \coloneqq \theta_n]$:
+    $\sigma_1$ "--- подтип $\sigma_2$, если существует такая подстановка
+            $[\alpha_1 \coloneqq \theta_1, \alpha_2 \coloneqq \theta_2 \ldots \alpha_n \coloneqq \theta_n]$, что:
     \begin{enumerate}
         \item $\sigma_1 = \forall \beta_1 \ldots \forall \beta_k . \tau [\alpha_1 \coloneqq \theta_1 \ldots \alpha_n := \theta_n]$,
-            $\alpha_i$ не входит свободно в $\theta_j$.
+            $\alpha_i$ не входит свободно в $\theta_j$
         \item $\sigma_2 = \forall \alpha_1 \ldots \forall \alpha_n \tau$
     \end{enumerate}
 \end{definition}
 
-\begin{definition}[Правила вывода в системе Хиндли-Милнера]
-\begin{gather*}
-    \infer[\text{(Аксиома)}]{\Gamma, x : \sigma \vdash x : \sigma}{} \qquad
-    \infer[\text{(Уточнение), $\sigma_1$ "--- подтип $\sigma$}]{\Gamma \vdash e : \sigma'}{\Gamma \vdash e : \sigma} \\
-    \infer[\text{(Обобщение), } \sigma\notin\FV(\Gamma)]{\Gamma \vdash e : \forall \alpha . \sigma}{\Gamma \vdash e : \sigma} \qquad
-    \infer[\text{(Абстракция)}]{\Gamma \vdash \lambda x . e : \tau' \rightarrow \tau}{\Gamma, x : \tau' \vdash e : \tau} \\
-    \infer[\text{(Подстановка, применение)}]
-        {\Gamma \vdash e e' : \tau}{\Gamma \vdash e : \tau' \rightarrow \tau && \Gamma \vdash e' : \tau'} \qquad
-    \infer[\text{(Let)}]
-        {\Gamma \vdash \lett{x=e}{e'=\tau}}
-        {\Gamma \vdash e : \sigma && \Gamma \setminus \set{x}, x : \sigma \vdash e' : \tau}
-\end{gather*}
-\end{definition}
-\todo попросить у Д.Г. оригинальную статью.
 
-Грамматика выражения выглядит следующим образом:
+\begin{definition}[грамматика выражения в Х-М]
 \[
 \begin{bnf}
     \Lambda ::= x | \lambda x . \Lambda | \Lambda \Lambda | (\Lambda) | \lett{x=\Lambda}{\Lambda}
 \end{bnf}
 \]
+\end{definition}
+
+\begin{definition}[правила вывода в системе Хиндли-Милнера]
+\inferspacing
+\begin{gather*}
+    \infer[\text{(Тавтология)}]{\Gamma, x : \sigma \vdash x : \sigma}{} \qquad
+    \infer[\text{(Уточнение, $\sigma'$ "--- подтип $\sigma$)}]{\Gamma \vdash e : \sigma'}{\Gamma \vdash e : \sigma} \\
+    \infer[\text{(Обобщение, $\alpha\notin\FV(\Gamma)$)}]{\Gamma \vdash e : \forall \alpha . \sigma}{\Gamma \vdash e : \sigma} \qquad
+    \infer[\text{(Абстракция)}]{\Gamma \vdash \lambda x . e : \sigma \rightarrow \tau}{\Gamma, x : \sigma \vdash e : \tau} \\
+    \infer[\text{(Применение)}]
+        {\Gamma \vdash e e' : \tau}{\Gamma \vdash e : \sigma \rightarrow \tau && \Gamma \vdash e' : \sigma} \qquad
+    \infer[\text{(Let)}]
+        {\Gamma \vdash \lett{x=e}{e'=\tau}}
+        {\Gamma \vdash e : \sigma && \Gamma, x : \sigma \vdash e' : \tau}
+\end{gather*}
+\end{definition}
+
+Мы существенно ограничили набор возможных типов в нашем языке, однако, он всё ещё вполне сильный.
+Например, в нём можно определить тип $\comb Y$: $\forall \alpha . (\alpha\rightarrow\alpha)\rightarrow\alpha$,
+и явно определить оператор фиксированной точки: $\mathtt{fix~f~=~f~(fix~f)}$.
+Через него можно определять рекурсивные функции и они будут типизироваться.
 
 \subsection{\texorpdfstring{Алгоритм W}{Algorithm W}}
 \begin{statement}
     Задача вывода типа в Х-М разрешима.
 \end{statement}
-Обозначения: $\overline{\Gamma(\tau)} = \forall \alpha_1 \ldots \forall \alpha_n . \tau$, где $\alpha_1 \ldots \alpha_n \notin \FV(\Gamma)$
+Обозначения: $\overline{\Gamma(\tau)} = \forall \alpha_1 \ldots \forall \alpha_n . \tau$,
+где $\alpha_i \in \tau$ и $\alpha_i \notin \FV(\Gamma)$
 (замыкание всех несвязанных переменных); $\Gamma_x = \Gamma \setminus \set{x}$.
 
 Определим $W(\Gamma, e) = (S, \tau)$, принимающую контекст и выражение и возвращающую такую подстановку и тип,
 что $S(\Gamma) \vdash e : \tau$.
+\begin{enumerate}
+    \item Если $e \equiv x$ и $x : \forall \alpha_1 \ldots \alpha_k . \tau' \in \Gamma$, то $S$
+\end{enumerate}
+
 \begin{center}
 \begin{tabular}{l l l} \toprule
     $e \equiv x$
