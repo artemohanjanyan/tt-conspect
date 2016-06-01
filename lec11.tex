@@ -1,0 +1,32 @@
+% Филипп Вадлерasdasd
+\subsection{\texorpdfstring{Новое $\lambda$-исчисление}{}}
+\begin{gather*}
+    \lambda
+        \left<x\right>.u
+        | s\left<t\right>
+        | \oc t
+        | case~s~of~\oc x \rightarrow u
+        | \left<\left<t,u\right>\right> | fst\left<p\right> | snd \left<p\right> \\
+        | inl \left<t\right> | inr \left<t\right> | case~s~of~inl\left<x\right> \rightarrow v; inr\left<y\right>\rightarrow w
+\end{gather*}
+
+\subsection{\texorpdfstring{Уникальные типы}{Unique types}}
+
+\begin{bnf}
+\[
+    \kappa ::= \tau | U | * | \kappa \rightarrow \kappa
+\]
+\end{bnf}
+
+Артибуты типа.
+Типы: Int, Bool, \ldots $: \tau$ "--- базовые типы, $\rightarrow : * \rightarrow * \rightarrow \tau$. \\
+$\cdot, \times : U$, $\vee \with : U \rightarrow U \rightarrow U$, $\oc : U \rightarrow U$. \\
+$Attr : \tau \rightarrow U \rightarrow *$
+
+\begin{bnf}
+\[
+    e ::= x
+\]
+\end{bnf}
+
+ай
