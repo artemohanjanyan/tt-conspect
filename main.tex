@@ -50,6 +50,7 @@
 \DeclareMathOperator{\dom}{dom}
 \DeclareMathOperator{\inj}{inj}
 \DeclareMathOperator{\FV}{FV}
+
 \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 
 \setlength\heavyrulewidth{1pt}
@@ -88,11 +89,19 @@
 \newcommand{\pack}[2]{\mathinner{\mathtt{pack}}~#1~\mathinner{\mathtt{to}}~#2}
 \newcommand{\abstype}[4]{\mathinner{\mathtt{abstype}}~#1~\mathinner{\mathtt{with}}~#2~\mathinner{\mathtt{in}}~#3~\mathinner{\mathtt{is}}~#4}
 \newcommand{\lett}[2]{\mathinner{\mathtt{let}}~#1~\mathinner{\mathtt{in}}~#2}
-\newcommand{\pair}[2]{\left<#1,#2\right>}
+\newcommand{\pair}[1]{\left<#1\right>}
+\newcommand{\ppair}[1]{\left<\!\left<#1\right>\!\right>}
+\newcommand{\caseb}[2]{\mathinner{\mathrm{case}}~#1~\mathinner{\mathrm{of}}~#2}
+\newcommand{\casec}[3]{\mathinner{\mathrm{case}}~#1~\mathinner{\mathrm{of}}~#2;~#3}
 
 \newcommand{\reduction}[1]{{\color{OrangeRed}#1}}
 
 \newcommand{\inferspacing}{\setlength{\jot}{1em}}
+
+\newcommand{\inl}[0]{\mathinner\mathrm{inl}}
+\newcommand{\inr}[0]{\mathinner\mathrm{inr}}
+\newcommand{\fst}[0]{\mathinner\mathrm{fst}}
+\newcommand{\snd}[0]{\mathinner\mathrm{snd}}
 
 \maketitle
 \tableofcontents

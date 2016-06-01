@@ -183,10 +183,10 @@
 \subsection{\texorpdfstring{Изоморфизм Карри-Ховарда}{Curry-Howard correspondence}}
 
 Давайте введём два новых типа данных.
-Первый "--- тип "<пары">. Если $A : \sigma$ и $B : \tau$, то $\pair{A}{B} : \sigma \with \tau$. Пара нам уже знакома.
+Первый "--- тип "<пары">. Если $A : \sigma$ и $B : \tau$, то $\pair{A,B} : \sigma \with \tau$. Пара нам уже знакома.
 Введём также функции доступа к элементам пары: $\pi_1 : \sigma\with\tau\rightarrow\sigma$ и $\pi_2 : \sigma\with\tau\rightarrow\tau$
 "--- левая и правая проекции.
-Например, $\pi_2 \pair{\overline 7}{\overline 5} =_\beta \overline 5$.
+Например, $\pi_2 \pair{\overline 7,\overline 5} =_\beta \overline 5$.
 
 Второй "--- алгебраический тип данных. Если $A : \sigma$ и $B : \tau$, то $\inj_1 A : \sigma \vee \tau$ и $\inj_2 : \sigma \vee \tau$.
 $\inj_1$ и $\inj_2$ это левая и правая инъекции.

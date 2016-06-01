@@ -1,15 +1,16 @@
 % Филипп Вадлерasdasd
 \subsection{\texorpdfstring{Новое $\lambda$-исчисление}{}}
- Пусть у нас есть некоторые набор переменных $x$, $y$, $z$ и некоторый набор термов $s$, $t$, $u$, $v$, $w$.
- Определим с их помощию грамматику для нашего $\lambda$-исчисления:
+%Пусть у нас есть некоторые набор переменных $x$, $y$, $z$ и некоторый набор термов $s$, $t$, $u$, $v$, $w$.
+Определим грамматику для нашего $\lambda$-исчисления:
 \begin{bnf}
-\begin{alignat*}{3}
-	\Lambda ::= & \lambda\left<x\right>.u \\ 
-			  | & s\left<t\right> \\
-			  | & \oc t && | case~s~of~\oc x \rightarrow u \\
-			  | & \left<t,u\right> && | case~s~of\left<t,u\right> \rightarrow v \\ 
-			  | & \left<\left<t,u\right>\right> && | fst\left<p\right> | snd \left<p\right> \\ 
-			  | & inl \left<t\right> && | inr \left<t\right>| case~s~of~inl\left<x\right> \rightarrow v; inr\left<y\right>\rightarrow w
+\begin{alignat*}{2}
+	s ::= &\ x \\
+              | &\ \lambda\left<x\right>.s | s\left<s\right> \\
+			  | &\ \oc s | \caseb{s}{\oc x \rightarrow s} \\
+			  | &\ \pair{s,s} | \caseb{s}{\pair{x,x} \rightarrow s} \\
+			  | &\ \ppair{s,s} | \fst \pair{s} | \snd \pair{s} \\
+			  | &\ \inl \pair{s} | \inr \pair{s}|
+                    \casec{s}{\inl \pair{x} \rightarrow s}{\inr \pair{x} \rightarrow s}
 \end{alignat*}
 \end{bnf}
 Будем типизировать это $\lambda$-исчисление линейными типами. Выпишем аксиомы:
