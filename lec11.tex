@@ -1,14 +1,32 @@
 % Филипп Вадлерasdasd
 \subsection{\texorpdfstring{Новое $\lambda$-исчисление}{}}
+ Пусть у нас есть некоторые набор переменных $x$, $y$, $z$ и некоторый набор термов $s$, $t$, $u$, $v$, $w$.
+ Определим с их помощию грамматику для нашего $\lambda$-исчисления:
+\begin{bnf}
+\begin{alignat*}{3}
+	\Lambda ::= & \lambda\left<x\right>.u \\ 
+			  | & s\left<t\right> \\
+			  | & \oc t && | case~s~of~\oc x \rightarrow u \\
+			  | & \left<t,u\right> && | case~s~of\left<t,u\right> \rightarrow v \\ 
+			  | & \left<\left<t,u\right>\right> && | fst\left<p\right> | snd \left<p\right> \\ 
+			  | & inl \left<t\right> && | inr \left<t\right>| case~s~of~inl\left<x\right> \rightarrow v; inr\left<y\right>\rightarrow w
+\end{alignat*}
+\end{bnf}
+Будем типизировать это $\lambda$-исчисление линейными типами. Выпишем аксиомы:
 \begin{gather*}
-    \lambda
-        \left<x\right>.u
-        | s\left<t\right>
-        | \oc t
-        | case~s~of~\oc x \rightarrow u
-        | \left<\left<t,u\right>\right> | fst\left<p\right> | snd \left<p\right> \\
-        | inl \left<t\right> | inr \left<t\right> | case~s~of~inl\left<x\right> \rightarrow v; inr\left<y\right>\rightarrow w
+	\infer[]
+		{\left[\Gamma\right]\vdash \oc t : \oc A}
+		{\left[\Gamma\right]\vdash t : A}
+	\qquad
+	\infer[]
+		{\Gamma, \Delta\vdash case~s~of \oc x \rightarrow u : B}
+		{\Gamma\vdash s : \oc A && \Delta, \left[x : A\right]\vdash u : B}
+	\\
+	\infer[]
+		{\Gamma, \Delta\vdash \left<t, u\right> : A \otimes B}
+		{\left[\Gamma\right]\vdash t : A && \Delta\vdash u : B}
 \end{gather*}
+
 
 \subsection{\texorpdfstring{Уникальные типы}{Unique types}}
 
