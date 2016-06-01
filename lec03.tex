@@ -258,16 +258,16 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
 
 \begin{theorem}[об изоморфизме Карри-Ховарда] \ 
     \begin{enumerate}
-        \item Пусть $\Gamma \vdash \sigma$ в и.ф.и.и.в., тогда найдётся такой терм M,
-            что $\Delta \vdash_{\xx} M : \sigma$, где $\Delta=\left\{ \left(x^\varphi : \varphi \right) \mid \varphi \in \Gamma \right\}$.
         \item Пусть $\Delta \vdash_{\xx} M : \sigma$, тогда $\abs{\Delta} \vdash \sigma$.
+        \item Пусть $\Gamma \vdash \sigma$ в и.ф.и.и.в., тогда найдётся такой терм M,
+            что $\Delta \vdash_{\xx} M : \sigma$, где $\Delta=\left\{ \left(x : \varphi \right) \mid \varphi \in \Gamma \right\}$.
     \end{enumerate}
 \end{theorem}
 
 %% долг с предыдущей лекции
 \begin{proof}
 \begin{enumerate}
-    \item Индукция по выводу $\Delta \vdash_\xx M : \sigma$. Заменяем каждое правило в выводе соответсвующим правилом из ИИВ и получаем доказательство $\Delta \vdash \sigma$.
+    \item Индукция по выводу $\Delta \vdash_\xx M : \sigma$. Заменяем каждое правило в выводе соответсвующим правилом из ИИВ и получаем доказательство $\abs\Delta \vdash \sigma$.
 
     \item Индукция по структуре вывода $\Gamma \vdash \sigma$. Пусть $\Gamma = \{\sigma_{1}, \sigma_{2} \ldots\}$,
         $\Delta = \{x_{1}:\sigma_{1}, x_{2}:\sigma_{2}, \ldots \}$.
@@ -297,17 +297,15 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
         \begin{enumerate}[label=\roman*.]
             \item Пусть $\varphi \in \Gamma$. Тогда по индукционному предположению $\Delta \vdash M : \psi$.
             Пусть $x \notin \dom(\Delta)$ (новая переменная).
-            Тогда можно изменить построенное доказательство и получить $\Delta, x : \varphi \vdash M : \psi$. Тогда
-            \[
-                \infer{\Delta \vdash \lambda x^\varphi . M : \varphi \rightarrow \psi}{\Delta, x : \varphi \vdash M : \psi}
-            \]
+            Тогда можно изменить построенное доказательство и получить $\Delta, x : \varphi \vdash M : \psi$.
 
-            \item Пусть $\varphi \notin \Gamma$. Тогда по индукционному предположению $\Delta, x^\varphi : \varphi \vdash M : \psi$. Тогда
-            \[
-                \infer{\Delta \vdash \lambda x^\varphi . M : \varphi \rightarrow \psi}{\Delta, x : \varphi \vdash M : \psi}
-                \qedhere
-            \]
+            \item Пусть $\varphi \notin \Gamma$. Тогда по индукционному предположению $\Delta, x : \varphi \vdash M : \psi$.
         \end{enumerate}
+        Тогда
+        \[
+            \infer{\Delta \vdash \lambda x^\varphi . M : \varphi \rightarrow \psi}{\Delta, x : \varphi \vdash M : \psi}
+            \qedhere
+        \]
     \end{enumerate}
 \end{enumerate} %есть в Curry-Howard Isomorphism, стр 75
 \end{proof}
