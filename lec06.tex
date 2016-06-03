@@ -1,4 +1,4 @@
-\subsection{\texorpdfstring{Экзистенциальные типы}{Existential types}}
+\subsection*{\texorpdfstring{Экзистенциальные типы}{Existential types}}
 
 \todo
 Допустим, у нас есть абстрактный тип данных "<Стек">: \\
@@ -89,7 +89,7 @@
     Типовая схема (политип) "--- выражение в грамматике $ \begin{bnf} \sigma ::= \tau | \forall \alpha . \sigma \end{bnf} $.
 \end{definition}
 
-$\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alpha\rightarrow\forall\beta.\beta$ "--- некорректный в Х-М тип.
+$\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alpha\rightarrow\forall\beta.\beta$ "--- некорректный в системе Хиндли-Милнера тип.
 
 \begin{statement}
     $\rank(\tau) = 0$, $\rank(\sigma) = 1$.
@@ -106,7 +106,7 @@ $\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alp
 \end{definition}
 
 
-\begin{definition}[грамматика выражения в Х-М]
+\begin{definition}[грамматика выражения в системе Хиндли-Милнера]
 \[
 \begin{bnf}
     \Lambda ::= x | \lambda x . \Lambda | \Lambda \Lambda | (\Lambda) | \lett{x=\Lambda}{\Lambda}
@@ -134,9 +134,9 @@ $\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alp
 и явно определить оператор фиксированной точки: $\mathtt{fix~f~=~f~(fix~f)}$.
 Через него можно определять рекурсивные функции и они будут типизироваться.
 
-\subsection{\texorpdfstring{Алгоритм W}{Algorithm W}}
+\subsection*{\texorpdfstring{Алгоритм W}{Algorithm W}}
 \begin{statement}
-    Задача вывода типа в Х-М разрешима.
+    Задача вывода типа в системе Хиндли-Милнера разрешима.
 \end{statement}
 Приведём алгоритм, решающий эту задачу.
 Он будет принимать выражение $e$ в контексте $\Gamma$ и возвращать такую подстановку $S$ и тип $\tau$, что
@@ -160,9 +160,9 @@ $\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alp
         & $\beta_i$ "--- новые переменные                           & $\tau = \tau'[\alpha_i \coloneqq \beta_i]$ \\
         \midrule
     $e_1 e_2$
-            & $W(\Gamma, e_2) = (S_2, \tau_2)$                                       & $S = V \circ S_1 \circ S_2$ \\
-            & $W(S_2(\Gamma), e_1) = (S_1, \tau_1)$                                  & $\tau = S(\beta)$ \\
-            & $U(S_1(\tau_1), \tau_2 \rightarrow \beta) = V$, $\beta$ "--- новый тип & \\ \midrule
+            & $W(\Gamma, e_1) = (S_1, \tau_1)$                                       & $S = V \circ S_1 \circ S_2$ \\
+            & $W(S_1(\Gamma), e_2) = (S_2, \tau_2)$                                  & $\tau = S(\beta)$ \\
+            & $U(S_2(\tau_1), \tau_2 \rightarrow \beta) = V$, $\beta$ "--- новый тип & \\ \midrule
     $\lambda x . e$
         & $W(\Gamma_x \cup \set{x : \beta}, e) = (S_1, \tau_1)$ & $S = S_1$  \\
         & $\beta$ "--- новый тип                                & $\tau = S(\beta) \rightarrow \tau_1$ \\ \midrule
