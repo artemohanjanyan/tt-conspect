@@ -197,8 +197,8 @@ $\inj_1$ и $\inj_2$ это левая и правая инъекции.
 \[
 T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarrow \pi \qquad \case{T}{A}{B} : \pi
 \]
-Рассмотрим такой код на Haskell: \mintinline{Haskell}{data Fruit = Orange Int | Banana Int}.
-В нём \mintinline{Haskell}{Orange :: Int -> Fruit} это левая инъекция, \mintinline{Haskell}{Banana :: Int -> Fruit} "--- правая.
+Рассмотрим такой тип на Haskell: \mintinline{Haskell}{data Fruit = Orange Int | Banana Int}. Левая инъекция для него "---
+\mintinline{Haskell}{Orange :: Int -> Fruit}, правая "--- \mintinline{Haskell}{Banana :: Int -> Fruit}.
 На нашем языке можно сказать, что $\mathinner\mathtt{Fruit} = \mathinner{\mathtt{Int}} \vee \mathinner{\mathtt{Int}}$.
 Тогда если $T \mathinner{:} \mathtt{Fruit}$, то $\case{T}{(+1)}{(-1)} \mathinner{:} \mathrel{\mathtt{Int}}$ это число,
 хранящееся в фрукте, увеличенное на единицу, если это апельсин, и уменьшенное на единицу, если это банан.

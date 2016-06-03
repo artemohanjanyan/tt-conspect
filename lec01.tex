@@ -155,7 +155,7 @@ $\lambda{}x.A$ связывает все свободные вхождения $
         \lambda x . f x =_{\eta} f
     \]
 \end{definition}
-Точно так же результат вычисления \mintinline{C++}{int f(int x)} равен результату вычисления \mintinline{C++}{[](int x){return f(x);}}.
+Точно так же результаты вычисления \mintinline{C++}{int f(int x)} и \mintinline{C++}{[](int x){return f(x);}} равны.
 
 Арифметические операции:
 \begin{align*}
@@ -242,13 +242,13 @@ $\combl\Omega$ не имеет нормальной формы.
                     (\comb{Mul} n \mathinner{(f \mathinner{(\mathinner{(-1)} n))}}) \\
     \comb{Fact} &= \comb Y \comb{Fact'} \\
     \comb{Fact} \overline 3 &=_\beta \comb Y \comb{Fact'} \overline 3 =_\beta \comb{Fact'} \mathinner{(\comb Y \comb{Fact'})} \overline 3
-                =_\beta \comb{IsZero} \overline 3 \mathinner{\overline{1}}
+                \\&=_\beta \comb{IsZero} \overline 3 \mathinner{\overline{1}}
                     (\comb{Mul} \overline 3 \mathinner{(\comb Y \comb{Fact'} \mathinner{(\mathinner{(-1)} \overline 3)})})
-                =_\beta \comb{Mul} \overline 3 \mathinner{(\comb Y \comb{Fact'} \mathinner{(\mathinner{(-1)} \overline 3)})} \\
-                &=_\beta \comb{Mul} \overline 3 \mathinner{(\comb Y \comb{Fact'} \overline 2)} =_\beta \ldots
+                =_\beta \comb{Mul} \overline 3 \mathinner{(\comb Y \comb{Fact'} \mathinner{(\mathinner{(-1)} \overline 3)})}
+                =_\beta \comb{Mul} \overline 3 \mathinner{(\comb Y \comb{Fact'} \overline 2)} \\&=_\beta \ldots
                 =_\beta \comb{Mul} \overline 3 \mathinner{(\comb{Mul} \overline 2 \mathinner{(\comb Y \comb{Fact'} \overline 1)})}
                 =_\beta \ldots =_\beta \comb{Mul} \overline 3 \mathinner{(\comb{Mul} \overline 2 \mathinner{(
-                    \comb{Mul} \overline 1 \mathinner{(\comb Y \comb{Fact'} \overline 0)})})} \\
+                    \comb{Mul} \overline 1 \mathinner{(\comb Y \comb{Fact'} \overline 0)})})} =_\beta \ldots \\
                 &=_\beta \comb{Mul} \overline 3 \mathinner{(\comb{Mul} \overline 2 \mathinner{( 
                     \comb{Mul} \mathinner{\overline 1} \overline 1)})}
                 =_\beta \overline 6
