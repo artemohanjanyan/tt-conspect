@@ -1,5 +1,5 @@
 \subsection{\texorpdfstring{Вывод типа с использованием ограничений}{Constraint-based type inference}}
-
+\todo
 Опишем другой подход к решению задачи вывода типа.
 Будем по выражению строить \emph{ограничения} на его тип.
 Для начала рассмотрим просто типизированное $\lambda$-исчисление.
@@ -81,3 +81,43 @@
         {\exists \alpha . x \preceq \alpha \land \restr{e_2:\tau}}
 \end{align*}
 \todo
+
+\subsection{\texorpdfstring{Рекурсивные типы}{Recursive types}}
+Допустим, мы хотим представить список. Все знают, что список это 
+\begin{minted}{Haskell}
+data List a = Nil | Cons a (List a)
+\end{minted}
+Хотелось бы написать $\operatorname{\mathtt{list}}\alpha=\varnothing\lor(\alpha\with\operatorname{\mathtt{list}}\alpha)$,
+однако так нельзя.
+Текущими выразительными средствами мы это сделать не можем.
+
+Есть два способа решить эту проблему.
+
+\subsection*{\texorpdfstring{Эквирекурсивные типы}{Equirecursive types}}
+Введём аналог комбинатора неподвижной точки для типов, $\mu$-оператор.
+Список можно будет записать так: $\operatorname{\mathtt{list}} \alpha = \mu \beta . \varnothing \lor \alpha \land \beta$.
+Будем считать, что типы $\mu \alpha . T$ и $T[\alpha \coloneqq \mu \alpha.T]$ равны.
+На основе такого равенства сделаем отношение эквивалентности $(=_\mu)$.
+Введём правило:
+\begin{bnf}
+\[
+    \infer[(\tau_1=_\mu \tau_2)]
+        {\Gamma \vdash e : \tau_2}
+        {\Gamma \vdash e : \tau_1}
+\]
+\end{bnf}
+
+Такое решение было применено в Java. Там можно писать \mintinline{Java}{Enum<E extends Enum<E>>}.
+
+\subsection*{\texorpdfstring{Изорекурсивные типы}{Isorecursive types}}
+Будем считать типы $\mu \alpha . T$ и $T[\alpha \coloneqq \mu \alpha.T]$ изоморфными.
+Введём две операции:
+\begin{align*}
+    \comb{fold}   &: T[\alpha \coloneqq \mu \alpha.T] \rightarrow \mu \alpha . T \\
+    \comb{unfold} &: \mu \alpha . T \rightarrow T[\alpha \coloneqq \mu \alpha.T]
+\end{align*}
+Аналогично можно ввести отношение эквивалентности.
+
+Разница в том, что изорекурсивные типы нужно сворачивать и разворачивать вручную.
+
+Типы и указатели на них в Си "--- пример изорекурсивных типов.
