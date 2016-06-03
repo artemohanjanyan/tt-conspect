@@ -206,10 +206,10 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
 Можно отчётливо проследить связь между аксиомами типизированного $\lambda$-исчисления и аксиомами ИИВ
 (таблицы \ref{correspondence-table}, \ref{correspondence-terms-table}).
 
-\begin{table}
+\begin{table}[hp]
 \centering
 \begin{tabular}{Sc@{\hspace{1.5cm}} Sc} \toprule
-    ИИВ & Типизированное $\lambda$-исчисление \\ \toprule
+    ИИВ & Типизированное $\lambda$-исчисление \\ \midrule
 
     $\infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \rightarrow \psi && \Gamma \vdash \varphi}$ &
     $\infer{\Gamma \vdash AB : \psi}{\Gamma \vdash A : \varphi \rightarrow \psi && \Gamma \vdash B : \varphi}$ \\ \addlinespace
@@ -242,10 +242,10 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
 \label{correspondence-table}
 \end{table}
 
-\begin{table}
+\begin{table}[hp]
 \centering
 \begin{tabular}{Sl Sl} \toprule
-    Интуиционистская логика & $\lambda$-исчисление \\ \toprule
+    Интуиционистская логика & $\lambda$-исчисление \\ \midrule
     выражение & тип \\
     доказательство & терм (программа) \\
     предположение & свободная переменная \\
