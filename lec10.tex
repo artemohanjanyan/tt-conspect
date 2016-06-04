@@ -123,7 +123,13 @@ $K = K$, $S = B (BW) (BBC)$, $I = CKK$.
 	\infer[]{\Gamma, \Delta \vdash C}{\Gamma \vdash A \oplus B && \Delta, \pair{A} \vdash C && \Delta, \pair{B} \vdash C}
 \end{gather*}
 \end{@empty}
-\begin{example}[закон Де-Моргана]
+\begin{example}[законы Де-Моргана]
+В линейных высказываниях также верны законы Де-Моргана :
+\[
+	\pair{\oc (A \with B)} \vdash \oc A \otimes \oc B \qquad
+	\pair{\oc A \otimes \oc B} \vdash \oc (A \with B)
+\]
+Докажем один из них:
 \[
 	\infer{\pair{\oc (A \with B)} \vdash \oc A \otimes \oc B} {
 		\infer{\pair{\oc (A \with B)} \vdash \oc (A \with B)}{}
