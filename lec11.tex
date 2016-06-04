@@ -139,7 +139,7 @@ $\Gamma$ и $fv$ отображают переменные в типы.
 	\infer[]{\Gamma, x : t^\times \vdash x^\otimes : t^\times |_{x:\times}}{} \\
 	\infer[]
 		{\Gamma \vdash \lambda x.e : a \xrightarrow{\vee fv\prime} b |_{fv\prime}}
-		{\Gamma, x : a \vdash e : b |_{fv} && fv' \equiv \todo fv} \\
+		{\Gamma, x : a \vdash e : b |_{fv} && fv' \equiv \fuck_x fv} \\
 	\infer[]
 		{\Gamma \vdash e_1e_2 : b |_{fv_1 \cup fv_2}}
 		{\Gamma \vdash e_1 : a \xrightarrow{u} b |_{fv_1} \qquad \Gamma \vdash e_2 : a |_{fv_2}}
