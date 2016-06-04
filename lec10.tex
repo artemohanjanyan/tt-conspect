@@ -77,53 +77,96 @@ $K = K$, $S = B (BW) (BBC)$, $I = CKK$.
 \todo{}шенька
 
 \subsection{\texorpdfstring{Линейные высказывания}{Linear statements}}
-
-\begin{definition}
+\begin{definition}[Грамматика линейных высказываний]
     \begin{bnf}
     \[
         T ::= x | T \multimap T | T \otimes T | T \with T | T \oplus T | \oc T
     \]
     \end{bnf}
 \end{definition}
+Неформально, этим значкам можно предать следующий смысл(формально - смысла в этом нет):
+\begin{enumerate}
+	\item $A \multimap B$  "--- Имеем возможноть превратить $A$ в $B$
+	\item $A \otimes B$ "--- Можем получить и $A$, и $B$, одновременно
+	\item $A \with B$ "--- Можем получить либо $A$, либо $B$, по своему усмотрению
+	\item $A \oplus B$ "--- Можем получить либо $A$, либо $B$, но не по своему усмотрению
+	\item $\oc A$ "--- Имеем фабрику, производящая  неограниченное количество $A$
+\end{enumerate}
 
-Контексты двух сортов. $\left<A\right>$ "--- линейный, $\left[ A \right]$ "--- интуиционистский.
-
+Расширим язык новыми правилами работы с контекстом "--- заведем два вида контекстов: $\pair{A}$ "--- линейный, $[A]$ "--- интуиционистский.
+Если у мета-переменной контекста нет каких-либо скобок, то вид контекста нам не важен и может быть любым.
+Разница заключается в том, что на выражанения в линейном контексте налагаются новые правила,
+говорящие что мы не можем раздвоить или убрать в контексте эти выражения. Формально это отображается в следующих аксиомах:
 \begin{gather*}
-    \infer{\left<A\right> \vdash A}{} \qquad
-    \infer{\left[A\right] \vdash A}{} \qquad
+	\infer{\pair{A} \vdash A}{} \qquad
+    \infer{[A] \vdash A}{} \qquad
     \infer{\Delta, \Gamma \vdash A}{\Gamma, \Delta \vdash A} \qquad
-    \infer{\Gamma, \left[A\right] \vdash B}{\Gamma, \left[A\right], \left[A\right] \vdash B} \qquad
-    \infer{\Gamma, \left[A\right] \vdash B}{\Gamma \vdash B} \\
+    \infer{\Gamma, [A] \vdash B}{\Gamma, [A], [A] \vdash B} \qquad
+    \infer{\Gamma, [A] \vdash B}{\Gamma \vdash B} \\
 \end{gather*}
 
-Докажем закон Де-Моргана:
+Заведем также аксиомы для работы с самими выражениями:
+\begin{gather*}
+	\infer[]{[\Gamma] \vdash \oc A}{[\Gamma] \vdash A} \qquad
+	\infer[]{\Gamma, \Delta \vdash B}{\Gamma \vdash \oc A && \Delta, [A] \vdash B} \qquad
+	\infer[]{\Gamma \vdash A \multimap B}{\Gamma, \pair{A} \vdash B} \qquad
+	\infer[]{\Gamma, \Delta \vdash B}{\Gamma \vdash A \multimap B && \Delta \vdash A} \\
+	\infer[]{\Gamma, \Delta \vdash A \otimes B}{\Gamma \vdash A && \Delta \vdash B} \qquad
+	\infer[]{\Gamma, \Delta \vdash C}{\Gamma \vdash A \otimes B && \Delta, \pair{A}, \pair{B} \vdash C} \\
+	\infer[]{\Gamma \vdash A \with B}{\Gamma \vdash A && \Gamma \vdash B} \qquad
+	\infer[]{\Gamma \vdash A}{\Gamma \vdash A \with B} \qquad
+	\infer[]{\Gamma \vdash B}{\Gamma \vdash A \with B} \\
+	\infer[]{\Gamma \vdash A \oplus B}{\Gamma \vdash A} \qquad
+	\infer[]{\Gamma \vdash A \oplus B}{\Gamma \vdash B} \qquad
+	\infer[]{\Gamma, \Delta \vdash C}{\Gamma \vdash A \oplus B && \Delta, \pair{A} \vdash C && \Delta, \pair{B} \vdash C}
+\end{gather*}
+\begin{example}[закон Де-Моргана]
 \[
-    \infer{\left<\oc (A \with B)\right> \vdash \oc A \otimes \oc B} {
-        \infer{\left<\oc (A \with B)\right> \vdash \oc (A \with B)}{}
+	\infer{\pair{\oc (A \with B)} \vdash \oc A \otimes \oc B} {
+		\infer{\pair{\oc (A \with B)} \vdash \oc (A \with B)}{}
         &&
-        \infer{\left[A \with B\right] \vdash \oc A \otimes \oc B} {
-            \infer{\left[A \with B, A \with B\right] \vdash \oc A \otimes \oc B}{
-                \infer{\left[A \with B\right] \vdash \oc A} {
-                    \infer{\left[A \with B\right] \vdash A} {
-                        \infer{\left[A \with B \right] \vdash A \with B}{}
+        \infer{[A \with B] \vdash \oc A \otimes \oc B} {
+            \infer{[A \with B, A \with B] \vdash \oc A \otimes \oc B}{
+                \infer{[A \with B] \vdash \oc A} {
+                    \infer{[A \with B] \vdash A} {
+                        \infer{[A \with B] \vdash A \with B}{}
                     }
                 }
                 &&
-                \infer{\left[A \with B\right] \vdash \oc B} {
-                    \infer{\left[A \with B\right] \vdash B} {
-                        \infer{\left[A \with B \right] \vdash A \with B}{}
+                \infer{[A \with B] \vdash \oc B} {
+                    \infer{[A \with B] \vdash B} {
+                        \infer{[A \with B] \vdash A \with B}{}
                     }
                 }
             }
         }
     }
 \]
+\end{example}
 
-Вложение интуиционистских связок в нашу логику:
+Интуционисткую логику можно вложить в линейную логику путем определения интуционистких связок через линейные:
 \begin{align*}
     A \rightarrow B &= \oc A \multimap B \\
     A \times B      &= A \with B \\
     A + B           &= \oc A \oplus \oc B
 \end{align*}
-
-Также можно вкладывать $A \times B$ как $\oc A \otimes \oc B$.
+В качестве альтернативного варианта, $A \times B$ можно вложить как $\oc A \otimes \oc B$.
+Доказательства из ИИВ могут быть переписаны на язык линейной логики путем замены аксиомы ИИВ их аналогами из линенйной логики.
+\begin{table}
+\centering
+\begin{tabular}{Sc Sc} \toprule
+	Схема аксиом в ИИВ & Представление в линейной логике \\ \toprule
+	$\infer[]{\Gamma \vdash A \rightarrow B}{\Gamma, A \vdash B}$ &
+	$\infer[]{\Gamma \vdash \oc A \multimap B}{
+		\infer[]{\Gamma, \pair{\oc A} \vdash B}{
+			\infer[]{\pair{\oc A} \vdash \oc A}{} && \Gamma, [A] \vdash B
+		}
+	}$ \\ \midrule
+	$\infer[]{\Gamma, \Delta \vdash B}{\Gamma \vdash A \rightarrow B && \Delta \vdash A}$ &
+	$\infer[]{\Gamma, [\Delta] \vdash B}{
+		\Gamma \vdash \oc A \multimap B && \infer[]{[\Delta] \vdash \oc A}{[\Delta] \vdash A}
+	}$ \\ \bottomrule
+\end{tabular}
+\caption{Примеры перевода аксиом ИИВ в линейную логику}
+\label{intutionistic-axioms-to-linear-samples}
+\end{table}

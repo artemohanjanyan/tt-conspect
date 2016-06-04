@@ -1,11 +1,11 @@
 % Филипп Вадлерasdasd
-\subsection{\texorpdfstring{Новое $\lambda$-исчисление}{}}
+\subsection{\texorpdfstring{Линейные типы}{Linear types}}
 %Пусть у нас есть некоторые набор переменных $x$, $y$, $z$ и некоторый набор термов $s$, $t$, $u$, $v$, $w$.
 Определим грамматику для нашего $\lambda$-исчисления:
 \begin{bnf}
 \begin{alignat*}{2}
 	s ::= &\ x \\
-              | &\ \lambda\left<x\right>.s | s\left<s\right> \\
+			  | &\ \lambda\pair{x}.s | s\pair{s} \\
 			  | &\ \oc s | \caseb{s}{\oc x \rightarrow s} \\
 			  | &\ \pair{s,s} | \caseb{s}{\pair{x,x} \rightarrow s} \\
 			  | &\ \ppair{s,s} | \fst \pair{s} | \snd \pair{s} \\
@@ -13,21 +13,70 @@
                     \casec{s}{\inl \pair{x} \rightarrow s}{\inr \pair{x} \rightarrow s}
 \end{alignat*}
 \end{bnf}
-Будем типизировать это $\lambda$-исчисление линейными типами. Выпишем аксиомы:
+Будем типизировать это $\lambda$-исчисление линейными высказываниями. Выпишем аксиомы:
 \begin{gather*}
 	\infer[]
-		{\left[\Gamma\right]\vdash \oc t : \oc A}
-		{\left[\Gamma\right]\vdash t : A}
-	\qquad
+		{[\Gamma]\vdash \oc s : \oc A}
+		{[\Gamma]\vdash s : A} \qquad
 	\infer[]
-		{\Gamma, \Delta\vdash case~s~of \oc x \rightarrow u : B}
-		{\Gamma\vdash s : \oc A && \Delta, \left[x : A\right]\vdash u : B}
-	\\
+		{\Gamma, \Delta\vdash \caseb{s}{\oc x \rightarrow t} : B}
+		{\Gamma\vdash s : \oc A && \Delta, [x : A]\vdash t : B} \\
 	\infer[]
-		{\Gamma, \Delta\vdash \left<t, u\right> : A \otimes B}
-		{\left[\Gamma\right]\vdash t : A && \Delta\vdash u : B}
+		{\Gamma, \Delta\vdash \pair{s, t} : A \otimes B}
+		{\Gamma \vdash s : A && \Delta\vdash t : B} \qquad
+	\infer[]
+		{\Gamma, \Delta \vdash \caseb{s}{\pair{x, y} \rightarrow t} : C}
+		{\Gamma\vdash s : A \otimes B && \Delta, \pair{x : A}, \pair{y : B} \vdash t : C} \\
+	\infer[]{\Gamma \vdash \ppair{s, t} : A \with B}{\Gamma \vdash s : A && \Gamma \vdash t : B} \qquad
+	\infer[]{\Gamma \vdash \fst \pair{s} : A}{\Gamma \vdash s : A \with B} \qquad
+	\infer[]{\Gamma \vdash \snd \pair{s} : B}{\Gamma \vdash s : A \with B} \\
+	\infer[]{\Gamma, \lambda\pair{x}.u : A \multimap B}{\Gamma, \pair{x : A} \vdash u : B} \qquad
+	\infer[]{\Gamma, \Delta \vdash  s \pair{t} : B}{\Gamma \vdash s : A \multimap B && \Delta \vdash t : A} \\
+	\infer[]{\Gamma \vdash \inl \pair{s} : A \oplus B}{\Gamma \vdash s : A} \qquad
+	\infer[]{\Gamma \vdash \inr \pair{s} : A \oplus B}{\Gamma \vdash s : B} \qquad
+	\infer[]
+		{\Gamma, \Delta \vdash \casec{s}{\inl \pair{x} \rightarrow t}{\inr \pair{y} \rightarrow v} : C}
+		{\Gamma \vdash s : A \oplus B && \Delta, \pair{x : A} \vdash t : C && \Delta, \pair{y : B} \vdash v : C}
 \end{gather*}
 
+Вложим просто типизируемое $\lambda$-исчисление в линейные типы.
+Абстракцию $\lambda x.s$ вложим в $\lambda\pair{x'}.\caseb{x'}{!x \rightarrow s}$,
+аппликацию $st$ вложим в $s\pair{\oc t}$.
+
+\begin{example}[Ломаем линейные типы]
+	Пусть у нас есть выражения $f$, $g$  типа $A \multimap B$.
+	Возьмем $h = \lambda x.\pair{f\pair{x}, g\pair{x}} : \oc A \multimap B \otimes B$.
+	Докажем, что $h$ действительно существует в линейных типах:
+
+	\[
+		\infer[]{[f : A \multimap B], [g : A\multimap B]\vdash \lambda x.\pair{f\pair{x}, g\pair{x}} : \oc A \multimap B \otimes B}{
+			\infer[]{
+				[f : A \multimap B], [g : A \multimap B], \pair{x' : \oc A}
+				\vdash \caseb{x'}{!x \rightarrow \pair{f\pair{x}, g\pair{x}} : B \otimes B}
+			}{
+				\infer[]{
+					\pair{x' : \oc A}, [f : A \multimap B], [g : A \multimap B]
+				\vdash \caseb{x'}{!x \rightarrow \pair{f\pair{x}, g\pair{x}} : B \otimes B}
+				}{
+					\pair{x' : \oc A} \vdash x' : A &&
+					\infer[]{[f : A \multimap B], [g : A \multimap B], [x : A]\vdash \pair{f\pair{x}, g\pair{x}} : B \otimes B}{
+						\infer[]{\vdots}{
+						\infer[]{[x : A], [f : A \multimap B], [x : A], [g : A \multimap B]\vdash \pair{f\pair{x}, g\pair{x}} : B \otimes B}{
+								\infer[]{[x : A], [f : A \multimap B]\vdash f\pair{x} : B}{[f : A \multimap B] \vdash f : A \multimap B}
+								&&
+								\infer[]{[x : A], [g : A \multimap B]\vdash g\pair{x} : B}{[g : A \multimap B] \vdash g : A \multimap B}
+							}
+						}
+					}
+				}
+			}
+		}
+	\]
+
+	В функции $h$ обьект $A$ был интуционистким, но функции $f$ и $g$ работают с ним, как с линейным.
+	Как мы видим линейный тип не дает на размножать обьект (получить несколько ссылок на него в разных местах),
+	но при этом у нас нет гарантий того, что до этого этот обьект не был размножен.
+\end{example}
 
 \subsection{\texorpdfstring{Уникальные типы}{Unique types}}
 
