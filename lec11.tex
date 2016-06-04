@@ -84,22 +84,64 @@
 \end{example}
 
 \subsection{\texorpdfstring{Уникальные типы}{Unique types}}
+\begin{definition}[Род]
+	Родом будем называть выражение, удовлетворяющие следующей граммтике:
+	\begin{bnf}
+	\begin{alignat*}{3}
+		\kappa ::= &\ T && \qquad Базовый~тип \\
+				 | &\ U && \qquad Аттрибут~уникальности \\
+				 | &\ * && \qquad Тип \\
+				 | &\ \kappa \rightarrow \kappa
+	\end{alignat*}
+	\end{bnf}
+\end{definition}
+\begin{definition}[Типовые константы]
+	\begin{bnf}
+	\begin{alignat*}{3}
+		& Int, Bool,\hdots && :: T && \qquad Базовые~типы \\
+		& \rightarrow      && :: * \rightarrow * \rightarrow T && \qquad Коструктор~функций \\
+		& \bullet, \times  && :: U && \qquad Уникальный, не~уникальный \\
+		& \vee, \wedge     && :: U \rightarrow U \rightarrow U && \qquad Дизьюнкия, коньюнкция~аттрибутов \\
+		& \neg             && :: U \rightarrow U && \qquad Отрицание~аттрибута \\
+		& Attr             && :: T \rightarrow U \rightarrow * && \qquad Конструктор~типа
+	\end{alignat*}
+	\end{bnf}
+\end{definition}
+С помощью типовых констант мы можем делать различные типы разных родов. 
+Тип (рода $*$) состоит из базового типа (рода $T$) и аттрибута уникальности (это тоже тип, только рода $U$). 
+Аттрибут показывает обязан ли обьект этого типа быть уникальным(всего на этот обьект может существовать только однаа ссылка) "--- $\bullet$,
+или это не обязательно "--- $\times$.
+На аттрибутах заданы различные булевы операции, которые выполняются так, будто $\bullet \equiv true$, $\times \equiv false$.
 
+Немного сахара:
+\[
+	Attr~t~u \equiv t^u \qquad Attr~(a \rightarrow b)~u \equiv a \xrightarrow{u} b
+\]
+
+Грамматика выражений будет похожа на классическую грамматику выражений, за исключением того,
+что у переменных будет указываться аттрибут ($x^\odot$), если на переменную есть только 1 ссылка,
+или аттрибут ($x^\otimes$), если на переменную имеется несколько ссылок.
 \begin{bnf}
 \[
-    \kappa ::= \tau | U | * | \kappa \rightarrow \kappa
+	e ::= \lambda x.e | ee | x^\odot | x^\otimes
 \]
 \end{bnf}
+В доказательствах будем использовать следующую нотацию: $\Gamma \vdash e : \tau |_{fv}$.
+$\Gamma$ и $fv$ отображают переменные в типы. 
+Разница заключается в том, что $\Gamma$ отображает в типы рода $*$,
+а $fv$ отображает в типы рода $U$
 
-Артибуты типа.
-Типы: Int, Bool, \ldots $: \tau$ "--- базовые типы, $\rightarrow : * \rightarrow * \rightarrow \tau$. \\
-$\cdot, \times : U$, $\vee \with : U \rightarrow U \rightarrow U$, $\oc : U \rightarrow U$. \\
-$Attr : \tau \rightarrow U \rightarrow *$
-
-\begin{bnf}
-\[
-    e ::= x
-\]
-\end{bnf}
-
-ай
+\todo пояснить про правила
+\begin{@empty}
+\inferspacing
+\begin{gather*}
+	\infer[]{\Gamma, x : t^u \vdash x^\odot : t^u |_{x:u}}{} \qquad
+	\infer[]{\Gamma, x : t^\times \vdash x^\otimes : t^\times |_{x:\times}}{} \\
+	\infer[]
+		{\Gamma \vdash \lambda x.e : a \xrightarrow{\vee fv\prime} b |_{fv\prime}}
+		{\Gamma, x : a \vdash e : b |_{fv} && fv' \equiv \todo fv} \\
+	\infer[]
+		{\Gamma \vdash e_1e_2 : b |_{fv_1 \cup fv_2}}
+		{\Gamma \vdash e_1 : a \xrightarrow{u} b |_{fv_1} \qquad \Gamma \vdash e_2 : a |_{fv_2}}
+\end{gather*}
+\end{@empty}
