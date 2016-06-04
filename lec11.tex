@@ -14,6 +14,8 @@
 \end{alignat*}
 \end{bnf}
 Будем типизировать это $\lambda$-исчисление линейными высказываниями. Выпишем аксиомы:
+\begin{@empty}
+\inferspacing
 \begin{gather*}
 	\infer[]
 		{[\Gamma]\vdash \oc s : \oc A}
@@ -38,6 +40,7 @@
 		{\Gamma, \Delta \vdash \casec{s}{\inl \pair{x} \rightarrow t}{\inr \pair{y} \rightarrow v} : C}
 		{\Gamma \vdash s : A \oplus B && \Delta, \pair{x : A} \vdash t : C && \Delta, \pair{y : B} \vdash v : C}
 \end{gather*}
+\end{@empty}
 
 Вложим просто типизируемое $\lambda$-исчисление в линейные типы.
 Абстракцию $\lambda x.s$ вложим в $\lambda\pair{x'}.\caseb{x'}{!x \rightarrow s}$,

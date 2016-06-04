@@ -84,7 +84,7 @@ $K = K$, $S = B (BW) (BBC)$, $I = CKK$.
     \]
     \end{bnf}
 \end{definition}
-Неформально, этим значкам можно предать следующий смысл(формально - смысла в этом нет):
+Неформально, этим значкам можно предать следующий смысл (формально "--- смысла в этом нет):
 \begin{enumerate}
 	\item $A \multimap B$  "--- Имеем возможноть превратить $A$ в $B$
 	\item $A \otimes B$ "--- Можем получить и $A$, и $B$, одновременно
@@ -97,15 +97,17 @@ $K = K$, $S = B (BW) (BBC)$, $I = CKK$.
 Если у мета-переменной контекста нет каких-либо скобок, то вид контекста нам не важен и может быть любым.
 Разница заключается в том, что на выражанения в линейном контексте налагаются новые правила,
 говорящие что мы не можем раздвоить или убрать в контексте эти выражения. Формально это отображается в следующих аксиомах:
-\begin{gather*}
+\[
 	\infer{\pair{A} \vdash A}{} \qquad
     \infer{[A] \vdash A}{} \qquad
     \infer{\Delta, \Gamma \vdash A}{\Gamma, \Delta \vdash A} \qquad
     \infer{\Gamma, [A] \vdash B}{\Gamma, [A], [A] \vdash B} \qquad
     \infer{\Gamma, [A] \vdash B}{\Gamma \vdash B} \\
-\end{gather*}
+\]
 
 Заведем также аксиомы для работы с самими выражениями:
+\begin{@empty}
+\inferspacing
 \begin{gather*}
 	\infer[]{[\Gamma] \vdash \oc A}{[\Gamma] \vdash A} \qquad
 	\infer[]{\Gamma, \Delta \vdash B}{\Gamma \vdash \oc A && \Delta, [A] \vdash B} \qquad
@@ -120,6 +122,7 @@ $K = K$, $S = B (BW) (BBC)$, $I = CKK$.
 	\infer[]{\Gamma \vdash A \oplus B}{\Gamma \vdash B} \qquad
 	\infer[]{\Gamma, \Delta \vdash C}{\Gamma \vdash A \oplus B && \Delta, \pair{A} \vdash C && \Delta, \pair{B} \vdash C}
 \end{gather*}
+\end{@empty}
 \begin{example}[закон Де-Моргана]
 \[
 	\infer{\pair{\oc (A \with B)} \vdash \oc A \otimes \oc B} {
@@ -155,7 +158,7 @@ $K = K$, $S = B (BW) (BBC)$, $I = CKK$.
 \begin{table}
 \centering
 \begin{tabular}{Sc Sc} \toprule
-	Схема аксиом в ИИВ & Представление в линейной логике \\ \toprule
+	Схема аксиом в ИИВ & Представление в линейной логике \\ \midrule
 	$\infer[]{\Gamma \vdash A \rightarrow B}{\Gamma, A \vdash B}$ &
 	$\infer[]{\Gamma \vdash \oc A \multimap B}{
 		\infer[]{\Gamma, \pair{\oc A} \vdash B}{
