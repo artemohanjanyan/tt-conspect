@@ -278,8 +278,8 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
             \infer{\Gamma, \varphi \vdash \varphi}{}
         \]
         \begin{enumerate}[label=\roman*.]
-            \item Если $\varphi \in \Gamma$, то $\Delta \vdash x_\varphi : \varphi$.
-            \item Если $\varphi \notin \Gamma$, то $\Delta, x_\varphi : \varphi \vdash x_\varphi : \varphi$.
+            \item Если $\varphi \in \Gamma$, то $\infer{\Delta \vdash x : \varphi}{}$.
+            \item Если $\varphi \notin \Gamma$, то $\infer{\Delta, x : \varphi \vdash x : \varphi}{}$.
         \end{enumerate}
 
         \item Вывод заканчивается правилом

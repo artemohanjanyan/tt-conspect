@@ -1,4 +1,4 @@
-\subsection{\texorpdfstring{Ромбовидное свойство и параллельная редукция}{Diamond property and parallel reduction}}
+\subsection{\texorpdfstring{Теорема Чёрча-Россера}{Church-Rosser theorem}}
 
 \begin{definition}[ромбовидное свойство]
     $G$ обладает ромбовидным свойством, если какие бы ни были $a$, $b$, $c$, что $aGb$, $aGc$, $b \ne c$, найдётся такое $d$, что $bGd$ и $cGd$.
@@ -61,7 +61,7 @@ $\beta$-редукция не обладает ромбовидным свойс
         \item Если $A \rightrightarrows_{\beta} B$, то $\lambda x.A \rightrightarrows_{\beta} \lambda x . B$
         \item Если $P \rightrightarrows_{\beta} Q$ и $R \rightrightarrows_{\beta} S$, то $PR \rightrightarrows_{\beta} QS$
         \item Если $P \rightrightarrows_{\beta}R$ и $Q \rightrightarrows_{\beta} S$,
-            то $(\lambda x . P) Q \rightrightarrows_{\beta} R_{[x\coloneqq{}S]}$.
+            то $(\lambda x . P) Q \rightrightarrows_{\beta} R [x\coloneqq{}S]$.
     \end{enumerate}
 \end{definition}
 
@@ -248,7 +248,8 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
 \end{theorem}
 
 \begin{proof}
-    Рассмотрим модель Крипке вида $W = \set{\Delta \mid \Gamma \subseteq \Delta}$, где $\Delta$ замкнуто относительно $\vdash$.
+    Рассмотрим модель Крипке вида $W = \set{\Delta \mid \Gamma \subseteq \Delta}$, где $\Delta$ замкнуто относительно $\vdash$,
+    то есть из $\Delta \vdash \varphi$ следует $\varphi \in \Delta$.
     $\Gamma \leq \Delta$ если $\Gamma \subseteq \Delta$.
     Индукцией по структуре $\varphi$ покажем, что $\Delta \Vdash \varphi$ т.и.т.т., когда $\Delta \vdash \varphi$.
     \begin{enumerate}
