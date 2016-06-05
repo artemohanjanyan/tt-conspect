@@ -22,9 +22,6 @@
 \begin{example}
     $((\lambda{} z.(z (y z))) (z x) z) = (\lambda{} z.z (y z)) (z x) z$
 \end{example}
-%[(а)]
-%[(б)]
-%[(в)]
 
 Есть понятия связанного и свободного вхождения переменной (аналогично ИП).
 $\lambda{}x.A$ связывает все свободные вхождения $x$ в $A$.
@@ -39,7 +36,7 @@ $\lambda{}x.A$ связывает все свободные вхождения $
     $A$ и $B$ называются $\alpha$-эквивалентными ($A=_{\alpha}B$), если выполнено одно из следующих условий:
     \begin{enumerate}
         \item $A\equiv{}x$ и $B\equiv{}x$.
-        \item $A\equiv{}\lambda{}x.P$, $B\equiv{}\lambda{}y.Q$ и $P_{[x\coloneqq{}t]}=_{\alpha}Q_{[y\coloneqq{}t]}$, где $t$ "--- новая переменная.
+        \item $A\equiv{}\lambda{}x.P$, $B\equiv{}\lambda{}y.Q$ и $P [x\coloneqq{}t] =_{\alpha}Q [y\coloneqq{}t]$, где $t$ "--- новая переменная.
         \item $A\equiv{}PQ$, $B\equiv{}RS$ и $P=_{\alpha}R$, $Q=_{\alpha}S$.
     \end{enumerate}
 \end{definition}
@@ -82,7 +79,7 @@ $\lambda{}x.A$ связывает все свободные вхождения $
         \item $A\equiv{}PQ$, $B\equiv{}RS$ и либо $P\rightarrow_{\beta}R$ и $Q=_{\alpha}S$,
             либо $P=_{\alpha}R$ и $Q\rightarrow_{\beta}S$.
         \item $A\equiv{}\lambda{}x.P$, $B\equiv{}\lambda x.Q$, $P\rightarrow_{\beta}Q$ ($x$ из какого-то класса из $\boldsymbol{\Lambda}$).
-        \item $A\equiv{}(\lambda{}x.P)Q$, $B\equiv{}P_{[x\coloneqq{}Q]}$, $Q$ свободно для подстановки в $P$ вместо $x$.
+        \item $A\equiv{}(\lambda{}x.P)Q$, $B\equiv{}P [x\coloneqq{}Q]$, $Q$ свободно для подстановки в $P$ вместо $x$.
     \end{enumerate}
 \end{definition}
 
@@ -111,12 +108,19 @@ $\lambda{}x.A$ связывает все свободные вхождения $
             \F
     \]
 \end{example}
+Истина это функция, которая принимает два аргумента, и возвращает первый аргумент.
+Ложь принимает два аргумента и возвращает второй.
+Если в выражении $a \F \T$ терм $a$ является истиной, то результатом будет первый аргумент, $\F$. Если ложью "--- второй аргумент, $\T$.
 
 Можно продолжить:
 \[
     \comb{And} = \lambda{}a.\lambda{}b.ab\F \qquad
     \comb{Or}  = \lambda{}a.\lambda{}b.a\T b
 \]
+Разберём $\comb{And}$. Он принимает два аргумента.
+Если первый аргумент это истина, то тогда результат $\comb{And}$ равен второму аргументу.
+Если первый аргумент это ложь, то тогда результат $\comb{And}$ это ложь, и от второго аргумента не зависит.
+Это и записано в выражении. $\comb{Or}$ разбирается аналогично.
 
 Попробуем определить числа:
 \begin{definition}[чёрчевский нумерал]
@@ -155,7 +159,7 @@ $\lambda{}x.A$ связывает все свободные вхождения $
         \lambda x . f x =_{\eta} f
     \]
 \end{definition}
-Точно так же результат вычисления \mintinline{C++}{int f(int x)} равен результату вычисления \mintinline{C++}{[](int x){return f(x);}}.
+Точно так же результаты вычисления \mintinline{C++}{int f(int x)} и \mintinline{C++}{[](int x){return f(x);}} равны.
 
 Арифметические операции:
 \begin{align*}
@@ -242,13 +246,13 @@ $\combl\Omega$ не имеет нормальной формы.
                     (\comb{Mul} n \mathinner{(f \mathinner{(\mathinner{(-1)} n))}}) \\
     \comb{Fact} &= \comb Y \comb{Fact'} \\
     \comb{Fact} \overline 3 &=_\beta \comb Y \comb{Fact'} \overline 3 =_\beta \comb{Fact'} \mathinner{(\comb Y \comb{Fact'})} \overline 3
-                =_\beta \comb{IsZero} \overline 3 \mathinner{\overline{1}}
+                \\&=_\beta \comb{IsZero} \overline 3 \mathinner{\overline{1}}
                     (\comb{Mul} \overline 3 \mathinner{(\comb Y \comb{Fact'} \mathinner{(\mathinner{(-1)} \overline 3)})})
-                =_\beta \comb{Mul} \overline 3 \mathinner{(\comb Y \comb{Fact'} \mathinner{(\mathinner{(-1)} \overline 3)})} \\
-                &=_\beta \comb{Mul} \overline 3 \mathinner{(\comb Y \comb{Fact'} \overline 2)} =_\beta \ldots
+                =_\beta \comb{Mul} \overline 3 \mathinner{(\comb Y \comb{Fact'} \mathinner{(\mathinner{(-1)} \overline 3)})}
+                =_\beta \comb{Mul} \overline 3 \mathinner{(\comb Y \comb{Fact'} \overline 2)} \\&=_\beta \ldots
                 =_\beta \comb{Mul} \overline 3 \mathinner{(\comb{Mul} \overline 2 \mathinner{(\comb Y \comb{Fact'} \overline 1)})}
                 =_\beta \ldots =_\beta \comb{Mul} \overline 3 \mathinner{(\comb{Mul} \overline 2 \mathinner{(
-                    \comb{Mul} \overline 1 \mathinner{(\comb Y \comb{Fact'} \overline 0)})})} \\
+                    \comb{Mul} \overline 1 \mathinner{(\comb Y \comb{Fact'} \overline 0)})})} =_\beta \ldots \\
                 &=_\beta \comb{Mul} \overline 3 \mathinner{(\comb{Mul} \overline 2 \mathinner{( 
                     \comb{Mul} \mathinner{\overline 1} \overline 1)})}
                 =_\beta \overline 6

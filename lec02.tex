@@ -1,4 +1,4 @@
-\subsection{\texorpdfstring{Ромбовидное свойство и параллельная редукция}{Diamond property and parallel reduction}}
+\subsection{\texorpdfstring{Теорема Чёрча-Россера}{Church-Rosser theorem}}
 
 \begin{definition}[ромбовидное свойство]
     $G$ обладает ромбовидным свойством, если какие бы ни были $a$, $b$, $c$, что $aGb$, $aGc$, $b \ne c$, найдётся такое $d$, что $bGd$ и $cGd$.
@@ -8,8 +8,8 @@
     $(<)$ на натуральных числах обладает ромбовидным свойством.
     $(>)$ на натуральных числах не обладает ромбовидным свойством.
 
-$\beta$-редукция не обладает ромбовидным свойством.
-\begin{figure}[h]
+$\beta$-редукция не обладает ромбовидным свойством (рисунок \ref{no-diamond}).
+\begin{figure}[ht]
     \centering
     \begin{tikzpicture}[->,>={Stealth[black]}, every edge/.style={draw=black,thick}]
         \node[label={\scriptsize\tikz\node[circle,draw]{$a$};}]     at (0,   0) (A)  {$(\lambda x . x x)(\comb Ia)$};
@@ -29,6 +29,7 @@ $\beta$-редукция не обладает ромбовидным свойс
     \end{tikzpicture}
     %\captionsetup{labelformat=empty}
     \caption{Нет такого $d$, что $b \rightarrow_{\beta} d$ и $c \rightarrow_{\beta} d$.}
+    \label{no-diamond}
 \end{figure}
 \end{example}
 
@@ -37,7 +38,7 @@ $\beta$-редукция не обладает ромбовидным свойс
 \end{theorem}
 
 \begin{lemma}
-    Если $R$ обладает ромбовидным свойством, то $R^{*}$ обладает ромбовидным свойством.
+    Если $R$ обладает ромбовидным свойством, то $R^{*}$ (транзитивно-рефлексивное замыкание $R$) обладает ромбовидным свойством.
 \end{lemma}
 
 \begin{proof}
@@ -60,7 +61,7 @@ $\beta$-редукция не обладает ромбовидным свойс
         \item Если $A \rightrightarrows_{\beta} B$, то $\lambda x.A \rightrightarrows_{\beta} \lambda x . B$
         \item Если $P \rightrightarrows_{\beta} Q$ и $R \rightrightarrows_{\beta} S$, то $PR \rightrightarrows_{\beta} QS$
         \item Если $P \rightrightarrows_{\beta}R$ и $Q \rightrightarrows_{\beta} S$,
-            то $(\lambda x . P) Q \rightrightarrows_{\beta} R_{[x\coloneqq{}S]}$.
+            то $(\lambda x . P) Q \rightrightarrows_{\beta} R [x\coloneqq{}S]$.
     \end{enumerate}
 \end{definition}
 
@@ -84,8 +85,8 @@ $\beta$-редукция не обладает ромбовидным свойс
     \todo % TODO
 \end{proof}
 
-При этом, обратное, очевидно, не всегда верно.
-\begin{figure}[h]
+При этом, обратное, очевидно, не всегда верно (рисунок \ref{no-reverse}).
+\begin{figure}[ht]
     \centering
     \begin{tikzpicture}[>={Stealth[black]}]
         \node[label={180:\scriptsize\tikz\node[circle,draw]{$a$};}] at (0, -0.5) (A)  {$(\lambda x . x x) (\lambda x . x x x)$};
@@ -101,7 +102,8 @@ $\beta$-редукция не обладает ромбовидным свойс
         %          edge[->>] (C)
         %      (B) edge[->] (C);
     \end{tikzpicture}
-    \caption{$a \twoheadrightarrow_\beta c$, но $a \mathrel{\cancel{\rightrightarrows_\beta}} c$}
+    \caption{$a \twoheadrightarrow_\beta c$, но $a \mathrel{\cancel{\rightrightarrows_\beta}} c$.}
+    \label{no-reverse}
 \end{figure}
 
 \begin{statement} \label{st-C}
@@ -139,20 +141,21 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
     Пусть $A$ "--- замкнутое $\lambda$-выражение.
     Тогда найдётся выражение $T$, состоящее только из $\comb S$ и $\comb K$, что $A =_{\beta}T$.
 \end{statement}
+%\newpage
 
-\begin{wrapfigure}[2]{r}{0pt}
+Нормальная форма некоторых $\lambda$-выражений может не достигаться при неудачном выборе порядка редукции (рисунок \ref{infred}).
+\begin{figure}[ht]
 \centering
-\begin{tikzpicture}[->,>={Stealth[black]},
-            every edge/.style={draw=black,thick}]
+\begin{tikzpicture}[->,>={Stealth[black]},every edge/.style={draw=black,thick}]
     \node at (0, 0) (A)  {$\comb K a \combl \Omega$};
     \node at (2, 0) (B)  {$a$};
 
     \path (A) edge [loop left] node[auto] {$\reduction{\combl\Omega}$} ()
               edge             node[auto] {$\reduction{\comb K}$}      (B);
 \end{tikzpicture}
-\caption*{}
-\end{wrapfigure}
-Нормальная форма некоторых $\lambda$-выражений может не достигаться при неудачном выборе порядка редукции.
+\caption{Редукция $\Omega$ обращает выражение в себя.}
+\label{infred}
+\end{figure}
 
 \begin{definition}[нормальный порядок редукции]
     Редукция самого левого $\beta$-редекса.
@@ -201,6 +204,8 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
 что в нашей логике с помощью $Y$-комбинатора мы можем ссылаться в утверждении на само себя.
 Аналогично можно прийти к парадоксальному выводу из высказывания "<если это утверждение верно, то русалки существуют"> на нашем мета-языке.
 
+\section{\texorpdfstring{Просто типизированное $\lambda$-исчисление}{Simply typed lambda calculus}}
+
 \subsection{\texorpdfstring{Импликационный фрагмент ИИВ}{Implication fragment of intuitionistic logic}}
 
 \begin{definition}[импликационный фрагмент ИИВ]
@@ -243,7 +248,8 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
 \end{theorem}
 
 \begin{proof}
-    Рассмотрим модель Крипке вида $W = \left\{\Delta \mid \Gamma \subseteq \Delta, \Delta\text{ замкнуто относительно }\vdash\right\}$,
+    Рассмотрим модель Крипке вида $W = \set{\Delta \mid \Gamma \subseteq \Delta}$, где $\Delta$ замкнуто относительно $\vdash$,
+    то есть из $\Delta \vdash \varphi$ следует $\varphi \in \Delta$.
     $\Gamma \leq \Delta$ если $\Gamma \subseteq \Delta$.
     Индукцией по структуре $\varphi$ покажем, что $\Delta \Vdash \varphi$ т.и.т.т., когда $\Delta \vdash \varphi$.
     \begin{enumerate}

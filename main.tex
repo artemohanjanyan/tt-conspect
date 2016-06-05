@@ -8,7 +8,7 @@
 \usepackage[T1,T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 %\usepackage{geometry}
-\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm,bindingoffset=0cm]{geometry}
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm,bindingoffset=0cm]{geometry}
 \usepackage{microtype}
 \usepackage{bnf}
 \usepackage{enumitem}
@@ -94,10 +94,6 @@
 \newcommand{\caseb}[2]{\mathinner{\mathrm{case}}~#1~\mathinner{\mathrm{of}}~#2}
 \newcommand{\casec}[3]{\mathinner{\mathrm{case}}~#1~\mathinner{\mathrm{of}}~#2;~#3}
 
-\newcommand{\reduction}[1]{{\color{OrangeRed}#1}}
-
-\newcommand{\inferspacing}{\setlength{\jot}{1em}}
-
 \newcommand{\inl}[0]{\mathinner\mathrm{inl}}
 \newcommand{\inr}[0]{\mathinner\mathrm{inr}}
 \newcommand{\fst}[0]{\mathinner\mathrm{fst}}
@@ -112,7 +108,12 @@
 \end{tikzpicture}%
 }
 
-%\fuck
+\newcommand{\restr}[1]{\llbracket#1\rrbracket}
+\newcommand{\deff}[2]{\mathinner\mathbf{def}~#1~\mathinner\mathbf{in}~#2}
+
+\newcommand{\reduction}[1]{{\color{OrangeRed}#1}}
+
+\newcommand{\inferspacing}{\setlength{\jot}{1em}}
 
 \maketitle
 \tableofcontents
@@ -130,6 +131,7 @@
 \input{lec04.tex}
 \input{lec05.tex}
 \input{lec06.tex}
+\input{lec07.tex}
 \input{lec10.tex}
 \input{lec11.tex}
 \input{lec13.tex}

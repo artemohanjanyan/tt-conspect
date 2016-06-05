@@ -1,0 +1,123 @@
+\subsection*{\texorpdfstring{Вывод типа с использованием ограничений}{Constraint-based type inference}}
+\todo
+Опишем другой подход к решению задачи вывода типа.
+Будем по выражению строить \emph{ограничения} на его тип.
+Для начала рассмотрим просто типизированное $\lambda$-исчисление.
+Грамматика ограничения:
+\[
+    \begin{bnf} C ::= \tau = \tau | C \land C | \exists \alpha . C \end{bnf}
+\]
+Алгоритм построения ограничений:
+\begin{align*}
+    \restr{\Gamma \vdash x : \tau} \ &=\  \Gamma(x) = \tau \\
+    \restr{\Gamma \vdash \lambda x . e : \tau} \ &=\ 
+        \exists \alpha_1 \alpha_2 . (\restr{\Gamma, x : \alpha_1\vdash e:\alpha_2} \land \alpha_1\rightarrow\alpha_2=\tau) \\
+    \restr{\Gamma \vdash e_1 e_2 : \tau} \ &=\ 
+        \exists\alpha.(\restr{\Gamma\vdash e_1 :\alpha\rightarrow\tau} \land \restr{\Gamma\vdash e_2 : \alpha})
+\end{align*}
+Где $\alpha_1, \alpha_2, \alpha \notin \FV(\Gamma, \tau)$.
+
+\begin{definition}[эрбановский универсум]
+    Пусть $c_i$ "--- константы языка, $f^i$ "--- функциональные символы языка.
+    \begin{align*}
+        H_0 &= \set{c_1 \ldots c_k \ldots} \\
+        H_i &= H_{i-1} \cup \set{f^i(h_1 \ldots h_t) \mid h_t \in H_{i-1}}
+    \end{align*}
+    Тогда $H = \cup_{i=0}^{\infty} H_i$ "--- эрбановский универсум.
+\end{definition}
+
+Пусть $\varphi : T \rightarrow H$ ($T$ "--- множество типов).
+
+\begin{theorem}
+    $\varphi$ "--- решение $\restr{\Gamma\vdash e : \tau}$ т.и.т.т., когда $(\varphi\Gamma, \varphi\tau)$ "--- типизация $e$.
+\end{theorem}
+
+\begin{example}
+    \begin{align*}
+        \restr{\vdash \lambda x . x : \sigma}
+        &= \exists \alpha_1 \alpha_2. (\restr{x : \alpha_1 \vdash x : \alpha_2} \land \alpha_1\rightarrow\alpha_2 = \sigma) \\
+        &= \exists \alpha_1 \alpha_2. (\set{x : \alpha_1}(x) = \alpha_2 \land \alpha_1\rightarrow\alpha_2 = \sigma) \\
+        &= \exists \alpha_1 \alpha_2. (\alpha_1 = \alpha_2 \land \alpha_1\rightarrow\alpha_2 = \sigma)
+    \end{align*}
+\end{example}
+
+Нам тут не нравится контекст \todo. Давайте избасимся от него.
+Добавим в язык ограничений ещё две конструкции:
+\[
+\begin{bnf}
+    C ::= \ldots | x = \tau | \deff{x : \tau}{C}
+\end{bnf}
+\]
+Теперь решением будет не только $\varphi : T \rightarrow H$, но и $\psi : X \rightarrow H$ ($X$ "--- множество переменных).
+Решение будет удовлетворять ограничению $x = \tau$, если $\psi x = \varphi \tau$.
+Решение будет удовлетворять ограничению $\deff{x:\tau}{C}$, если $C$ удовлетворено при $\varphi$ и $\psi[x \coloneqq \varphi(\tau)]$.
+
+Перепишем алгоритм:
+\begin{align*}
+    \restr{x : \tau} \ &=\  \Gamma(x) = \tau \\
+    \restr{\lambda x . e : \tau} \ &=\ 
+        \exists \alpha_1 \alpha_2 . (\deff{x : \alpha_1}{\restr{e:\alpha_2}} \land \alpha_1\rightarrow\alpha_2=\tau) \\
+    \restr{e_1 e_2 : \tau} \ &=\ 
+        \exists\alpha.(\restr{\Gamma\vdash e_1 :\alpha\rightarrow\tau} \land \restr{\Gamma\vdash e_2 : \alpha})
+\end{align*}
+
+Теперь расширим наш алгоритм на систему Хиндли-Милнера. Языком ограничений будет
+\begin{bnf}
+\begin{align*}
+    C &::= \tau = \tau | C \land C | \exists \alpha . C | x \preceq \tau | \deff{x : \varsigma}{C} \\
+    \varsigma &::= \forall \overline\alpha[C] . \tau
+\end{align*}
+\end{bnf}
+где $x \preceq \tau$ означает, что $x$ "--- экземпляр $\tau$, а $\varsigma$ "--- типовая схема.
+
+Сам алгоритм:
+\begin{align*}
+    \restr{x : \tau} \ &=\  \Gamma(x) = \tau \\
+    \restr{\lambda x . e : \tau} \ &=\ 
+        \exists \alpha_1 \alpha_2 . (\deff{x : \alpha_1}{\restr{e:\alpha_2}} \land \alpha_1\rightarrow\alpha_2=\tau) \\
+    \restr{e_1 e_2 : \tau} \ &=\ 
+        \exists\alpha.(\restr{\Gamma\vdash e_1 :\alpha\rightarrow\tau} \land \restr{\Gamma\vdash e_2 : \alpha}) \\
+    \restr{\lett{x = e_1}{e_2}} \ &=\ \deff{x : \forall \alpha[\restr{e_1 : \alpha}].\alpha}
+        {\exists \alpha . x \preceq \alpha \land \restr{e_2:\tau}}
+\end{align*}
+\todo
+
+\subsection{\texorpdfstring{Рекурсивные типы}{Recursive types}}
+Допустим, мы хотим представить список. Все знают, что список это 
+\begin{minted}{Haskell}
+data List a = Nil | Cons a (List a)
+\end{minted}
+Хотелось бы написать $\operatorname{\mathtt{list}}\alpha=\varnothing\lor(\alpha\with\operatorname{\mathtt{list}}\alpha)$,
+однако так нельзя.
+Текущими выразительными средствами мы это сделать не можем.
+
+Есть два способа решить эту проблему.
+
+\subsection*{\texorpdfstring{Эквирекурсивные типы}{Equirecursive types}}
+Введём аналог комбинатора неподвижной точки для типов, $\mu$-оператор.
+Список можно будет записать так: $\operatorname{\mathtt{list}} \alpha = \mu \beta . \varnothing \lor \alpha \land \beta$.
+Будем считать, что типы $\mu \alpha . T$ и $T[\alpha \coloneqq \mu \alpha.T]$ равны.
+На основе такого равенства сделаем отношение эквивалентности $(=_\mu)$.
+Введём правило:
+\begin{bnf}
+\[
+    \infer[(\tau_1=_\mu \tau_2)]
+        {\Gamma \vdash e : \tau_2}
+        {\Gamma \vdash e : \tau_1}
+\]
+\end{bnf}
+
+Такое решение было применено в Java. Там можно писать \mintinline{Java}{Enum<E extends Enum<E>>}.
+
+\subsection*{\texorpdfstring{Изорекурсивные типы}{Isorecursive types}}
+Будем считать типы $\mu \alpha . T$ и $T[\alpha \coloneqq \mu \alpha.T]$ изоморфными.
+Введём две операции:
+\begin{align*}
+    \comb{fold}   &: T[\alpha \coloneqq \mu \alpha.T] \rightarrow \mu \alpha . T \\
+    \comb{unfold} &: \mu \alpha . T \rightarrow T[\alpha \coloneqq \mu \alpha.T]
+\end{align*}
+Аналогично можно ввести отношение эквивалентности.
+
+Разница в том, что изорекурсивные типы нужно сворачивать и разворачивать вручную.
+
+Типы и указатели на них в Си "--- пример изорекурсивных типов.

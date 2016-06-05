@@ -1,4 +1,4 @@
-\section{\texorpdfstring{Задачи в $\lambda$-исчислении}{Link to programming}}
+\subsection{\texorpdfstring{Вывод типа}{Type deduction}}
 \epigraph{Помните, что в $\lambda$-исчислении нет смысла? Здесь смысл отрицательный, скорее.}{Д.Г.}
 
 В $\lambda$-исчислении выделяют 3 задачи:
@@ -8,9 +8,7 @@
     \item Обитаемость типа: $? \vdash ? : \sigma$
 \end{enumerate}
 
-В этом разделе будем рассматривать задачу вывода типа.
-
-\subsection{\texorpdfstring{Вывод типа}{Type deduction}}
+В этом разделе мы будем рассматривать задачу вывода типа.
 
 \begin{definition}[алгебраический терм]
     \begin{bnf}
@@ -112,7 +110,7 @@
 Рассотрим следующие преобразования, которые не меняют свойства системы:
 \begin{center}
 \begin{tabular}{l l l} \toprule
-    Выражения                         & Условия             & Новые выражения \\ \toprule
+    Выражения                         & Условия             & Новые выражения \\ \midrule
     $T=x$, $T$ не переменная          &                     & $x=T$ \\ \midrule
     $T=T$                             &                     & убрать это уравнение \\ \midrule
     \multirow{2}{*}[-\aboverulesep]{$f(A_1, \ldots A_n) = g(B_1, \ldots B_n)$}

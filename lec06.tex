@@ -134,7 +134,7 @@ $\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alp
 и явно определить оператор фиксированной точки: $\mathtt{fix~f~=~f~(fix~f)}$.
 Через него можно определять рекурсивные функции и они будут типизироваться.
 
-\subsection*{\texorpdfstring{Алгоритм W}{Algorithm W}}
+\subsection{\texorpdfstring{Вывод типа}{Type inference}}
 \begin{statement}
     Задача вывода типа в системе Хиндли-Милнера разрешима.
 \end{statement}
@@ -152,9 +152,14 @@ $\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alp
 \]
 где $\alpha_i \in \FV(\tau)$ и $\alpha_i \notin \FV(\Gamma)$.
 
-\begin{center}
+Алгоритм описан в таблице \ref{algorithm-w}.
+Если какие-то условия не могут быть соблюдены, то тип выражения не может быть выведен.
+
+%\begin{center}
+\begin{table}[ht]
+\centering
 \begin{tabular}{Sl Sl Sl} \toprule
-    Вид $e$ & Условия & $W(\Gamma, e)$ \\ \toprule
+    Вид $e$ & Условия & $W(\Gamma, e)$ \\ \midrule
     $x$
         & $x : \forall \alpha_1 \ldots \alpha_k . \tau' \in \Gamma$ & $S =\mathrm{Id}$ \\
         & $\beta_i$ "--- новые переменные                           & $\tau = \tau'[\alpha_i \coloneqq \beta_i]$ \\
@@ -170,9 +175,10 @@ $\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alp
         & $W(\Gamma, e_1) = (S_1, \tau_1)$                                                     & $S = S_2 \circ S_1$ \\
         & $W(S_1 \Gamma_x \cup \set{x : \overline{S_1 \Gamma} (\tau_1)}, e_2) = (S_2, \tau_2)$ & $\tau = \tau_2$ \\ \bottomrule
 \end{tabular}
-\end{center}
-
-Если какие-то условия не могут быть соблюдены, то тип выражения не может быть выведен.
+\caption{Алгоритм $W$.}
+\label{algorithm-w}
+\end{table}
+%\end{center}
 
 \begin{example}
 \todo

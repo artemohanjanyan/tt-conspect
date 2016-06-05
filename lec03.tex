@@ -1,4 +1,4 @@
-\section{\texorpdfstring{Просто типизированное $\lambda$-исчисление}{Simply typed lambda calculus}}
+%\section{\texorpdfstring{Просто типизированное $\lambda$-исчисление}{Simply typed lambda calculus}}
 
 \begin{definition}[тип]
     $T = \{\alpha, \beta, \gamma, \ldots\}$ "--- множество типов.
@@ -182,13 +182,15 @@
 
 \subsection{\texorpdfstring{Изоморфизм Карри-Ховарда}{Curry-Howard correspondence}}
 
-Давайте введём два новых типа данных.
+Можно отчётливо проследить связь между аксиомами типизированного $\lambda$-исчисления и аксиомами импликационного фрагмента ИИВ.
+Сейчас мы введём два новых типа данных, правила для которых будут соответствовать связкам $\with$ и $\lor$ из ИИВ.
+
 Первый "--- тип "<пары">. Если $A : \sigma$ и $B : \tau$, то $\pair{A,B} : \sigma \with \tau$. Пара нам уже знакома.
 Введём также функции доступа к элементам пары: $\pi_1 : \sigma\with\tau\rightarrow\sigma$ и $\pi_2 : \sigma\with\tau\rightarrow\tau$
 "--- левая и правая проекции.
 Например, $\pi_2 \pair{\overline 7,\overline 5} =_\beta \overline 5$.
 
-Второй "--- алгебраический тип данных. Если $A : \sigma$ и $B : \tau$, то $\inj_1 A : \sigma \vee \tau$ и $\inj_2 : \sigma \vee \tau$.
+Второй "--- алгебраический тип данных. Если $A : \sigma$ и $B : \tau$, то $\inj_1 A : \sigma \vee \tau$ и $\inj_2 B : \sigma \vee \tau$.
 $\inj_1$ и $\inj_2$ это левая и правая инъекции.
 Тип $\sigma \vee \tau$ означает, что это либо $\sigma$, либо $\tau$.
 Его можно понимать как \mintinline{C++}{union}, который дополнительно хранит в себе информацию о типе, который в нём записан.
@@ -197,19 +199,18 @@ $\inj_1$ и $\inj_2$ это левая и правая инъекции.
 \[
 T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarrow \pi \qquad \case{T}{A}{B} : \pi
 \]
-Рассмотрим такой код на Haskell: \mintinline{Haskell}{data Fruit = Orange Int | Banana Int}.
-В нём \mintinline{Haskell}{Orange :: Int -> Fruit} это левая инъекция, \mintinline{Haskell}{Banana :: Int -> Fruit} "--- правая.
+Рассмотрим такой тип на Haskell: \mintinline{Haskell}{data Fruit = Orange Int | Banana Int}. Левая инъекция для него "---
+\mintinline{Haskell}{Orange :: Int -> Fruit}, правая "--- \mintinline{Haskell}{Banana :: Int -> Fruit}.
 На нашем языке можно сказать, что $\mathinner\mathtt{Fruit} = \mathinner{\mathtt{Int}} \vee \mathinner{\mathtt{Int}}$.
 Тогда если $T \mathinner{:} \mathtt{Fruit}$, то $\case{T}{(+1)}{(-1)} \mathinner{:} \mathrel{\mathtt{Int}}$ это число,
 хранящееся в фрукте, увеличенное на единицу, если это апельсин, и уменьшенное на единицу, если это банан.
 
-Можно отчётливо проследить связь между аксиомами типизированного $\lambda$-исчисления и аксиомами ИИВ
-(таблицы \ref{correspondence-table}, \ref{correspondence-terms-table}).
+Соответствие описано в таблицах \ref{correspondence-table} и \ref{correspondence-terms-table}.
 
-\begin{table}
+\begin{table}[hp]
 \centering
 \begin{tabular}{Sc@{\hspace{1.5cm}} Sc} \toprule
-    ИИВ & Типизированное $\lambda$-исчисление \\ \toprule
+    ИИВ & Типизированное $\lambda$-исчисление \\ \midrule
 
     $\infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \rightarrow \psi && \Gamma \vdash \varphi}$ &
     $\infer{\Gamma \vdash AB : \psi}{\Gamma \vdash A : \varphi \rightarrow \psi && \Gamma \vdash B : \varphi}$ \\ \addlinespace
@@ -242,10 +243,10 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
 \label{correspondence-table}
 \end{table}
 
-\begin{table}
+\begin{table}[hp]
 \centering
 \begin{tabular}{Sl Sl} \toprule
-    Интуиционистская логика & $\lambda$-исчисление \\ \toprule
+    Интуиционистская логика & $\lambda$-исчисление \\ \midrule
     выражение & тип \\
     доказательство & терм (программа) \\
     предположение & свободная переменная \\
@@ -277,8 +278,8 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
             \infer{\Gamma, \varphi \vdash \varphi}{}
         \]
         \begin{enumerate}[label=\roman*.]
-            \item Если $\varphi \in \Gamma$, то $\Delta \vdash x_\varphi : \varphi$.
-            \item Если $\varphi \notin \Gamma$, то $\Delta, x_\varphi : \varphi \vdash x_\varphi : \varphi$.
+            \item Если $\varphi \in \Gamma$, то $\infer{\Delta \vdash x : \varphi}{}$.
+            \item Если $\varphi \notin \Gamma$, то $\infer{\Delta, x : \varphi \vdash x : \varphi}{}$.
         \end{enumerate}
 
         \item Вывод заканчивается правилом
