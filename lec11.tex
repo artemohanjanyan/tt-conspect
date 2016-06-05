@@ -43,7 +43,7 @@
 \end{@empty}
 Вложим просто типизируемое $\lambda$-исчисление в линейные типы.
 \begin{align*}
-	\lambda x.s &= \lambda\pair{x'}.\caseb{x'}{!x \rightarrow s} \\
+	\lambda x.s &= \lambda\pair{x'}.\caseb{x'}{\oc x \rightarrow s} \\
 	st          &= s\pair{\oc t}
 \end{align*}
 \begin{example}[Ломаем линейные типы]
@@ -55,11 +55,11 @@
 		\infer[]{[f : A \multimap B], [g : A\multimap B]\vdash \lambda x.\pair{f\pair{x}, g\pair{x}} : \oc A \multimap B \otimes B}{
 			\infer[]{
 				[f : A \multimap B], [g : A \multimap B], \pair{x' : \oc A}
-				\vdash \caseb{x'}{!x \rightarrow \pair{f\pair{x}, g\pair{x}} : B \otimes B}
+				\vdash \caseb{x'}{\oc x \rightarrow \pair{f\pair{x}, g\pair{x}} : B \otimes B}
 			}{
 				\infer[]{
 					\pair{x' : \oc A}, [f : A \multimap B], [g : A \multimap B]
-				\vdash \caseb{x'}{!x \rightarrow \pair{f\pair{x}, g\pair{x}} : B \otimes B}
+				\vdash \caseb{x'}{\oc x \rightarrow \pair{f\pair{x}, g\pair{x}} : B \otimes B}
 				}{
 					\pair{x' : \oc A} \vdash x' : A &&
 					\infer[]{[f : A \multimap B], [g : A \multimap B], [x : A]\vdash \pair{f\pair{x}, g\pair{x}} : B \otimes B}{
@@ -86,34 +86,32 @@
 	Родом будем называть выражение, удовлетворяющие следующей граммтике:
 	\begin{bnf}
 	\begin{alignat*}{3}
-		\kappa ::= &\ T && \qquad Базовый~тип \\
-				 | &\ U && \qquad Аттрибут~уникальности \\
-				 | &\ * && \qquad Тип \\
+		\kappa ::= &\ T && \qquad \text{Базовый тип} \\
+				 | &\ U && \qquad \text{Аттрибут уникальности} \\
+				 | &\ * && \qquad \text{Тип} \\
 				 | &\ \kappa \rightarrow \kappa
 	\end{alignat*}
 	\end{bnf}
 \end{definition}
-\begin{definition}[Типовые константы]
-	\begin{bnf}
-	\begin{alignat*}{3}
-		& Int, Bool,\hdots && :: T && \qquad Базовые~типы \\
-		& \rightarrow      && :: * \rightarrow * \rightarrow T && \qquad Коструктор~функций \\
-		& \bullet, \times  && :: U && \qquad Уникальный, не~уникальный \\
-		& \vee, \wedge     && :: U \rightarrow U \rightarrow U && \qquad Дизьюнкия, коньюнкция~аттрибутов \\
-		& \neg             && :: U \rightarrow U && \qquad Отрицание~аттрибута \\
-		& Attr             && :: T \rightarrow U \rightarrow * && \qquad Конструктор~типа
-	\end{alignat*}
-	\end{bnf}
+\begin{definition}[Типовые константы]\ \\
+	\begin{tabular}{llll}
+		$\mathtt{Int}$, $\mathtt{Bool}$ & :: & $T$ & Базовые типы \\
+		$\rightarrow$                   & :: & $* \rightarrow * \rightarrow T$ & Коструктор функций \\
+		$\bullet, \times$               & :: & $U$ & Уникальный, не уникальный \\
+		$\vee, \wedge$                  & :: & $U \rightarrow U \rightarrow U$ & Дизьюнкия, коньюнкция аттрибутов \\
+		$\neg$                          & :: & $U \rightarrow U$ & Отрицание аттрибута \\
+		$\mathtt{Attr}$                 & :: & $T \rightarrow U \rightarrow *$ & Конструктор типа
+	\end{tabular}
 \end{definition}
 С помощью типовых констант мы можем делать различные типы разных родов. 
 Тип (рода $*$) состоит из базового типа (рода $T$) и аттрибута уникальности (это тоже тип, только рода $U$). 
-Аттрибут показывает обязан ли обьект этого типа быть уникальным(всего на этот обьект может существовать только однаа ссылка) "--- $\bullet$,
+Аттрибут показывает обязан ли обьект этого типа быть уникальным (всего на этот обьект может существовать только однаа ссылка) "--- $\bullet$,
 или это не обязательно "--- $\times$.
 На аттрибутах заданы различные булевы операции, которые выполняются так, будто $\bullet \equiv true$, $\times \equiv false$.
 
 Немного сахара:
 \[
-	Attr~t~u \equiv t^u \qquad Attr~(a \rightarrow b)~u \equiv a \xrightarrow{u} b
+	\attr{t}{u} \equiv t^u \qquad \attr{(a \rightarrow b)}{u} \equiv a \xrightarrow{u} b
 \]
 
 Грамматика выражений будет похожа на классическую грамматику выражений, за исключением того,
@@ -123,11 +121,11 @@
 \[
 	e ::= \lambda x.e | ee | x^\odot | x^\otimes
 \]
-\end{bnf}
-В доказательствах будем использовать следующую нотацию: $\Gamma \vdash e : \tau |_{fv}$.
-$\Gamma$ и $fv$ отображают переменные в типы. 
+\end{bnf}%
+В доказательствах будем использовать следующую нотацию: $\Gamma \vdash e : \tau |_{\fv}$.
+$\Gamma$ и $\fv$ отображают переменные в типы. 
 Разница заключается в том, что $\Gamma$ отображает в типы рода $*$,
-а $fv$ отображает в типы рода $U$
+а $\fv$ отображает в типы рода $U$.
 
 \todo пояснить про правила
 \begin{@empty}
@@ -136,10 +134,10 @@ $\Gamma$ и $fv$ отображают переменные в типы.
 	\infer[]{\Gamma, x : t^u \vdash x^\odot : t^u |_{x:u}}{} \qquad
 	\infer[]{\Gamma, x : t^\times \vdash x^\otimes : t^\times |_{x:\times}}{} \\
 	\infer[]
-		{\Gamma \vdash \lambda x.e : a \xrightarrow{\vee fv\prime} b |_{fv\prime}}
-		{\Gamma, x : a \vdash e : b |_{fv} && fv' \equiv \fuck_x fv} \\
+		{\Gamma \vdash \lambda x.e : a \xrightarrow{\vee \fv'} b |_{\fv'}}
+		{\Gamma, x : a \vdash e : b |_{\fv} && \fv' \equiv \fuck_x \fv} \\
 	\infer[]
-		{\Gamma \vdash e_1e_2 : b |_{fv_1 \cup fv_2}}
-		{\Gamma \vdash e_1 : a \xrightarrow{u} b |_{fv_1} \qquad \Gamma \vdash e_2 : a |_{fv_2}}
+		{\Gamma \vdash e_1e_2 : b |_{\fv_1 \cup \fv_2}}
+		{\Gamma \vdash e_1 : a \xrightarrow{u} b |_{\fv_1} \qquad \Gamma \vdash e_2 : a |_{\fv_2}}
 \end{gather*}
 \end{@empty}
