@@ -1,0 +1,50 @@
+\section{\texorpdfstring{Зависимые типы и обобщённая типовая система}{Dependent types and generalized type systems}}
+
+\subsection{\texorpdfstring{Зависимые типы}{Dependent types}}
+
+Рассмотрим такой код на Си:
+\begin{minted}{C}
+int n;
+scanf("%d", &n);
+int a[n];
+\end{minted}
+Возникает вопрос, какой тип у \mintinline{C}{a}.
+Во-первых, это массив. Во-вторых, это массив значений тип \mintinline{C}{int}. В треьтих, он размера \mintinline{C}{n}.
+Хотелось бы это как-то формализовать.
+
+\begin{@empty}
+Вспомним логику первого порядка.
+В ней есть конструкции вида $\forall x . \varphi$ и $\exists x . \varphi$, и аксиомы для них: %
+\inferspacing
+\begin{gather*}
+    \infer[(x \notin \FV(\Gamma))]{\Gamma \vdash \forall x . \varphi}{\Gamma \vdash \varphi} \qquad
+    \infer{\Gamma \vdash \varphi \left[x \coloneqq \sigma\right]}{\Gamma \vdash \forall x . \varphi} \\
+    \infer{\Gamma \vdash \exists x . \varphi}{\Gamma \vdash \varphi \left[x \coloneqq \psi\right]} \qquad
+    \infer[(x \notin \FV(\Gamma, \psi))]{\Gamma \vdash \psi}{\Gamma \vdash \exists x . \varphi && \Gamma, \varphi \vdash \psi}
+\end{gather*}
+В логике второго порядка переменные под кванторами могли принимать значения любых выражений, что давало там выразительную силу.
+Типы зависели от других типов.
+Теперь же давайте скажем, что типы могут зависеть не только от типов, а ещё от значений объектов.
+\end{@empty}
+
+Можно было бы записать "<тип"> массива так: $\mintinline{C}{[]}: * \rightarrow \mathtt{int} \rightarrow *$.
+Однако, назвать это типом нельзя. Это \emph{род}. А вместе типы и рода это \emph{сорта}.
+
+\subsection*{\texorpdfstring{Система $\lambda P$}{Lambda P}}
+\begin{definition}[грамматика выражения в системе $\lambda P$]
+\begin{bnf}
+\begin{align*}
+    \kappa &::= * | (\Pi x : \tau) \kappa \\
+    \tau   &::= \alpha | (\forall x . \tau) \tau | \tau M \\
+    M      &::= x | MM | \lambda x : \tau . M | (M)
+\end{align*}
+\end{bnf}%
+$\kappa$ это род, $\tau$ это сорт.
+Контекст в новом исчислении будет состоять из выражений вида $x : \tau$ и $\alpha : \kappa$.
+\end{definition}
+
+Теперь мы можем записать, например
+$\mintinline{C}{[]} : (\Pi x : \mintinline{C}{int}) \mathinner{*} \vdash a : \mathinner{\mintinline{C}{[]}} 5$.
+Или $5 : \mintinline{C}{int} : * : \Box$, то есть $5$ имеет тип $\mintinline{C}{int}$, $\mintinline{C}{int}$ имеет род $*$, а $*$ это сорт.
+
+\subsection{\texorpdfstring{Обобщённая типовая система}{Generalized type system}}

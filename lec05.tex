@@ -26,6 +26,9 @@
     \]
 \end{definition}
 
+Напомним, что в логике второго порядка переменные под кванторами могут быть любыми другими выражениями,
+а не только значениями из предметного множества.
+
 Последние четыре связки можно выразить через первые:
 \begin{align*}
     \bot & \equiv \forall p . p \\
@@ -72,11 +75,11 @@ $\bot$ утверждает "<любое утверждение верно">, ч
 
 \begin{definition}[грамматика исчисления по Чёрчу в системе $F$]
     \begin{bnf}
-        \begin{gather*}
-            \mathbf\Lambda ::= x | \lambda p^\alpha . \mathbf\Lambda | \mathbf\Lambda \mathbf\Lambda | (\mathbf\Lambda)
-            | \Lambda \alpha . \mathbf\Lambda | \mathbf\Lambda \tau
-        \end{gather*}
-    \end{bnf}
+    \[
+        \mathbf\Lambda ::= x | \lambda p^\alpha . \mathbf\Lambda | \mathbf\Lambda \mathbf\Lambda | (\mathbf\Lambda)
+        | \Lambda \alpha . \mathbf\Lambda | \mathbf\Lambda \tau
+    \]
+    \end{bnf}%
     $\Lambda \alpha . \mathbf\Lambda$ "--- полиморфная абстракция, $\mathbf\Lambda \tau$ "--- применение типа.
 \end{definition}
 
@@ -97,7 +100,7 @@ $\bot$ утверждает "<любое утверждение верно">, ч
     \begin{tabular}{l l l} \toprule
         & Просто типизированное $\lambda$-исчисление & Система $F$ \\ \midrule
         Тип & $\pi_1:\alpha\with\beta\rightarrow\alpha$ & $\pi_1:\forall \alpha . \forall \beta . \alpha \with \beta \rightarrow \alpha$ \\
-        Выражение & $\pi_1 = \lambda p . p T$ & $\pi_1 = \Lambda \varphi . \Lambda \psi . \lambda p^{\varphi\with\psi} . p T$
+        Выражение & $\pi_1 = \lambda p . p \comb T$ & $\pi_1 = \Lambda \varphi . \Lambda \psi . \lambda p^{\varphi\with\psi} . p \comb T$
         \\ \bottomrule
     \end{tabular}
     \end{center}
