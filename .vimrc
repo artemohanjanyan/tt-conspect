@@ -3,6 +3,8 @@ imap `b \beta
 imap `f \varphi
 imap `g \gamma
 imap `G \Gamma
+imap `d \delta
+imap `D \Delta
 imap `e \varepsilon
 imap `l \lambda
 imap `L \Lambda
