@@ -4,9 +4,13 @@
 В $\lambda$-исчислении выделяют 3 задачи:
 \begin{enumerate}[label=(\asbuk*)]
     \item Проверка типа: верно ли $\Gamma \vdash M : \sigma$?
-    \item Вывод типа: $? \vdash M : \mathinner{?}$
-    \item Обитаемость типа: $? \vdash ? : \sigma$
-\end{enumerate}
+    \item Вывод типа: существуют ли такие $\Gamma$ и $\sigma$, что $\Gamma \vdash M : \sigma$?
+    \item Обитаемость типа: существуют ли такие $\Gamma$ и $M$, что $\Gamma \vdash M : \sigma$?
+\end{enumerate}%
+Первые две задачи возникают в контексте дизайна языков программирования.
+Понятно, что задача проверки типа сводится к задаче вывода типа.
+
+Из изоморфизма Карри-Ховарда ясно, что задача обитаемости типа эквивалентна задаче проверки выражения ИИВ на корректность.
 
 В этом разделе мы будем рассматривать задачу вывода типа.
 
@@ -16,7 +20,7 @@
         A ::= x | f\left(A, \ldots, A\right)
     \]
     \end{bnf}%
-    Где $x \in X$.
+    Где $x \in X$, $f$ "--- функциональная связка.
 \end{definition}
 
 Уравнение в алгебраических термах: $A = A$.
@@ -30,7 +34,7 @@
 
 \begin{definition}[естественное обобщение]
     Естественное обобщение "--- такая подстановка $S : A \rightarrow A$, получаемая из $S : X \rightarrow A$, что
-    $S\left(f\left(A_1, \dots, A_n\right)\right) = f\left(S(f_1), \ldots, S(f_n)\right)$
+    $S\left(f\left(A_1 \dots A_n\right)\right) = f\left(S(f_1) \ldots S(f_n)\right)$
 \end{definition}
 
 \begin{definition}[унификатор] \label{unificator}
@@ -68,8 +72,8 @@
 \begin{definition}[несовместная система]
     Назовём систему несовместной, если выполнено одно из условий:
     \begin{enumerate}
-        \item в ней есть уравнение вида $f(\ldots)=g(\ldots)$
-        \item в ней есть уравнение вида $x = \ldots x \ldots$
+        \item В ней есть уравнение вида $f(\ldots)=g(\ldots)$.
+        \item В ней есть уравнение вида $x = f(\ldots~x~\ldots)$.
     \end{enumerate}
 \end{definition}
 
@@ -80,11 +84,15 @@
 \begin{statement}
     Для любой системы
     \[
-        \begin{cases} A_1 = B_1 \\ \vdots \\ A_n = B_n \end{cases}
+        \begin{cases}
+            A_1 = B_1 \\
+            \phantom{A_1} \mathrel{\makebox[\widthof{=}]{\vdots}} \\
+            A_n = B_n
+        \end{cases}
     \]
     найдётся эквивалентная ей система из одного уравнения:
     \[
-        f(A_1, \ldots, A_n) = f(B_1, \ldots, B_n)\text{,}
+        f(A_1 \ldots A_n) = f(B_1 \ldots B_n)\text{,}
     \]
     где $f$ "--- новый символ.
 \end{statement}
@@ -92,8 +100,8 @@
 \begin{definition}[разрешённая система]
     Назовём систему разрешённой, если:
     \begin{enumerate}
-        \item все уравнения имеют вид $x = A$;
-        \item все переменные в левой части встречаются однократно.
+        \item Все уравнения имеют вид $x = A$.
+        \item Все переменные в левой части встречаются однократно.
     \end{enumerate}
 \end{definition}
 
@@ -117,13 +125,14 @@
                                       & $f=g$               & $ A_1 = B_1 \ldots A_n = B_n$ \\ \cmidrule{2-3}
                                       & $f \neq g$          & система несовместна \\ \midrule
     \multirow{2}{*}[-\aboverulesep]{$x=T$, $R=S$, $x$ входит в $S$ или $R$}
-                                      & $T$ не содержит $x$ & $x=T$,$R\left[x\coloneqq T\right]=S\left[x\coloneqq T\right]$\\ \cmidrule{2-3}
+                                      & $T$ не содержит $x$ & $x=T$,
+                                        $R\left[x\coloneqq T\right]=S\left[x\coloneqq T\right]$\\ \cmidrule{2-3}
                                       & $T$ содержит $x$    & система несовместна \\ \bottomrule
 \end{tabular}
 \end{center}
 
 \begin{statement}
-    Последовательное применение правил либо за конечное число шагов приведёт систему в разрешённый вид, либо сделает её несовместной.
+    Последовательное применение правил либо за конечное число шагов приведёт систему в разрешённый вид, либо покажет, что она несовместна.
 \end{statement}
 
 \begin{proof}
@@ -139,16 +148,17 @@
 \end{theorem}
 
 \begin{proof}
-    Опишем алгоритм. \\
-    Пусть нам дан $\lambda$-терм $M$. Рекурсивно построим по нему систему уравнений $E_m$:
+    Опишем алгоритм. Пусть нам дан $\lambda$-терм $M$. Рекурсивно построим по нему систему уравнений $E_m$ и тип выражения $\tau_m$:
     \begin{center}
     \begin{tabular}{l l l} \toprule
-        $M \equiv x$ & $E_m=\set{}$ & $\tau_m=\alpha$ "--- новая переменная. \\ \midrule
-        $M \equiv PR$ & $E_m=E_p \cup E_r \cup \set{\tau_p=\tau_r\rightarrow\pi}$ & $\tau_m=\pi$ "--- новая переменная \\ \midrule
-        $M \equiv \lambda x . P$ & $E_m=E_p$ & $\tau_m=\tau_x\rightarrow\tau_p$ \\ \bottomrule
+        Вид $M$         & $E_m$                                                 & $\tau_m$                        \\ \midrule
+        $x$             & $\varnothing$                                         & $\alpha$ "--- новая переменная. \\ \midrule
+        $PR$            & $E_p \cup E_r \cup \set{\tau_p=\tau_r\rightarrow\pi}$ & $\pi$ "--- новая переменная     \\ \midrule
+        $\lambda x . P$ & $E_p$                                                 & $\tau_x\rightarrow\tau_p$       \\ \bottomrule
     \end{tabular}
     \end{center}
     Решим построенную систему уравнений.
+    Пусть унификатор $S$ "--- решение системы уравнений $E_m$. Тогда тип $M$ это $S(\tau_m)$.
 
     Можно показать, что алгоритм корректный.
 \end{proof}

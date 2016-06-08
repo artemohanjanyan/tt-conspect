@@ -1,4 +1,4 @@
-%\section{\texorpdfstring{Просто типизированное $\lambda$-исчисление}{Simply typed lambda calculus}}
+\subsection*{\texorpdfstring{Просто типизированное $\lambda$-исчисление}{Simply typed lambda calculus}}
 
 \begin{definition}[тип]
     $T = \{\alpha, \beta, \gamma, \ldots\}$ "--- множество типов.
@@ -288,7 +288,7 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
         \]
         По индукционному предположению $\Delta \vdash M : \varphi \rightarrow \psi$ и $\Delta \vdash N : \varphi$. Тогда
         \[
-            \infer{\Gamma \vdash MN : \psi}{\Gamma \vdash A : \varphi \rightarrow \psi && \Gamma \vdash B : \varphi}
+            \infer{\Delta \vdash MN : \psi}{\Delta \vdash A : \varphi \rightarrow \psi && \Delta \vdash B : \varphi}
         \]
 
         \item Вывод заканчивается правилом
@@ -297,7 +297,7 @@ T : \sigma \vee \tau \qquad A : \sigma \rightarrow \pi \qquad B : \tau \rightarr
         \]
         \begin{enumerate}[label=\roman*.]
             \item Пусть $\varphi \in \Gamma$. Тогда по индукционному предположению $\Delta \vdash M : \psi$.
-            Пусть $x \notin \dom(\Delta)$ (новая переменная).
+            Возьмём новую переменную $x \notin \dom(\Delta)$.
             Тогда можно изменить построенное доказательство и получить $\Delta, x : \varphi \vdash M : \psi$.
 
             \item Пусть $\varphi \notin \Gamma$. Тогда по индукционному предположению $\Delta, x : \varphi \vdash M : \psi$.

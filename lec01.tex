@@ -14,8 +14,8 @@
     \end{alignat*}
     \end{bnf}
     \begin{enumerate}[label=(\asbuk*)]
-        \item аппликация левоассоциативна
-        \item абстракция распространяется как можно дальше вправо
+        \item Аппликация левоассоциативна.
+        \item Абстракция распространяется как можно дальше вправо.
     \end{enumerate}
 \end{definition}
 
@@ -32,6 +32,9 @@ $\lambda{}x.A$ связывает все свободные вхождения $
     \item Фиксированные переменные обозначаются буквами из начала алфавита, метапеременные "--- из конца.
 \end{enumerate}
 
+На самом деле, смысл в этом есть, $\lambda$-выражение можно понимать как функцию.
+Абстракция "--- это функция с аргументом, аппликация "--- это передача аргумента.
+
 \begin{definition}[$\alpha$-эквивалентность]
     $A$ и $B$ называются $\alpha$-эквивалентными ($A=_{\alpha}B$), если выполнено одно из следующих условий:
     \begin{enumerate}
@@ -41,13 +44,16 @@ $\lambda{}x.A$ связывает все свободные вхождения $
     \end{enumerate}
 \end{definition}
 
+То есть два выражения $\alpha$-эквивалентны, если они равны с точностью до переименования абстракций.
+В C++ между функциями \mintinline{C++}{[](int x){return f(x);}} и \mintinline{C++}{[](int y){return f(y);}} нет разницы.
+
 \begin{example}
     $\lambda{}x.\lambda{}y.xy=_{\alpha}\lambda{}y.\lambda{}x.yx$.
-    \begin{proof}
+    \begin{proof} Согласно второму правилу следующие утверждения верны:
         \begin{alignat*}{2}
             \lambda{}y.ty=_{\alpha}\lambda{}x.tx &\implies \lambda{}x.\lambda{}y.xy=_{\alpha}\lambda{}y.\lambda{}x.yx \\
             tz=_{\alpha}tz &\implies \lambda{}y.ty=_{\alpha}\lambda{}x.tx
-        \end{alignat*}
+        \end{alignat*}%
         $tz=_{\alpha}tz$ верно по третьему условию.
     \end{proof}
 \end{example}
@@ -83,7 +89,8 @@ $\lambda{}x.A$ связывает все свободные вхождения $
     \end{enumerate}
 \end{definition}
 
-На самом деле, смысл в этом есть, $\beta$-редукция это аналог вычисления функции.
+$\beta$-редукция это вычисление функции, подстановка её аргумента.
+
 \begin{example} $(\lambda x . x y) a \rightarrow_\beta a y$
 \end{example}
 
@@ -172,13 +179,12 @@ $\lambda{}x.A$ связывает все свободные вхождения $
 \end{align*}
 
 Для того, чтобы определить $(-1)$, сначала определим "пару":
-\begin{align*}
+\[
     \left<a,b\right> = \lambda f.f \mathinner{a} b \qquad
     \comb{First} = \lambda p . p \T \qquad
     \comb{Second} = \lambda p . p \F
-\end{align*}
-
-$n$ раз применим функцию $f\left(\left<a,b\right>\right) = \left<b,b+1\right>$ и возьмём первый элемент пары:
+\]%
+затем $n$ раз применим функцию $f\left(\left<a,b\right>\right) = \left<b,b+1\right>$ и возьмём первый элемент пары:
 \[
     (-1) = \lambda n . \comb{First}
         \left(n \mathinner{(\lambda p . \left<\left(\comb{Second} p\right), \mathinner{(+1)} (\comb{Second} p)\right>)}
@@ -229,7 +235,9 @@ $\combl\Omega$ не имеет нормальной формы.
     \]
 \end{statement}
 
-\begin{proof}
+Из-за этого свойста комбинатор $\comb Y$ и получил своё название.
+
+\begin{proof} Наивное $\beta$-редуцирование:
     \begin{align*}
         \comb Yf &=_{\beta} (\reduction{\lambda f} . (\lambda x . f (x x)) (\lambda x . f (x x))) \reduction f \\
                  &=_{\beta} (\reduction{\lambda x} . f (x x)) \reduction{(\lambda x . f (x x))} \\
@@ -240,7 +248,7 @@ $\combl\Omega$ не имеет нормальной формы.
 \end{proof}
 
 Таким образом, с помощью $\comb Y$-комбинатора можно определять рекурсивные функции.
-\begin{example}
+\begin{example} Определим факториал.
 \begin{align*}
     \comb{Fact'} &= \lambda{} f n . \comb{IsZero} n \mathinner{\overline{1}}
                     (\comb{Mul} n \mathinner{(f \mathinner{(\mathinner{(-1)} n))}}) \\
