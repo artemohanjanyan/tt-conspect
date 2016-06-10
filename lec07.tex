@@ -106,8 +106,8 @@ data List a = Nil | Cons a (List a)
     \infer[(\tau_1=_\mu \tau_2)]
         {\Gamma \vdash e : \tau_2}
         {\Gamma \vdash e : \tau_1}
-\]
-\end{bnf}
+\]%
+\end{bnf}%
 
 Такое решение было применено в Java. Там можно писать \mintinline{Java}{Enum<E extends Enum<E>>}.
 
@@ -118,8 +118,6 @@ data List a = Nil | Cons a (List a)
     \comb{fold}   &: T[\alpha \coloneqq \mu \alpha.T] \rightarrow \mu \alpha . T \\
     \comb{unfold} &: \mu \alpha . T \rightarrow T[\alpha \coloneqq \mu \alpha.T]
 \end{align*}
-Аналогично можно ввести отношение эквивалентности.
-
 Разница в том, что изорекурсивные типы нужно сворачивать и разворачивать вручную, мы не считаем их равными.
 
 Типы и указатели на них в Си "--- пример изорекурсивных типов.

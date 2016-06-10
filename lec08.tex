@@ -1,7 +1,7 @@
-\section{\texorpdfstring{Зависимые типы и обобщённая типовая система}{Dependent types and generalized type systems}}
+\section{\texorpdfstring{$\lambda$-куб}{Lambda cube}}
 \epigraph{А где все?}{Д.Г.}
 
-\subsection{\texorpdfstring{Зависимые типы}{Dependent types}}
+\subsection{\texorpdfstring{Зависимые типы}{Depended types}}
 
 Рассмотрим такой код на Си:
 \begin{minted}{C}
@@ -25,27 +25,68 @@ int a[n];
 \end{gather*}
 В логике второго порядка переменные под кванторами могли принимать значения любых выражений, что давало там выразительную силу.
 Типы зависели от других типов.
-Теперь же давайте скажем, что типы могут зависеть не только от типов, а ещё от значений объектов.
 \end{@empty}
 
+Теперь же давайте скажем, что типы могут зависеть не только от типов, а ещё от значений объектов.
 Можно было бы записать "<тип"> массива так: $\mintinline{C}{[]}: * \rightarrow \mathtt{int} \rightarrow *$.
 Однако, назвать это типом нельзя. Это \emph{род}. А вместе типы и рода это \emph{сорта}.
 
-\subsection*{\texorpdfstring{Система $\lambda P$}{Lambda P}}
-\begin{definition}[грамматика выражения в системе $\lambda P$]
+Сейчас мы определим исчисление, в котором типы могут зависить от значений.
+
+\begin{definition}[обобщённая типовая система]
+Грамматика выражения:
 \begin{bnf}
-\begin{align*}
-    \kappa &::= * | (\Pi x : \tau) \kappa \\
-    \tau   &::= \alpha | (\forall x . \tau) \tau | \tau M \\
-    M      &::= x | MM | \lambda x : \tau . M | (M)
-\end{align*}
+\[
+    T ::= x | c | T T | \lambda x : T . T | \lambda \Pi : T . T
+\]
 \end{bnf}%
-$\kappa$ это род, $\tau$ это сорт.
-Контекст в новом исчислении будет состоять из выражений вида $x : \tau$ и $\alpha : \kappa$.
+где под выражение $x$ подходят все переменные, под $c$ водходят все константы.
+
+Есть две выделенные константы для сортов: $*$ и $\Box$.
+Пусть $s, s_1, s_2 \in \set{*, \Box}$. Общие правила вывода:
+\inferspacing
+\begin{gather*}
+    \infer{\vdash * : \Box}{} \qquad
+    \infer[(x \notin \Gamma)]{\Gamma, x : A \vdash x : A}{\Gamma \vdash x : s} \qquad
+    \infer[(x \notin \Gamma)]{\Gamma, x : C \vdash A : B}{\Gamma \vdash A : B && \Gamma \vdash C : s} \\
+    \infer{\Gamma \vdash (Fa) : B [x \coloneqq a]}{\Gamma \vdash F : \left(\Pi x : A . B\right) && \Gamma \vdash a : A} \qquad
+    \infer[(B =_\beta B')]{\Gamma \vdash A : B'}{\Gamma \vdash A : B \vphantom{(} && \Gamma \vdash B' : s} %todo убрать костыль
+\end{gather*}%
+Следующие специальные правила параметризуются парами $(s_1, s_2)$:
+\begin{gather*}
+    \infer{\Gamma \vdash (\Pi x : A . B) : s_2}{\Gamma \vdash A : s_1 && \Gamma, x : A \vdash B : s_2} \qquad
+    \infer{\Gamma \vdash (\lambda x : A . b) : (\Pi x : A . B)}
+            {\Gamma \vdash A : s_1 && \Gamma, x : A \vdash b : B && \Gamma, x : A \vdash B : s_2}
+\end{gather*}
 \end{definition}
 
-Теперь мы можем записать, например
-$\mintinline{C}{[]} : (\Pi x : \mintinline{C}{int}) \mathinner{*} \vdash a : \mathinner{\mintinline{C}{[]}} 5$.
-Или $5 : \mintinline{C}{int} : * : \Box$, то есть $5$ имеет тип $\mintinline{C}{int}$, $\mintinline{C}{int}$ имеет род $*$, а $*$ это сорт.
+$\Pi$ "--- это обобщение $\rightarrow$. $\Pi x : a . b$, где $b$ зависит от $x$, это множество пар,
+каждая из которых сопоставляет типу $a$ тип $b$.
+В частности, если $\varphi = \Pi x : \psi . \sigma$, и $x \notin \FV(\sigma)$,
+то аналогичной записью для $\varphi$ будет $\varphi = \psi \rightarrow \sigma$.
+
+Рассмотрение обобщённой типовой системы мы оставим на потом, а пока рассмотрим ту же систему,
+в которой специальные правила ограничены парами $(s_1, s_2) \in \set{(*, *), (*, \Box)}$.
+Такая система называется $\lambda P$.
+Правила с $(s_1, s_2) = (*, *)$ это обычные правила для $\lambda$-выражений.
+Правила с $(s_1, s_2) = (*, \Box)$ это правила для типов, зависящих от значений ($\lambda$-выражений).
+
+В системе $F$ тип массива из \mintinline{C}{int} можно записать так:
+$\mintinline{C}{int[]} \equiv \Pi \mintinline{C}{x} : \mintinline{C}{int}.\mintinline{C}{int[x]}$.
+Мы явно указали, что тип зависит от значения типа \mintinline{C}{int}.
+Тогда если \mintinline{C}{int a[5]}, то $\mintinline{C}{a}:\mintinline{C}{int[5]}$.
+
+\begin{example} Типизируем $\lambda x . x$ (опуская $\vdash * : \Box$):
+\[
+    \infer{a : * \vdash \lambda x : a . x : \Pi x : a . a}
+        { \infer{a : * \vdash a : *}{}
+        &&\infer{a : *, x : a \vdash x : a}{\infer{x : a \vdash x : a}{}}
+        &&\infer{a : *, x : a \vdash a : *}{\infer{a : * \vdash a : *}{}}
+        }
+\]
+\todo ещё надо
+\end{example}
 
 \subsection{\texorpdfstring{Обобщённая типовая система}{Generalized type system}}
+
+\subsection{\texorpdfstring{$\lambda$-куб}{Lambda cube}}

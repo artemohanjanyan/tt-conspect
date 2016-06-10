@@ -10,7 +10,7 @@
 Первые две задачи возникают в контексте дизайна языков программирования.
 Понятно, что задача проверки типа сводится к задаче вывода типа.
 
-Из изоморфизма Карри-Ховарда ясно, что задача обитаемости типа эквивалентна задаче проверки выражения ИИВ на корректность.
+Из изоморфизма Карри-Ховарда ясно, что задача обитаемости типа эквивалентна задаче проверки выражения ИИВ на доказуемость.
 
 В этом разделе мы будем рассматривать задачу вывода типа.
 
@@ -20,7 +20,7 @@
         A ::= x | f\left(A, \ldots, A\right)
     \]
     \end{bnf}%
-    Где $x \in X$, $f$ "--- функциональная связка.
+    Где $x \in X$, $f$ "--- функциональный символ.
 \end{definition}
 
 Уравнение в алгебраических термах: $A = A$.
@@ -61,8 +61,8 @@
     $T$ "--- частный случай $U$, если существует такое $S$, что $T = S \circ U$.
 \end{definition}
 
-\begin{definition}[наибольший общий унификатор]
-    Наибольший общий унификатор $U$ для уравнения $A=B$ "--- такой унификатор, что:
+\begin{definition}[наиболее общий унификатор]
+    Наиболее общий унификатор $U$ для уравнения $A=B$ "--- такой унификатор, что:
     \begin{enumerate}
         \item $U(A)=U(B)$.
         \item Любой другой унификатор "--- частный случай $U$.
@@ -92,7 +92,7 @@
     \]
     найдётся эквивалентная ей система из одного уравнения:
     \[
-        f(A_1 \ldots A_n) = f(B_1 \ldots B_n)\text{,}
+        f(A_1 \ldots A_n) = f(B_1 \ldots B_n)
     \]
     где $f$ "--- новый символ.
 \end{statement}
@@ -108,14 +108,14 @@
 По системе в разрешённой форме мы можем построить решение $S$, определив $S(x_i) = A_i$ для каждого $i$.
 
 \begin{statement}
-    Построенный по системе в разрешённой форме унификатор $S$ "--- наибольший общий унификатор.
+    Построенный по системе в разрешённой форме унификатор $S$ "--- наиболее общий унификатор.
 \end{statement}
 
 \begin{statement}
     Несовместная система не имеет решений.
 \end{statement}
 
-Рассотрим следующие преобразования, которые не меняют свойства системы:
+Рассмотрим следующие преобразования, не меняющие свойств системы:
 \begin{center}
 \begin{tabular}{l l l} \toprule
     Выражения                         & Условия             & Новые выражения \\ \midrule
@@ -132,7 +132,8 @@
 \end{center}
 
 \begin{statement}
-    Последовательное применение правил либо за конечное число шагов приведёт систему в разрешённый вид, либо покажет, что она несовместна.
+    Последовательное применение преобразований либо за конечное число шагов приведёт систему в разрешённый вид,
+    либо покажет, что она несовместна.
 \end{statement}
 
 \begin{proof}
@@ -151,10 +152,10 @@
     Опишем алгоритм. Пусть нам дан $\lambda$-терм $M$. Рекурсивно построим по нему систему уравнений $E_m$ и тип выражения $\tau_m$:
     \begin{center}
     \begin{tabular}{l l l} \toprule
-        Вид $M$         & $E_m$                                                 & $\tau_m$                        \\ \midrule
-        $x$             & $\varnothing$                                         & $\alpha$ "--- новая переменная. \\ \midrule
-        $PR$            & $E_p \cup E_r \cup \set{\tau_p=\tau_r\rightarrow\pi}$ & $\pi$ "--- новая переменная     \\ \midrule
-        $\lambda x . P$ & $E_p$                                                 & $\tau_x\rightarrow\tau_p$       \\ \bottomrule
+        Вид $M$         & $E_m$                                                 & $\tau_m$                         \\ \midrule
+        $x$             & $\varnothing$                                         & $\alpha_x$ "--- новая переменная \\ \midrule
+        $PR$            & $E_p \cup E_r \cup \set{\tau_p=\tau_r\rightarrow\pi}$ & $\pi$ "--- новая переменная      \\ \midrule
+        $\lambda x . P$ & $E_p$                                                 & $\tau_x\rightarrow\tau_p$        \\ \bottomrule
     \end{tabular}
     \end{center}
     Решим построенную систему уравнений.
@@ -163,8 +164,83 @@
     Можно показать, что алгоритм корректный.
 \end{proof}
 
+Отметим важную для реализации деталь. Одной переменной должен соответствовать только один тип.
+Однако не всегда переменные, называющиеся одинаково, мы считаем одинаковыми.
+В выражении $\lambda f x . f \reduction x \reduction x$ важно, чтобы выделенные переменные получили один тип.
+Но в выражении $\lambda x . \reduction x \lambda x . \reduction x \lambda x . \reduction x$ типы выделенных переменных должны быть разными.
+Его тип должен быть такой же, как и, например, тип выражения $\lambda x . x \lambda y . y \lambda z . z$.
+Можно сформулировать правило: построенная система уравнений должна оставаться корректной для любого выражения,
+$\alpha$-эквивалентного исходному.
+
 \begin{example}
-    \todo %todo
+    Рассмотрим выражение $\overline 2 = \lambda f . \lambda x . f (f x)$. Сначала построим по нему систему уравнений
+    ($M$ "--- аргумент функции, столбики справа "--- рекурсивные вызовы, $E$ и $\tau$ "--- результат функции):
+    \begin{center}
+        \begin{tabular}{l l l l l} \toprule
+            $M = \lambda f x . f (f x)$ & $M = \lambda x . f (f x)$ & $M = f (f x)$ & $M = f$ & \\
+            & & & $E = \varnothing$ & \\
+            & & & $\tau = \alpha$ \\ \cmidrule{4-5}
+            & & & $M = f x$ & $M = f$ \\
+            & & & & $E = \varnothing$ \\
+            & & & & $\tau = \alpha$ \\ \cmidrule{5-5}
+            & & & & $M = x$ \\
+            & & & & $E = \varnothing$ \\
+            & & & & $\tau = \beta$ \\ \cmidrule{5-5}
+            & & & $E = \set{\alpha = \beta \rightarrow \gamma}$ & \\
+            & & & $\tau = \gamma$ & \\ \cmidrule{4-5}
+            $E = \begin{cases}
+              \alpha=\beta\rightarrow\gamma \\
+              \alpha=\gamma\rightarrow\delta
+            \end{cases}\mkern-18mu$ &
+            $E = \begin{cases}
+                \alpha=\beta\rightarrow\gamma \\
+                \alpha=\gamma\rightarrow\delta
+            \end{cases}\mkern-18mu$ &
+            $E = \begin{cases}
+                \alpha=\beta\rightarrow\gamma \\
+                \alpha=\gamma\rightarrow\delta
+            \end{cases}\mkern-18mu$ & & \\[1.2em]
+            $\tau = \alpha\rightarrow(\beta\rightarrow\delta)$ &
+            $\tau = \beta\rightarrow\delta$ &
+            $\tau = \delta$ & & \\ \bottomrule
+        \end{tabular}
+    \end{center}
+    Затем решим полученную систему уравнений:
+    \[
+        \begin{cases}
+            \alpha=\beta\rightarrow\gamma \\
+            \alpha=\gamma\rightarrow\delta
+        \end{cases} \mkern-18mu
+        \implies
+        \begin{cases}
+            \alpha=\beta\rightarrow\gamma \\
+            \beta\rightarrow\gamma=\gamma\rightarrow\delta
+        \end{cases} \mkern-18mu
+        \implies
+        \begin{cases}
+            \alpha=\beta\rightarrow\gamma \\
+            \beta=\gamma \\
+            \gamma=\delta
+        \end{cases} \mkern-18mu
+        \implies
+        \begin{cases}
+            \alpha=\beta\rightarrow\delta \\
+            \beta=\delta \\
+            \gamma=\delta
+        \end{cases} \mkern-18mu
+        \implies
+        \begin{cases}
+            \alpha=\delta\rightarrow\delta \\
+            \beta=\delta \\
+            \gamma=\delta
+        \end{cases}
+    \]
+    Получаем подстановку $S = \left[\alpha\coloneqq\delta\rightarrow\delta, \beta\coloneqq\delta, \gamma\coloneqq\delta\right]$.
+    Применяя её к $\tau$ получаем тип выражения:
+    \begin{gather*}
+        S(\tau) = (\delta\rightarrow\delta)\rightarrow(\delta\rightarrow\delta) \\
+        \lambda f \lambda x . f (f x) : (\delta\rightarrow\delta)\rightarrow(\delta\rightarrow\delta)
+    \end{gather*}
 \end{example}
 
 %\subsection{\texorpdfstring{Про ложь}{About false}}

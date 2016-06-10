@@ -55,7 +55,7 @@ $\beta$-редукция не обладает ромбовидным свойс
 \end{proof}
 
 \begin{definition}[параллельная $\beta$-редукция]
-    $A \rightrightarrows_{\beta} B$
+    Обозначается как $A \rightrightarrows_{\beta} B$.
     \begin{enumerate}
         \item Если $A =_\alpha B$, то $A \rightrightarrows_{\beta}B$
         \item Если $A \rightrightarrows_{\beta} B$, то $\lambda x.A \rightrightarrows_{\beta} \lambda x . B$
@@ -188,20 +188,20 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
 \end{enumerate}
 
 Покажем, как в полученной логике можно доказать любое утверждение.
-Введём обозначение: $Y_{\supset a} \equiv Y (\lambda t . t \supset a) =_{\beta} Y (\lambda t . t \supset a) \supset a$.
+Введём обозначение: $\comb Y_{\supset a} \equiv \comb Y (\lambda t . t \supset a) =_{\beta} \comb Y (\lambda t . t \supset a) \supset a$.
 
 \begin{tabular}{lll}
-    1) & $Y_{\supset a} \supset Y_{\supset a}$ & (схема аксиом) \\
-    2) & $Y_{\supset a} \supset (Y_{\supset a} \supset a)$ & (можно доказать) \\
-    3) & $(Y_{\supset a} \supset Y_{\supset a} \supset a) \supset (Y_{\supset a} \supset a)$ & (схема аксиом) \\
-    4) & $Y_{\supset a} \supset a$ & (M.P.) \\
-    5) & $(Y_{\supset a} \supset a) \supset Y_{\supset a}$ & (третье правило) \\
-    6) & $Y_{\supset a}$ & (M.P.) \\
+    1) & $\comb Y_{\supset a} \supset \comb Y_{\supset a}$ & (схема аксиом) \\
+    2) & $\comb Y_{\supset a} \supset (\comb Y_{\supset a} \supset a)$ & (можно доказать) \\
+    3) & $(\comb Y_{\supset a} \supset \comb Y_{\supset a} \supset a) \supset (\comb Y_{\supset a} \supset a)$ & (схема аксиом) \\
+    4) & $\comb Y_{\supset a} \supset a$ & (M.P.) \\
+    5) & $(\comb Y_{\supset a} \supset a) \supset \comb Y_{\supset a}$ & (третье правило) \\
+    6) & $\comb Y_{\supset a}$ & (M.P.) \\
     7) & $a$ & (M.P.)
 \end{tabular}
 
 Получается, что данная логика противоречива. Показать это нам дал возможность тот факт,
-что в нашей логике с помощью $Y$-комбинатора мы можем ссылаться в утверждении на само себя.
+что в нашей логике с помощью $\comb Y$-комбинатора мы можем ссылаться в утверждении на само себя.
 Аналогично можно прийти к парадоксальному выводу из высказывания "<если это утверждение верно, то русалки существуют"> на нашем мета-языке.
 
 \section{\texorpdfstring{Просто типизированное $\lambda$-исчисление}{Simply typed lambda calculus}}
