@@ -63,7 +63,7 @@
 
 \subsection{\texorpdfstring{Типовая система Хиндли-Милнера}{Hindley and Milner’s type system}}
 
-\begin{definition}[Ранг типа]
+\begin{definition}[ранг типа]
 \[
     \rank(\tau) =
     \begin{cases}
@@ -95,7 +95,7 @@ $\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alp
     $\rank(\tau) = 0$, $\rank(\sigma) = 1$.
 \end{statement}
 
-\begin{definition}
+\begin{definition}[подтип]
     $\sigma_1$ "--- подтип $\sigma_2$, если существует такая подстановка
             $[\alpha_1 \coloneqq \theta_1, \alpha_2 \coloneqq \theta_2 \ldots \alpha_n \coloneqq \theta_n]$, что:
     \begin{enumerate}
@@ -106,15 +106,13 @@ $\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alp
 \end{definition}
 
 
-\begin{definition}[грамматика выражения в системе Хиндли-Милнера]
-\[
+\begin{definition}[система Хиндли-Милнера] Грамматика:
 \begin{bnf}
+\[
     \Lambda ::= x | \lambda x . \Lambda | \Lambda \Lambda | (\Lambda) | \lett{x=\Lambda}{\Lambda}
-\end{bnf}
 \]
-\end{definition}
-
-\begin{definition}[правила вывода в системе Хиндли-Милнера]
+\end{bnf}%
+Правила вывода:
 \inferspacing
 \begin{gather*}
     \infer[\text{(Тавтология)}]{\Gamma, x : \sigma \vdash x : \sigma}{} \qquad

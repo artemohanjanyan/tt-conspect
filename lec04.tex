@@ -92,7 +92,7 @@
     \]
     найдётся эквивалентная ей система из одного уравнения:
     \[
-        f(A_1 \ldots A_n) = f(B_1 \ldots B_n)\text{,}
+        f(A_1 \ldots A_n) = f(B_1 \ldots B_n)
     \]
     где $f$ "--- новый символ.
 \end{statement}
@@ -164,8 +164,17 @@
     Можно показать, что алгоритм корректный.
 \end{proof}
 
+Отметим важную для реализации деталь. Одной переменной должен соответствовать только один тип.
+Однако не всегда переменные, называющиеся одинаково, мы считаем одинаковыми.
+В выражении $\lambda f x . f \reduction x \reduction x$ важно, чтобы выделенные переменные получили один тип.
+Но в выражении $\lambda x . \reduction x \lambda x . \reduction x \lambda x . \reduction x$ типы выделенных переменных должны быть разными.
+Его тип должен быть такой же, как и, например, тип выражения $\lambda x . x \lambda y . y \lambda z . z$.
+Можно сформулировать правило: построенная система уравнений должна оставаться корректной для любого выражения,
+$\alpha$-эквивалентного исходному.
+
 \begin{example}
-    Рассмотрим выражение $\overline 2 = \lambda f \lambda x . f (f x)$. Сначала построим по нему систему уравнений:
+    Рассмотрим выражение $\overline 2 = \lambda f . \lambda x . f (f x)$. Сначала построим по нему систему уравнений
+    ($M$ "--- аргумент функции, столбики справа "--- рекурсивные вызовы, $E$ и $\tau$ "--- результат функции):
     \begin{center}
         \begin{tabular}{l l l l l} \toprule
             $M = \lambda f x . f (f x)$ & $M = \lambda x . f (f x)$ & $M = f (f x)$ & $M = f$ & \\
@@ -182,50 +191,50 @@
             $E = \begin{cases}
               \alpha=\beta\rightarrow\gamma \\
               \alpha=\gamma\rightarrow\delta
-            \end{cases}$ &
+            \end{cases}\mkern-18mu$ &
             $E = \begin{cases}
                 \alpha=\beta\rightarrow\gamma \\
                 \alpha=\gamma\rightarrow\delta
-            \end{cases}$ &
+            \end{cases}\mkern-18mu$ &
             $E = \begin{cases}
                 \alpha=\beta\rightarrow\gamma \\
                 \alpha=\gamma\rightarrow\delta
-            \end{cases}$ & & \\
+            \end{cases}\mkern-18mu$ & & \\[1.2em]
             $\tau = \alpha\rightarrow(\beta\rightarrow\delta)$ &
             $\tau = \beta\rightarrow\delta$ &
             $\tau = \delta$ & & \\ \bottomrule
         \end{tabular}
     \end{center}
     Затем решим полученную систему уравнений:
-    \begin{gather*}
+    \[
         \begin{cases}
             \alpha=\beta\rightarrow\gamma \\
             \alpha=\gamma\rightarrow\delta
-        \end{cases}
+        \end{cases} \mkern-18mu
         \implies
         \begin{cases}
             \alpha=\beta\rightarrow\gamma \\
             \beta\rightarrow\gamma=\gamma\rightarrow\delta
-        \end{cases}
+        \end{cases} \mkern-18mu
         \implies
         \begin{cases}
             \alpha=\beta\rightarrow\gamma \\
             \beta=\gamma \\
             \gamma=\delta
-        \end{cases} \\
+        \end{cases} \mkern-18mu
         \implies
         \begin{cases}
             \alpha=\beta\rightarrow\delta \\
             \beta=\delta \\
             \gamma=\delta
-        \end{cases}
+        \end{cases} \mkern-18mu
         \implies
         \begin{cases}
             \alpha=\delta\rightarrow\delta \\
             \beta=\delta \\
             \gamma=\delta
         \end{cases}
-    \end{gather*}
+    \]
     Получаем подстановку $S = \left[\alpha\coloneqq\delta\rightarrow\delta, \beta\coloneqq\delta, \gamma\coloneqq\delta\right]$.
     Применяя её к $\tau$ получаем тип выражения:
     \begin{gather*}

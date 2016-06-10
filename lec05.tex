@@ -24,6 +24,7 @@
         \infer{\Gamma \vdash \exists p . \varphi}{\Gamma \vdash \varphi \left[p \coloneqq \psi\right]} \qquad
         \infer[(p \notin \FV(\Gamma, \psi))]{\Gamma \vdash \psi}{\Gamma \vdash \exists p . \varphi && \Gamma, \varphi \vdash \psi}
     \]
+    Где $\FV(\Gamma)$ "--- множество свободных переменных всех выражений из $\Gamma$.
 \end{definition}
 
 Напомним, что в логике второго порядка переменные под кванторами могут быть любыми другими выражениями,
@@ -73,7 +74,8 @@ $\bot$ утверждает "<любое утверждение верно">, ч
 \]
 \end{definition}
 
-\begin{definition}[грамматика исчисления по Чёрчу в системе $F$]
+\begin{definition}[система $F$]
+Грамматика выражения в системе $F$:
     \begin{bnf}
     \[
         \mathbf\Lambda ::= x | \lambda p^\alpha . \mathbf\Lambda | \mathbf\Lambda \mathbf\Lambda | (\mathbf\Lambda)
@@ -81,9 +83,7 @@ $\bot$ утверждает "<любое утверждение верно">, ч
     \]
     \end{bnf}%
     $\Lambda \alpha . \mathbf\Lambda$ "--- полиморфная абстракция, $\mathbf\Lambda \tau$ "--- применение типа.
-\end{definition}
-
-\begin{definition}[правила вывода в системе $F$]
+    Правила вывода:
     \inferspacing
     \begin{gather*}
         \infer[(x \notin \mathrm{dom}(\Gamma))]{\Gamma, x : \sigma \vdash x : \sigma}{} \\
@@ -114,7 +114,7 @@ $\bot$ утверждает "<любое утверждение верно">, ч
     \end{enumerate}
 \end{definition}
 
-\begin{theorem}[Изоморфизм Карри-Ховарда]
+\begin{theorem}[изоморфизм Карри-Ховарда для системы $F$]
     $\Gamma \vdash_F M :\tau$ т.и.т.т., когда $\abs{\Gamma} \vdash \tau$ в интуиционистском исчислении предикатов второго порядка.
 \end{theorem}
 
