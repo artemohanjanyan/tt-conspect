@@ -56,11 +56,11 @@
 
 Перепишем алгоритм:
 \begin{align*}
-    \restr{x : \tau} \ &=\  \Gamma(x) = \tau \\
+    \restr{x : \tau} \ &=\  x = \tau \\
     \restr{\lambda x . e : \tau} \ &=\ 
         \exists \alpha_1 \alpha_2 . (\deff{x : \alpha_1}{\restr{e:\alpha_2}} \land \alpha_1\rightarrow\alpha_2=\tau) \\
     \restr{e_1 e_2 : \tau} \ &=\ 
-        \exists\alpha.(\restr{\Gamma\vdash e_1 :\alpha\rightarrow\tau} \land \restr{\Gamma\vdash e_2 : \alpha})
+        \exists\alpha.(\restr{e_1 :\alpha\rightarrow\tau} \land \restr{e_2 : \alpha})
 \end{align*}
 
 Теперь расширим наш алгоритм на систему Хиндли-Милнера. Языком ограничений будет
@@ -74,11 +74,11 @@
 
 Сам алгоритм:
 \begin{align*}
-    \restr{x : \tau} \ &=\  \Gamma(x) = \tau \\
+    \restr{x : \tau} \ &=\  x = \tau \\
     \restr{\lambda x . e : \tau} \ &=\ 
         \exists \alpha_1 \alpha_2 . (\deff{x : \alpha_1}{\restr{e:\alpha_2}} \land \alpha_1\rightarrow\alpha_2=\tau) \\
     \restr{e_1 e_2 : \tau} \ &=\ 
-        \exists\alpha.(\restr{\Gamma\vdash e_1 :\alpha\rightarrow\tau} \land \restr{\Gamma\vdash e_2 : \alpha}) \\
+        \exists\alpha.(\restr{e_1 :\alpha\rightarrow\tau} \land \restr{e_2 : \alpha}) \\
     \restr{\lett{x = e_1}{e_2}} \ &=\ \deff{x : \forall \alpha[\restr{e_1 : \alpha}].\alpha}
         {\exists \alpha . x \preceq \alpha \land \restr{e_2:\tau}}
 \end{align*}

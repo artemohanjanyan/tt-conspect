@@ -122,7 +122,7 @@ $\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alp
     \infer[\text{(Применение)}]
         {\Gamma \vdash e e' : \tau}{\Gamma \vdash e : \sigma \rightarrow \tau && \Gamma \vdash e' : \sigma} \qquad
     \infer[\text{(Let)}]
-        {\Gamma \vdash \lett{x=e}{e'=\tau}}
+        {\Gamma \vdash \lett{x=e}{e':\tau}}
         {\Gamma \vdash e : \sigma && \Gamma, x : \sigma \vdash e' : \tau}
 \end{gather*}
 \end{definition}

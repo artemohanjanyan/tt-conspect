@@ -37,7 +37,7 @@ int a[n];
 Грамматика выражения:
 \begin{bnf}
 \[
-    T ::= x | c | T T | \lambda x : T . T | \lambda \Pi : T . T
+    T ::= x | c | T T | \lambda x : T . T | \Pi x : T . T
 \]
 \end{bnf}%
 где под выражение $x$ подходят все переменные, под $c$ водходят все константы.
@@ -52,7 +52,7 @@ int a[n];
     \infer{\Gamma \vdash (Fa) : B [x \coloneqq a]}{\Gamma \vdash F : \left(\Pi x : A . B\right) && \Gamma \vdash a : A} \qquad
     \infer[(B =_\beta B')]{\Gamma \vdash A : B'}{\Gamma \vdash A : B \vphantom{(} && \Gamma \vdash B' : s} %todo убрать костыль
 \end{gather*}%
-Следующие специальные правила параметризуются парами $(s_1, s_2)$:
+Следующие специальные правила параметризуются парами сортов $(s_1, s_2)$:
 \begin{gather*}
     \infer{\Gamma \vdash (\Pi x : A . B) : s_2}{\Gamma \vdash A : s_1 && \Gamma, x : A \vdash B : s_2} \qquad
     \infer{\Gamma \vdash (\lambda x : A . b) : (\Pi x : A . B)}
@@ -71,7 +71,7 @@ $\Pi$ "--- это обобщение $\rightarrow$. $\Pi x : a . b$, где $b$ 
 Правила с $(s_1, s_2) = (*, *)$ это обычные правила для $\lambda$-выражений.
 Правила с $(s_1, s_2) = (*, \Box)$ это правила для типов, зависящих от значений ($\lambda$-выражений).
 
-В системе $F$ тип массива из \mintinline{C}{int} можно записать так:
+В системе $\lambda P$ тип массива из \mintinline{C}{int} можно записать так:
 $\mintinline{C}{int[]} \equiv \Pi \mintinline{C}{x} : \mintinline{C}{int}.\mintinline{C}{int[x]}$.
 Мы явно указали, что тип зависит от значения типа \mintinline{C}{int}.
 Тогда если \mintinline{C}{int a[5]}, то $\mintinline{C}{a}:\mintinline{C}{int[5]}$.
@@ -87,6 +87,73 @@ $\mintinline{C}{int[]} \equiv \Pi \mintinline{C}{x} : \mintinline{C}{int}.\minti
 \todo ещё надо
 \end{example}
 
-\subsection{\texorpdfstring{Обобщённая типовая система}{Generalized type system}}
+\subsection{\texorpdfstring{Обобщённая типовая система и $\lambda$-куб}{Generalized type system and lambda cube}}
 
-\subsection{\texorpdfstring{$\lambda$-куб}{Lambda cube}}
+Ранее мы рассматривали систему $F$, в которой был полиморфизм за счёт выражений, зависящих от типов.
+Нам ничего не мешает совместить полиморфизм с зависимыми типами.
+Кроме того, для формализации массивов из Си нам всё ещё не хватает типов, которые зависили бы от других типов.
+Их мы также можем добавить.
+
+Обобщённая типовая система "--- это систематизация этих трёх не зависящих друг от друга расширений
+просто типизированного $\lambda$-исчисления.
+Позволяя или запрещая различные пары сортов $(s_1, s_2)$ можно получать разные типовые системы:
+\begin{center}
+\begin{tabular}{l c c c c} \toprule
+    $\lambda_\rightarrow$          & $(*, *)$ &             &                &             \\
+    $\lambda 2$                    & $(*, *)$ & $(\Box, *)$ &                &             \\
+    $\lambda \underline \omega$    & $(*, *)$ &             & $(\Box, \Box)$ &             \\
+    $\lambda \omega$               & $(*, *)$ & $(\Box, *)$ & $(\Box, \Box)$ &             \\
+    $\lambda P$                    & $(*, *)$ &             &                & $(*, \Box)$ \\
+    $\lambda P2$                   & $(*, *)$ & $(\Box, *)$ &                & $(*, \Box)$ \\
+    $\lambda P\underline \omega$   & $(*, *)$ &             & $(\Box, \Box)$ & $(*, \Box)$ \\
+    $\lambda P \omega = \lambda C$ & $(*, *)$ & $(\Box, *)$ & $(\Box, \Box)$ & $(*, \Box)$ \\ \bottomrule
+\end{tabular}
+\end{center}%
+Эти пары имеют следующий смысл:
+\begin{center}
+\begin{tabular}{r l@{\ }l} \toprule
+    $(*, *)$       & разрешены правила для выражений, &зависящих от выражений \\
+    $(\Box, *)$    & разрешены правила для выражений, &зависящих от типов     \\
+    $(*, \Box)$    & разрешены правила для типов,     &зависящих от выражений \\
+    $(\Box, \Box)$ & разрешены правила для типов,     &зависящих от типов     \\ \bottomrule
+\end{tabular}
+\end{center}
+
+Система $F$, например, в таблице обозначена как $\lambda 2$.
+Системы, в которых мы можем написать нечто вроде
+$\mintinline{C}{[]}: * \rightarrow \mathtt{int} \rightarrow *$ это $\lambda P \underline \omega$ и $\lambda C$.
+
+Наглядно такую классификацию обычно представляют в виде куба (рисунок \ref{cube}).
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\matrix (m) [matrix of math nodes,
+row sep=3em, column sep=3em,
+text height=1.5ex,
+text depth=0.25ex]{
+            & \lambda\omega             &              & \lambda P \omega             \\
+\lambda 2   &                           & \lambda P 2                                \\
+            & \lambda\underline{\omega} &              & \lambda P \underline{\omega} \\
+\lambda{\to}&                           & \lambda P  \\
+};
+\path[-{Latex[length=2.5mm, width=1.5mm]}]
+(m-1-2) edge (m-1-4)
+(m-2-1) edge (m-2-3)
+        edge (m-1-2)
+(m-3-2) edge (m-1-2)
+        edge (m-3-4)
+(m-4-1) edge (m-2-1)
+        edge (m-3-2)
+        edge (m-4-3)
+(m-3-4) edge (m-1-4)
+(m-2-3) edge (m-1-4)
+(m-4-3) edge (m-3-4)
+        edge (m-2-3);
+\end{tikzpicture}
+\caption{$\lambda$-куб}
+\label{cube}
+\end{figure}
+
+\begin{example}
+    \todo примерчики
+\end{example}
