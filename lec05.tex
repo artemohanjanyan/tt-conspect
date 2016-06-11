@@ -43,7 +43,8 @@ $\bot$ утверждает "<любое утверждение верно">, ч
 
 Выражение конъюнкции можно читать как "<если всё, что выводимо из $\set{\varphi,\psi}$, выполняется,
 то тогда выполняется $\varphi\with\psi$">.
-Также для неё можно проверить, что правила вывода действительно выводятся через такое определение. Например:
+Также для неё можно проверить, что правила вывода действительно выводятся через такое определение.
+Например, можно вывести $\varphi$ из $\varphi\with\psi\equiv\forall\gamma.(\varphi\rightarrow\psi\rightarrow\gamma)\rightarrow\gamma$:
 \[
     \infer{\Gamma \vdash \varphi}
     {
@@ -91,7 +92,7 @@ $\bot$ утверждает "<любое утверждение верно">, ч
         \infer{\Gamma \vdash MN : \sigma}{\Gamma \vdash M : \tau \rightarrow \sigma && \Gamma \vdash N : \tau} \qquad
         \infer[(x \notin \mathrm{dom}(\Gamma))]
                 {\Gamma \vdash \lambda x^\tau . M : \tau \rightarrow \sigma}{\Gamma, x : \tau \vdash M : \sigma} \\
-        \infer[(\alpha \notin \FV(\Gamma))]{\Gamma \vdash \Lambda \alpha . M : \forall \alpha : \sigma}{\Gamma \vdash M : \sigma} \qquad
+        \infer[(\alpha \notin \FV(\Gamma))]{\Gamma \vdash \Lambda \alpha . M : \forall \alpha . \sigma}{\Gamma \vdash M : \sigma} \qquad
         \infer{\Gamma \vdash M \tau : \sigma [\alpha := \tau]}{\Gamma \vdash M : \forall \alpha . \sigma}
     \end{gather*}
 \end{definition}
@@ -118,6 +119,43 @@ $\bot$ утверждает "<любое утверждение верно">, ч
 \begin{theorem}[изоморфизм Карри-Ховарда для системы $F$]
     $\Gamma \vdash_F M :\tau$ т.и.т.т., когда $\abs{\Gamma} \vdash \tau$ в интуиционистском исчислении предикатов второго порядка.
 \end{theorem}
+
+Доказательство изоморфизма для системы $F$ абсолютно аналогичное.
+Рассмотрим, например, следующее верное утверждение в ИИП второго порядка: "<из лжи следует что угодно">, или
+$\forall \beta . \bot \rightarrow \beta \equiv \forall \beta . (\forall \alpha.\alpha) \rightarrow \beta$.
+Если мы выпишем $\lambda$-выражение с таким типом, то станет очевидно, как доказывать утверждение. Пример такого выражения:
+\[
+    \Lambda \beta . \lambda a^{\forall \alpha.\alpha} . a \beta :
+    \forall \beta . (\forall \alpha.\alpha) \rightarrow \beta
+\]
+Вывод типа выражения, как и раньше, легко выписывается исходя из самого выражения,
+так как $\lambda$-выражение каждого из видов, описанных в грамматике, можно получить только одним правилом.
+\[
+    \infer{\vdash \Lambda \beta . \lambda a^{\forall \alpha.\alpha} . a \beta : \forall \beta . (\forall \alpha.\alpha) \rightarrow \beta}
+    {   \infer{\vdash \lambda a^{\forall \alpha.\alpha} . a \beta : (\forall \alpha.\alpha) \rightarrow \beta}
+        {   \infer{a : \forall \alpha . \alpha \vdash a \beta : \beta}
+            {   \infer{a : \forall \alpha.\alpha \vdash a : \forall \alpha.\alpha}{}
+            }
+        }
+    }
+\]
+Другое $\lambda$-выражение с таким же типом это
+$\Lambda \beta . \lambda a^{\forall \alpha . \alpha} . a ((\forall \alpha.\alpha) \rightarrow \beta) a$.
+%\[
+%    \infer{\vdash \Lambda \beta . \lambda a^{\forall \alpha . \alpha} . a ((\forall \alpha.\alpha) \rightarrow \beta) a :
+%            \forall \beta . (\forall \alpha.\alpha) \rightarrow \beta}
+%    {   \infer{\vdash \lambda a^{\forall \alpha . \alpha} . a ((\forall \alpha.\alpha) \rightarrow \beta) a :
+%                (\forall \alpha.\alpha) \rightarrow \beta}
+%        {   \infer{a : \forall \alpha . \alpha \vdash a ((\forall \alpha.\alpha) \rightarrow \beta) a : \beta}
+%            {   \infer{a : \forall \alpha . \alpha \vdash a ((\forall \alpha.\alpha) \rightarrow \beta)
+%                        : (\forall \alpha . \alpha) \rightarrow \beta}
+%                {   \infer{a : \forall \alpha.\alpha \vdash a : \forall \alpha.\alpha}{}
+%                }
+%            &&  \infer{a : \forall \alpha . \alpha \vdash a : \forall \alpha.\alpha}{}
+%            }
+%        }
+%    }
+%\]
 
 \begin{theorem}
     $F$ \hyperref[strong-normalization]{сильно нормализуемо}.
