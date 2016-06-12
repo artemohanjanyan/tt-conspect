@@ -91,6 +91,10 @@
     \end{enumerate}
 \end{example}
 
+Если мы знаем тип выражения, то построить вывод этого типа нам не составит труда.
+По виду $\lambda$-терма можно однозначно сказать, каким правилом был выведен его тип.
+Правилом 1 выводится тип обособленных переменных, правилом 2 выводится тип аппликаций, правилом 3 "--- абстракций.
+
 \begin{lemma}[отсутствие subject expansion]
     Неверно, что если $M \rightarrow_{\beta} N$, $\Gamma \vdash N : \sigma$, то $\Gamma \vdash M : \sigma$.
 \end{lemma}
@@ -147,12 +151,12 @@
 \end{definition}
 
 \begin{lemma}[subject reduction по Чёрчу]
-    Пусть $\Gamma \vdash_{\xx} M : \sigma$ и $\abs{M} \rightarrow_{\beta} N$. \\
+    Пусть $\Gamma \vdash_{\xx} M : \sigma$ и $\abs{M} \rightarrow_{\beta} N$.
     Тогда найдётся такое $H$, что $\abs{H} = N$, $\Gamma \vdash_{\xx} H:\sigma$.
 \end{lemma}
 
 \begin{theorem}[Чёрча-Россера]
-    Пусть $\Gamma \vdash_{\xx} M : \sigma$, $\abs{M} \twoheadrightarrow_{\beta} N$, $\abs{M} \twoheadrightarrow_{\beta} T$. \\
+    Пусть $\Gamma \vdash_{\xx} M : \sigma$, $\abs{M} \twoheadrightarrow_{\beta} N$, $\abs{M} \twoheadrightarrow_{\beta} T$.
     Тогда найдётся такое $P$, что $\Gamma \vdash_{\xx} P : \sigma$,
             $N \twoheadrightarrow_{\beta} \abs{P}$ и $T \twoheadrightarrow_{\beta} \abs{P}$.
 \end{theorem}
