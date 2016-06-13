@@ -7,7 +7,8 @@ sync: clean
 	touch main.tex
 	make
 	touch ~/Dropbox/main.pdf
-	rm build/main.pdf
+	cp build/main.pdf build/q.pdf
+	mv build/q.pdf build/main.pdf
 
 clean:
 	$(RM) -r build/_minted-main
