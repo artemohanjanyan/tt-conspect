@@ -8,73 +8,85 @@ $(\lambda x . x x) A \rightarrow_\beta (\lambda x . x x) A' \rightarrow_\beta A'
 С другой стороны, реальный мир на самом деле не таков, в нём есть побочные эффекты.
 % A(b(), unique_ptr<C>(new C))
 
-\subsection{\texorpdfstring{Комбинаторы}{Combinators}}
+\subsection{\texorpdfstring{Комбинаторы и логика}{Combinators and logic}}
 
-Рассмотрим комбинаторные логики Моисея Шейнфинкеля и Хаскелла Карри:
+Историческая справка. Известные нам комбинаторы $\comb S$ и $\comb K$ придумал Моисей Шейнфинкель,
+ещё до Карри с его $\lambda$-исчислением.
+У него было своё каррирование (шейфинковка?) и комбинаторная логика.
+Хаскелл Карри придумал свою систему позже, однако независимо от Шейнфинкеля.
 
-Моисей Шейнфинкель:
 \begin{center}
-\begin{tabular}{Sc Sl}
-    $I$ & Identität \\
-    $K$ & Konstanz \\
-    $S$ & VerSchmelzung \\
-    $T$ & VerTauschung
-\end{tabular}
+\begin{tabular}{l l l l l} \toprule
+    \multicolumn{3}{l}{Моисей Шейнфинкель} & \multicolumn{2}{l}{Хаскелл Карри} \\ \cmidrule(r){1-3} \cmidrule(l){4-5}
+    $\comb I$ & (Identität)     & $\lambda x . x$             & $\comb B$ & $\lambda x y z . x (y z)$ \\
+    $\comb K$ & (Konstanz)      & $\lambda x y . x$           & $\comb C$ & $\lambda x y z . x z y$   \\
+    $\comb S$ & (VerSchmelzung) & $\lambda x y z . x z (y z)$ & $\comb K$ & $\lambda x y . x$         \\
+    $\comb T$ & (VerTauschung)  & $\lambda x y z . x z y$     & $\comb W$ & $\lambda x y . x y y$ \\ \bottomrule
+\end{tabular} % Вот тут про названия. Больше не нашёл :( http://www.johndcook.com/blog/2014/02/06/schonfinkel-combinators/
 \end{center}
 
-Хаскел Карри:
-\begin{align*}
-    B &= \lambda x y z . x (y z) \\
-    C &= \lambda x y z . x z y \\
-    K &= \lambda x y . x \\
-    W &= \lambda x y . x y y
-\end{align*}
+С помощью каждой из этих двух систем можно выразить любое $\lambda$-выражение без свободных переменных.
 
-
-\begin{proof}[Докажем \ref{SK-basis}]
+\begin{proof}[Докажем \ref{SK-basis}] \newcommand{\opop}{\operatorname}
     Определим $T : \Lambda \rightarrow \Lambda_{SK} \cup \left\{ \text{свободные переменные} \right\}$:
     \begin{align*}
-        T[x] &= x \\
-        T[A B] &= T[A]\ T[B]  \\
-        T[\lambda x . P] &= K\ T[P] \text{, если $x \notin FV(P)$} \\
-        T[\lambda x . x] &= I =_\beta SKK \\
-        T[\lambda x . A B] &= S\ T[\lambda x . A]\ T[\lambda x . B] \\
-        T[\lambda x . \lambda y . A] &= T[\lambda x . T[\lambda y . A]]
+        \opop T[x]                         &= x \\
+        \opop T[A B]                       &= \opop{T}[A]\opop{T}[B]  \\
+        \opop T[\lambda x . P]             &= \comb K \opop{T}[P] \text{, если $x \notin FV(P)$} \\
+        \opop T[\lambda x . x]             &= \comb I \\
+        \opop T[\lambda x . A B]           &= \comb S \opop{T}[\lambda x . A]\opop{T}[\lambda x . B] \\
+        \opop T[\lambda x . \lambda y . A] &= \opop T[\lambda x . \opop T[\lambda y . A]]
     \end{align*}
 
     $T[\lambda\text{-выражение}]$ завершается и не содержит абстракций.
-    Можно показать, что $T[A] =_\beta A$.
+    Можно проверить, что $T[A] =_\beta A$.
 \end{proof}
 
-Можно доказать аналогичную теорему для комбинаторов $B$, $C$, $K$, $W$, выразив через них $S$ и $K$:
-$K = K$, $S = B (BW) (BBC)$, $I = CKK$.
-
-А теперь выведем типы у $S$ и $K$:
-\begin{align*}
-    S &= \lambda x y z . x z (y z) : (\alpha \rightarrow \beta \rightarrow \gamma) \rightarrow
-        (\alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \gamma) \\
-    K &= \lambda x y . x : \alpha \rightarrow \beta \rightarrow \alpha
-\end{align*}
-Это похоже на вторую и первую схемы аксиом в ИИВ.
-
-Базис $BCKWI$ по изоморфизму Карри-Ховарда порождает интуиционистскую логику.
-Можно рассматривать исчисления, прорджённые базисами $BCKI$ и $BCI$.
-\begin{align*}
-    I &: \alpha \rightarrow \alpha \\
-    B &: (\alpha \rightarrow \beta) \rightarrow (\beta \rightarrow \gamma) \rightarrow (\alpha \rightarrow \gamma) \\
-    C &: (\alpha \rightarrow \beta \rightarrow \gamma) \rightarrow (\beta \rightarrow \alpha \rightarrow \gamma) \\
-    K &: \alpha \rightarrow \beta \rightarrow \alpha \\
-    W &: (\alpha \rightarrow \alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \beta)
-\end{align*}
-
-Сейчас мы выпишем какое-то исчисление.
+Для доказательства аналогичной теоремы для базиса $\comb{BCKW}$ достаточно выразить через них комбинаторы $\comb S$ и $\comb K$:
 \[
-    \infer{\Gamma \vdash A \times B}{\Gamma \vdash A && \Gamma \vdash B} \qquad
-    \infer{\Gamma \vdash A}{\Gamma \vdash A \times B} \qquad
-    \infer{\Gamma \vdash B}{\Gamma \vdash A \times B}
+    \comb S = \comb B (\comb B \comb W) (\comb B \comb B \comb C) \qquad \comb I = \comb C \comb K \comb K
 \]
 
-\todo{}шенька
+Давайте теперь проследим связь комбинаторов с логикой. Выведем типы у $\comb S$ и $\comb K$:
+\begin{align*}
+    \comb S &= \lambda x y z . x z (y z) : (\alpha \rightarrow \beta \rightarrow \gamma) \rightarrow
+        (\alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \gamma) \\
+    \comb K &= \lambda x y . x : \alpha \rightarrow \beta \rightarrow \alpha
+\end{align*}
+Это похоже на вторую и первую схемы аксиом в ИИВ.
+Понятно, что изоморфизм Карри-Ховарда переносится и на комбинаторы, так как это сокращения для $\lambda$-выражений.
+Роль modus ponens будет исполнять редукция.
+Посмотрим на другие комбинаторы:
+\begin{alignat*}{4}
+    \comb I&=\lambda x.x         &&: \alpha \rightarrow \alpha \\
+    \comb B&=\lambda x y z.x(yz) &&:(\alpha\rightarrow\beta)\rightarrow(\beta \rightarrow\gamma) \rightarrow (\alpha \rightarrow \gamma) \\
+    \comb C&=\lambda x y z.x z y &&:(\alpha \rightarrow\beta\rightarrow \gamma)\rightarrow (\beta \rightarrow \alpha \rightarrow \gamma) \\
+    \comb K&=\lambda x y . x     &&: \alpha \rightarrow \beta \rightarrow \alpha \\
+    \comb W&=\lambda x y . x y y &&: (\alpha \rightarrow \alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \beta)
+\end{alignat*}
+
+У последних двух комбинаторов есть отличительная особенность. $\comb K$ "<убивает"> один аргумент, а $\comb W$ "--- размножает.
+В логике это не даёт ничего плохого, однако в $\lambda$-исчислении такой эффект может быть нежелателен.
+Ведь не всегда в реальных программах мы можем произвольным образом дублировать какие-то объекты.
+Базис $\comb{BCKWI}$ по изоморфизму Карри-Ховарда порождает интуиционистскую логику.
+Можно рассматривать исчисления, прорджённые базисами $\comb{BCKI}$ и $\comb{BCI}$.
+
+Прежде чем описывать новую логику, мы вспомним классическое ИИВ, однако представим правила вывода в немного другом виде:
+\begin{@empty} \inferspacing
+\begin{gather*}
+    \infer{A \vdash A}{} \qquad
+    \infer{\Delta, \Gamma \vdash A}{\Gamma, \Delta \vdash A} \qquad
+    \infer{\Gamma, A \vdash B}{\Gamma, A, A \vdash B} \qquad
+    \infer{\Gamma, A \vdash B}{\Gamma \vdash B} \\
+    \infer{\Gamma \vdash A \rightarrow B}{\Gamma, A \vdash B} \qquad
+    \infer{\Gamma, \Delta \vdash B}{\Gamma \vdash A \rightarrow B && \Delta \vdash A} \\
+    \infer{\Gamma, \Delta \vdash A \times B}{\Gamma \vdash A && \Delta \vdash B} \qquad
+    \infer{\Gamma, \Delta \vdash C}{\Gamma \vdash A \times B && \Delta, A, B \vdash C}\\
+    \infer{\Gamma \vdash A + B}{\Gamma \vdash A} \qquad
+    \infer{\Gamma \vdash A + B}{\Gamma \vdash B} \qquad
+    \infer{\Gamma, \Delta \vdash C}{\Gamma \vdash A + B && \Delta, A \vdash C && \Delta, B \vdash C}
+\end{gather*}
+\end{@empty}%
 
 \subsection{\texorpdfstring{Линейные высказывания}{Linear statements}}
 \begin{definition}[Грамматика линейных высказываний]
