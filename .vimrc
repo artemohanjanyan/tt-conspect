@@ -15,7 +15,7 @@ imap `s \sigma
 
 imap `= \equiv
 
-imap `<Right> \rightarrow
+imap `<Right> \to
 
 imap `- "---
 imap ё- "---

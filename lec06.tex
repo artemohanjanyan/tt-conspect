@@ -4,13 +4,13 @@
 Допустим, у нас есть абстрактный тип данных "<Стек">: \\
 \begin{tabular}{l l}
     $\comb{empty}$ & $: \alpha$ \\
-    $\comb{push}$  & $: \alpha\with\nu\rightarrow\alpha$ \\
-    $\comb{pop}$   & $: \alpha\rightarrow\alpha\with\nu$ \\
+    $\comb{push}$  & $: \alpha\with\nu\to\alpha$ \\
+    $\comb{pop}$   & $: \alpha\to\alpha\with\nu$ \\
 \end{tabular} \\
 Можно попробовать сказать это так: $\mathtt{stack} =
-    \alpha \with (\alpha\with\nu\rightarrow\alpha) \with (\alpha\rightarrow\alpha\with\nu)$.
+    \alpha \with (\alpha\with\nu\to\alpha) \with (\alpha\to\alpha\with\nu)$.
 Но проблема в том, что у нас есть только интерфейс стека, а не его реализация. Поэтому лучше будет сказать так:
-    $\exists \alpha . \alpha \with (\alpha\with\nu\rightarrow\alpha) \with (\alpha\rightarrow\alpha\with\nu)$.
+    $\exists \alpha . \alpha \with (\alpha\with\nu\to\alpha) \with (\alpha\to\alpha\with\nu)$.
 То есть существует какое-то $\alpha$, реазизовывающее требуемый интерфейс.
 \todo 
 
@@ -28,7 +28,7 @@
 \texttt{pack} и \texttt{abstype} через квантор существования и выразить их без расширения языка.
 \begin{gather*}
     \pack{M, \theta}{\exists \alpha . \varphi} =
-        \Lambda \beta . \lambda x^{\forall \alpha . \varphi \rightarrow \beta} . x \theta M \\
+        \Lambda \beta . \lambda x^{\forall \alpha . \varphi \to \beta} . x \theta M \\
     \abstype{\alpha}{x : \varphi}{M}{N}:\psi =
         M \psi (\Lambda \alpha . \lambda x ^ \varphi . N)
 \end{gather*}
@@ -36,13 +36,13 @@
         редуцируется в $N[\alpha\coloneqq\theta][x\coloneqq M]$:
 \begin{align*}
     \abstype{\alpha}{x:\varphi}{(\pack{M,\theta}{\exists\alpha .\varphi})}{N}
-    &= (\reduction{\Lambda \beta} . \lambda x^{\forall \alpha . \varphi \rightarrow \beta} . x \theta M)
+    &= (\reduction{\Lambda \beta} . \lambda x^{\forall \alpha . \varphi \to \beta} . x \theta M)
         \reduction{\psi} (\Lambda \alpha . \lambda x ^ \varphi . N) \\
-    &\rightarrow_\beta (\reduction{\lambda x^{\forall \alpha . \varphi \rightarrow \psi}} . x \theta M)
+    &\to_\beta (\reduction{\lambda x^{\forall \alpha . \varphi \to \psi}} . x \theta M)
         \reduction{(\Lambda \alpha . \lambda x ^ \varphi . N)} \\
-    &\rightarrow_\beta (\reduction{\Lambda \alpha} . \lambda x^\varphi . N) \reduction\theta M \\
-    &\rightarrow_\beta (\reduction{\lambda x^\varphi} . N)[\alpha\coloneqq\theta] \reduction M \\
-    &\rightarrow_\beta N[\alpha\coloneqq\theta][x\coloneqq M]
+    &\to_\beta (\reduction{\Lambda \alpha} . \lambda x^\varphi . N) \reduction\theta M \\
+    &\to_\beta (\reduction{\lambda x^\varphi} . N)[\alpha\coloneqq\theta] \reduction M \\
+    &\to_\beta N[\alpha\coloneqq\theta][x\coloneqq M]
 \end{align*}
 
 \begin{example} \todo там чёрт ногу сломит \textbf{:/}
@@ -67,8 +67,8 @@
 \[
     \rank(\tau) =
     \begin{cases}
-        \max(\rank(\sigma)+1, \rank(\rho)) & \tau \equiv \sigma \rightarrow \rho\text{, если }\sigma\text{ содержит }\forall \\
-        \rank(\rho) & \tau \equiv \sigma \rightarrow \rho\text{, если }\sigma \text{ не содержит } \forall \\
+        \max(\rank(\sigma)+1, \rank(\rho)) & \tau \equiv \sigma \to \rho\text{, если }\sigma\text{ содержит }\forall \\
+        \rank(\rho) & \tau \equiv \sigma \to \rho\text{, если }\sigma \text{ не содержит } \forall \\
         0 & \tau \equiv \alpha \\
         \max(\rank(\rho), 1) & \tau \equiv \forall \alpha . \rho
     \end{cases}
@@ -77,19 +77,19 @@
 
 \begin{example} Ранг экзистенциального типа:
 \begin{align*}
-    \rank(\exists \alpha . \beta) &= \rank(\forall \gamma . (\forall \alpha . \beta \rightarrow \gamma) \rightarrow \gamma) \\
-    &= \max(\rank((\forall \alpha . \beta \rightarrow \gamma) \rightarrow \gamma), 1) \\
-    &= \max(\max(\rank(\forall \alpha . \beta \rightarrow \gamma) + 1, \rank(\gamma)), 1) \\
+    \rank(\exists \alpha . \beta) &= \rank(\forall \gamma . (\forall \alpha . \beta \to \gamma) \to \gamma) \\
+    &= \max(\rank((\forall \alpha . \beta \to \gamma) \to \gamma), 1) \\
+    &= \max(\max(\rank(\forall \alpha . \beta \to \gamma) + 1, \rank(\gamma)), 1) \\
     &= \max(\max(2, 0), 1) = 2
 \end{align*}
 \end{example}
 
 \begin{definition}[тип в системе Хиндли-Милнера] \ \\
-    Тип (монотип) "--- выражение в грамматике $ \begin{bnf} \tau ::= \alpha | \tau \rightarrow \tau | (\tau) \end{bnf} $. \\
+    Тип (монотип) "--- выражение в грамматике $ \begin{bnf} \tau ::= \alpha | \tau \to \tau | (\tau) \end{bnf} $. \\
     Типовая схема (политип) "--- выражение в грамматике $ \begin{bnf} \sigma ::= \tau | \forall \alpha . \sigma \end{bnf} $.
 \end{definition}
 
-$\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alpha\rightarrow\forall\beta.\beta$ "--- некорректный в системе Хиндли-Милнера тип.
+$\forall\alpha.\alpha\to\alpha$ "--- политип, $\forall\alpha.\alpha\to\forall\beta.\beta$ "--- некорректный в системе Хиндли-Милнера тип.
 
 \begin{statement}
     $\rank(\tau) = 0$, $\rank(\sigma) = 1$.
@@ -118,9 +118,9 @@ $\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alp
     \infer[\text{(Тавтология)}]{\Gamma, x : \sigma \vdash x : \sigma}{} \qquad
     \infer[\text{(Уточнение, $\sigma'$ "--- подтип $\sigma$)}]{\Gamma \vdash e : \sigma'}{\Gamma \vdash e : \sigma} \\
     \infer[\text{(Обобщение, $\alpha\notin\FV(\Gamma)$)}]{\Gamma \vdash e : \forall \alpha . \sigma}{\Gamma \vdash e : \sigma} \qquad
-    \infer[\text{(Абстракция)}]{\Gamma \vdash \lambda x . e : \sigma \rightarrow \tau}{\Gamma, x : \sigma \vdash e : \tau} \\
+    \infer[\text{(Абстракция)}]{\Gamma \vdash \lambda x . e : \sigma \to \tau}{\Gamma, x : \sigma \vdash e : \tau} \\
     \infer[\text{(Применение)}]
-        {\Gamma \vdash e e' : \tau}{\Gamma \vdash e : \sigma \rightarrow \tau && \Gamma \vdash e' : \sigma} \qquad
+        {\Gamma \vdash e e' : \tau}{\Gamma \vdash e : \sigma \to \tau && \Gamma \vdash e' : \sigma} \qquad
     \infer[\text{(Let)}]
         {\Gamma \vdash \lett{x=e}{e':\tau}}
         {\Gamma \vdash e : \sigma && \Gamma, x : \sigma \vdash e' : \tau}
@@ -128,7 +128,7 @@ $\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alp
 \end{definition}
 
 Мы существенно ограничили набор возможных типов в нашем языке, однако, он всё ещё вполне сильный.
-Например, в нём можно определить тип $\comb Y$: $\forall \alpha . (\alpha\rightarrow\alpha)\rightarrow\alpha$,
+Например, в нём можно определить тип $\comb Y$: $\forall \alpha . (\alpha\to\alpha)\to\alpha$,
 и явно определить оператор фиксированной точки: $\mathtt{fix~f~=~f~(fix~f)}$.
 Через него можно определять рекурсивные функции и они будут типизироваться.
 
@@ -165,10 +165,10 @@ $\forall\alpha.\alpha\rightarrow\alpha$ "--- политип, $\forall\alpha.\alp
     $e_1 e_2$
             & $W(\Gamma, e_1) = (S_1, \tau_1)$                                       & $S = V \circ S_1 \circ S_2$ \\
             & $W(S_1(\Gamma), e_2) = (S_2, \tau_2)$                                  & $\tau = S(\beta)$ \\
-            & $U(S_2(\tau_1), \tau_2 \rightarrow \beta) = V$, $\beta$ "--- новый тип & \\ \midrule
+            & $U(S_2(\tau_1), \tau_2 \to \beta) = V$, $\beta$ "--- новый тип & \\ \midrule
     $\lambda x . e$
         & $W(\Gamma_x \cup \set{x : \beta}, e) = (S_1, \tau_1)$ & $S = S_1$  \\
-        & $\beta$ "--- новый тип                                & $\tau = S(\beta) \rightarrow \tau_1$ \\ \midrule
+        & $\beta$ "--- новый тип                                & $\tau = S(\beta) \to \tau_1$ \\ \midrule
     $\lett{x=e_1}{e_2}$
         & $W(\Gamma, e_1) = (S_1, \tau_1)$                                                     & $S = S_2 \circ S_1$ \\
         & $W(S_1 \Gamma_x \cup \set{x : \overline{S_1 \Gamma} (\tau_1)}, e_2) = (S_2, \tau_2)$ & $\tau = \tau_2$ \\ \bottomrule

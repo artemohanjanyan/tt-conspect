@@ -8,7 +8,7 @@
 \begin{definition}[грамматика ИИП второго порядка]
     \begin{bnf}
     \[
-        \Phi ::= (\Phi) | p | \Phi \rightarrow \Phi | \forall p . \Phi \color{gray}
+        \Phi ::= (\Phi) | p | \Phi \to \Phi | \forall p . \Phi \color{gray}
             \underbrace{| \exists p . \Phi | \bot | \Phi \with \Phi | \Phi \vee \Phi}_{\text{не существенные}}
     \]
     \end{bnf}
@@ -34,9 +34,9 @@
 Последние четыре связки можно выразить через первые:
 \begin{align*}
     \bot & \equiv \forall p . p \\
-    \varphi \with \psi & \equiv \forall a . ((\varphi \rightarrow \psi \rightarrow a) \rightarrow a) \\
-    \varphi \vee \psi & \equiv \forall a . (\varphi \rightarrow a) \rightarrow (\psi \rightarrow a) \rightarrow a \\
-    \exists x . \tau & \equiv \forall a . (\forall x . \tau \rightarrow a) \rightarrow a
+    \varphi \with \psi & \equiv \forall a . ((\varphi \to \psi \to a) \to a) \\
+    \varphi \vee \psi & \equiv \forall a . (\varphi \to a) \to (\psi \to a) \to a \\
+    \exists x . \tau & \equiv \forall a . (\forall x . \tau \to a) \to a
 \end{align*}
 
 $\bot$ утверждает "<любое утверждение верно">, что является критерием противоречивости.
@@ -44,15 +44,15 @@ $\bot$ утверждает "<любое утверждение верно">, ч
 Выражение конъюнкции можно читать как "<если всё, что выводимо из $\set{\varphi,\psi}$, выполняется,
 то тогда выполняется $\varphi\with\psi$">.
 Также для неё можно проверить, что правила вывода действительно выводятся через такое определение.
-Например, можно вывести $\varphi$ из $\varphi\with\psi\equiv\forall\gamma.(\varphi\rightarrow\psi\rightarrow\gamma)\rightarrow\gamma$:
+Например, можно вывести $\varphi$ из $\varphi\with\psi\equiv\forall\gamma.(\varphi\to\psi\to\gamma)\to\gamma$:
 \[
     \infer{\Gamma \vdash \varphi}
     {
-        \infer{\Gamma \vdash (\varphi\rightarrow\psi\rightarrow\varphi)\rightarrow\varphi}
-            {\Gamma \vdash \forall \gamma.(\varphi\rightarrow\psi\rightarrow\gamma)\rightarrow\gamma}
+        \infer{\Gamma \vdash (\varphi\to\psi\to\varphi)\to\varphi}
+            {\Gamma \vdash \forall \gamma.(\varphi\to\psi\to\gamma)\to\gamma}
         &&
-        \infer{\Gamma\vdash\varphi\rightarrow\psi\rightarrow\varphi}
-        {\infer{\Gamma,\varphi\vdash\psi\rightarrow\varphi}
+        \infer{\Gamma\vdash\varphi\to\psi\to\varphi}
+        {\infer{\Gamma,\varphi\vdash\psi\to\varphi}
         {\infer{\Gamma,\varphi,\psi\vdash\varphi}
         {}}}
     }
@@ -70,7 +70,7 @@ $\bot$ утверждает "<любое утверждение верно">, ч
     \tau =
     \begin{cases}
         \alpha, \beta, \gamma, \ldots & \text{(атомарный тип)} \\
-        \tau \rightarrow \tau \\
+        \tau \to \tau \\
         \forall \alpha . \tau & \text{($\alpha$ "--- переменнная)}
     \end{cases}
 \]
@@ -89,9 +89,9 @@ $\bot$ утверждает "<любое утверждение верно">, ч
     \inferspacing
     \begin{gather*}
         \infer[(x \notin \mathrm{dom}(\Gamma))]{\Gamma, x : \sigma \vdash x : \sigma}{} \\
-        \infer{\Gamma \vdash MN : \sigma}{\Gamma \vdash M : \tau \rightarrow \sigma && \Gamma \vdash N : \tau} \qquad
+        \infer{\Gamma \vdash MN : \sigma}{\Gamma \vdash M : \tau \to \sigma && \Gamma \vdash N : \tau} \qquad
         \infer[(x \notin \mathrm{dom}(\Gamma))]
-                {\Gamma \vdash \lambda x^\tau . M : \tau \rightarrow \sigma}{\Gamma, x : \tau \vdash M : \sigma} \\
+                {\Gamma \vdash \lambda x^\tau . M : \tau \to \sigma}{\Gamma, x : \tau \vdash M : \sigma} \\
         \infer[(\alpha \notin \FV(\Gamma))]{\Gamma \vdash \Lambda \alpha . M : \forall \alpha . \sigma}{\Gamma \vdash M : \sigma} \qquad
         \infer{\Gamma \vdash M \tau : \sigma [\alpha := \tau]}{\Gamma \vdash M : \forall \alpha . \sigma}
     \end{gather*}
@@ -101,7 +101,7 @@ $\bot$ утверждает "<любое утверждение верно">, ч
     \begin{center}
     \begin{tabular}{l l l} \toprule
         & Просто типизированное $\lambda$-исчисление & Система $F$ \\ \midrule
-        Тип & $\pi_1:\alpha\with\beta\rightarrow\alpha$ & $\pi_1:\forall \alpha . \forall \beta . \alpha \with \beta \rightarrow \alpha$ \\
+        Тип & $\pi_1:\alpha\with\beta\to\alpha$ & $\pi_1:\forall \alpha . \forall \beta . \alpha \with \beta \to \alpha$ \\
         Выражение & $\pi_1 = \lambda p . p \comb T$ & $\pi_1 = \Lambda \varphi . \Lambda \psi . \lambda p^{\varphi\with\psi} . p \comb T$
         \\ \bottomrule
     \end{tabular}
@@ -111,8 +111,8 @@ $\bot$ утверждает "<любое утверждение верно">, ч
 
 \begin{definition}[$\beta$-редукция в $F$] \ 
     \begin{enumerate}
-        \item Типовая редукция: $\left(\Lambda \alpha . M^\sigma\right) \tau \rightarrow_\beta M[\alpha:=\tau] : \sigma[\alpha := \tau]$
-        \item Классическая $\beta$-редукция: $\left(\lambda x^\sigma.M\right)^{\sigma\rightarrow\tau} X \rightarrow_\beta M [x:=X] : \tau$
+        \item Типовая редукция: $\left(\Lambda \alpha . M^\sigma\right) \tau \to_\beta M[\alpha:=\tau] : \sigma[\alpha := \tau]$
+        \item Классическая $\beta$-редукция: $\left(\lambda x^\sigma.M\right)^{\sigma\to\tau} X \to_\beta M [x:=X] : \tau$
     \end{enumerate}
 \end{definition}
 
@@ -122,17 +122,17 @@ $\bot$ утверждает "<любое утверждение верно">, ч
 
 Доказательство изоморфизма для системы $F$ абсолютно аналогичное.
 Рассмотрим, например, следующее верное утверждение в ИИП второго порядка: "<из лжи следует что угодно">, или
-$\forall \beta . \bot \rightarrow \beta \equiv \forall \beta . (\forall \alpha.\alpha) \rightarrow \beta$.
+$\forall \beta . \bot \to \beta \equiv \forall \beta . (\forall \alpha.\alpha) \to \beta$.
 Если мы выпишем $\lambda$-выражение с таким типом, то станет очевидно, как доказывать утверждение. Пример такого выражения:
 \[
     \Lambda \beta . \lambda a^{\forall \alpha.\alpha} . a \beta :
-    \forall \beta . (\forall \alpha.\alpha) \rightarrow \beta
+    \forall \beta . (\forall \alpha.\alpha) \to \beta
 \]
 Вывод типа выражения, как и раньше, легко выписывается исходя из самого выражения,
 так как $\lambda$-выражение каждого из видов, описанных в грамматике, можно получить только одним правилом.
 \[
-    \infer{\vdash \Lambda \beta . \lambda a^{\forall \alpha.\alpha} . a \beta : \forall \beta . (\forall \alpha.\alpha) \rightarrow \beta}
-    {   \infer{\vdash \lambda a^{\forall \alpha.\alpha} . a \beta : (\forall \alpha.\alpha) \rightarrow \beta}
+    \infer{\vdash \Lambda \beta . \lambda a^{\forall \alpha.\alpha} . a \beta : \forall \beta . (\forall \alpha.\alpha) \to \beta}
+    {   \infer{\vdash \lambda a^{\forall \alpha.\alpha} . a \beta : (\forall \alpha.\alpha) \to \beta}
         {   \infer{a : \forall \alpha . \alpha \vdash a \beta : \beta}
             {   \infer{a : \forall \alpha.\alpha \vdash a : \forall \alpha.\alpha}{}
             }
@@ -140,15 +140,15 @@ $\forall \beta . \bot \rightarrow \beta \equiv \forall \beta . (\forall \alpha.\
     }
 \]
 Другое $\lambda$-выражение с таким же типом это
-$\Lambda \beta . \lambda a^{\forall \alpha . \alpha} . a ((\forall \alpha.\alpha) \rightarrow \beta) a$.
+$\Lambda \beta . \lambda a^{\forall \alpha . \alpha} . a ((\forall \alpha.\alpha) \to \beta) a$.
 %\[
-%    \infer{\vdash \Lambda \beta . \lambda a^{\forall \alpha . \alpha} . a ((\forall \alpha.\alpha) \rightarrow \beta) a :
-%            \forall \beta . (\forall \alpha.\alpha) \rightarrow \beta}
-%    {   \infer{\vdash \lambda a^{\forall \alpha . \alpha} . a ((\forall \alpha.\alpha) \rightarrow \beta) a :
-%                (\forall \alpha.\alpha) \rightarrow \beta}
-%        {   \infer{a : \forall \alpha . \alpha \vdash a ((\forall \alpha.\alpha) \rightarrow \beta) a : \beta}
-%            {   \infer{a : \forall \alpha . \alpha \vdash a ((\forall \alpha.\alpha) \rightarrow \beta)
-%                        : (\forall \alpha . \alpha) \rightarrow \beta}
+%    \infer{\vdash \Lambda \beta . \lambda a^{\forall \alpha . \alpha} . a ((\forall \alpha.\alpha) \to \beta) a :
+%            \forall \beta . (\forall \alpha.\alpha) \to \beta}
+%    {   \infer{\vdash \lambda a^{\forall \alpha . \alpha} . a ((\forall \alpha.\alpha) \to \beta) a :
+%                (\forall \alpha.\alpha) \to \beta}
+%        {   \infer{a : \forall \alpha . \alpha \vdash a ((\forall \alpha.\alpha) \to \beta) a : \beta}
+%            {   \infer{a : \forall \alpha . \alpha \vdash a ((\forall \alpha.\alpha) \to \beta)
+%                        : (\forall \alpha . \alpha) \to \beta}
 %                {   \infer{a : \forall \alpha.\alpha \vdash a : \forall \alpha.\alpha}{}
 %                }
 %            &&  \infer{a : \forall \alpha . \alpha \vdash a : \forall \alpha.\alpha}{}
@@ -162,4 +162,4 @@ $\Lambda \beta . \lambda a^{\forall \alpha . \alpha} . a ((\forall \alpha.\alpha
 \end{theorem}
 
 \todo упражнения $\alpha\with\beta$ и тип чёрчевского нумерала
-$\forall\alpha.(\alpha\rightarrow\alpha)\rightarrow(\alpha\rightarrow\alpha)$
+$\forall\alpha.(\alpha\to\alpha)\to(\alpha\to\alpha)$

@@ -28,7 +28,7 @@ $\beta$-редукция не обладает ромбовидным свойс
               (C)  edge (D);
     \end{tikzpicture}
     %\captionsetup{labelformat=empty}
-    \caption{Нет такого $d$, что $b \rightarrow_{\beta} d$ и $c \rightarrow_{\beta} d$.}
+    \caption{Нет такого $d$, что $b \to_{\beta} d$ и $c \to_{\beta} d$.}
     \label{no-diamond}
 \end{figure}
 \end{example}
@@ -74,7 +74,7 @@ $\beta$-редукция не обладает ромбовидным свойс
 \end{proof}
 
 \begin{statement} \label{st-A}
-    Если $A \rightarrow_{\beta} B$, то $A \rightrightarrows_{\beta} B$.
+    Если $A \to_{\beta} B$, то $A \rightrightarrows_{\beta} B$.
 \end{statement}
 
 \begin{statement} \label{st-B}
@@ -107,7 +107,7 @@ $\beta$-редукция не обладает ромбовидным свойс
 \end{figure}
 
 \begin{statement} \label{st-C}
-    Из \ref{st-A} и \ref{st-B} следует, что $(\rightarrow_{\beta})^{*} = (\rightrightarrows_{\beta})^{*}$.
+    Из \ref{st-A} и \ref{st-B} следует, что $(\to_{\beta})^{*} = (\rightrightarrows_{\beta})^{*}$.
 \end{statement}
 
 \begin{proof}
@@ -217,23 +217,23 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
         \]
         \item Правило введения импликации:
         \[
-            \infer{\Gamma \vdash \varphi \rightarrow \psi}{\Gamma, \varphi \vdash \psi}
+            \infer{\Gamma \vdash \varphi \to \psi}{\Gamma, \varphi \vdash \psi}
         \]
         \item И правило удаления импликации:
         \[
-            \infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \rightarrow \psi && \Gamma \vdash \varphi}
+            \infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \to \psi && \Gamma \vdash \varphi}
         \]
     \end{enumerate}
 
     Мы построили импликационный фрагмент ИИВ (и.ф.и.и.в).
 \end{definition}
 
-\begin{example} Докажем $\varphi \rightarrow \psi \rightarrow \varphi$:
+\begin{example} Докажем $\varphi \to \psi \to \varphi$:
 \[
     \infer[(2)]
-        { \vdash \varphi \rightarrow (\psi \rightarrow \varphi) }
+        { \vdash \varphi \to (\psi \to \varphi) }
         { \infer[(2)]
-            { \varphi \vdash \psi \rightarrow \varphi }
+            { \varphi \vdash \psi \to \varphi }
             { \infer[(1)]
                 { \varphi, \psi \vdash \varphi}
                 {}
@@ -254,21 +254,21 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
     Индукцией по структуре $\varphi$ покажем, что $\Delta \Vdash \varphi$ т.и.т.т., когда $\Delta \vdash \varphi$.
     \begin{enumerate}
         \item Пусть $\varphi \equiv x$ "--- переменная. Тогда $\Gamma \vdash \varphi$ эквивалентно $x \in \Gamma$, что эквивалентно $\Gamma\Vdash x$ (по определению).
-        \item Пусть $\varphi \equiv \alpha \rightarrow \beta$.
+        \item Пусть $\varphi \equiv \alpha \to \beta$.
         \begin{enumerate}[label=(\asbuk*)]
-            \item Пусть $\Delta \vdash \alpha\rightarrow\beta$.
+            \item Пусть $\Delta \vdash \alpha\to\beta$.
                 Рассмотрим такое $\Delta'$, что $\Delta \leq \Delta'$ и $\Delta' \Vdash \alpha$.
-                Так как $\Delta \vdash \alpha\rightarrow\beta$, то $\Delta' \vdash \alpha\rightarrow\beta$.
+                Так как $\Delta \vdash \alpha\to\beta$, то $\Delta' \vdash \alpha\to\beta$.
                 Так как $\Delta' \Vdash \alpha$, то по индукционному предположению $\Delta' \vdash \alpha$.
                 \[
-                    \infer{\Delta' \vdash \beta}{\Delta' \vdash \alpha \rightarrow \beta && \Delta' \vdash \alpha}
+                    \infer{\Delta' \vdash \beta}{\Delta' \vdash \alpha \to \beta && \Delta' \vdash \alpha}
                 \]
-                Значит, $\Delta' \Vdash \beta$, по индуционному предположению. Тогда и $\Delta' \Vdash \alpha\rightarrow\beta$.
-            \item Пусть $\Delta \Vdash \alpha\rightarrow\beta$.
+                Значит, $\Delta' \Vdash \beta$, по индуционному предположению. Тогда и $\Delta' \Vdash \alpha\to\beta$.
+            \item Пусть $\Delta \Vdash \alpha\to\beta$.
                 Пусть $\Delta'$ "--- замыкание относительно выводимости $\Delta \cup \set \alpha$.
                 Тогда $\Delta' \Vdash \beta$. Тогда $\Delta' \vdash \beta$ по предположению индукции.
                 \[
-                    \infer{\Delta' \vdash \alpha \rightarrow \beta}{\Delta', \alpha \vdash \beta} 
+                    \infer{\Delta' \vdash \alpha \to \beta}{\Delta', \alpha \vdash \beta} 
                     \qedhere
                 \]
         \end{enumerate}
@@ -279,4 +279,4 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
     И.ф.и.и.в замкнут относительно выводимости.
 \end{corollary}
 Если некоторое утверждение выводится в ИИВ ($\vdash_{и} \varphi$) и содержит только импликации,
-то оно выводится и в и.ф.и.и.в. ($\vdash_{и \rightarrow} \varphi$).
+то оно выводится и в и.ф.и.и.в. ($\vdash_{и \to} \varphi$).

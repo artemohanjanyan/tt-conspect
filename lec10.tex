@@ -1,9 +1,9 @@
 \section{\texorpdfstring{Линейные и уникальные типы}{Linear and unique types}}
 
-Пусть $A \rightarrow_\beta A'$.
+Пусть $A \to_\beta A'$.
 С одной стороны, порядок редукции не важен, % TODO картинка
-$(\lambda x . x x) A \rightarrow_\beta (\lambda x . x x) A' \rightarrow_\beta A' A'$
-и $(\lambda x . x x) A \rightarrow_\beta A A \rightarrow_\beta A' A \rightarrow_\beta A' A'$.
+$(\lambda x . x x) A \to_\beta (\lambda x . x x) A' \to_\beta A' A'$
+и $(\lambda x . x x) A \to_\beta A A \to_\beta A' A \to_\beta A' A'$.
 По теореме \nameref{church-rosser} нормальная форма единственна, если существует.
 С другой стороны, реальный мир на самом деле не таков, в нём есть побочные эффекты.
 % A(b(), unique_ptr<C>(new C))
@@ -28,7 +28,7 @@ $(\lambda x . x x) A \rightarrow_\beta (\lambda x . x x) A' \rightarrow_\beta A'
 С помощью каждой из этих двух систем можно выразить любое $\lambda$-выражение без свободных переменных.
 
 \begin{proof}[Докажем \ref{SK-basis}] \newcommand{\opop}{\operatorname}
-    Определим $\opop T : \Lambda \rightarrow \Lambda_{SK} \cup \left\{ \text{свободные переменные} \right\}$:
+    Определим $\opop T : \Lambda \to \Lambda_{SK} \cup \left\{ \text{свободные переменные} \right\}$:
     \begin{align*}
         \opop T[x]                         &= x \\
         \opop T[A B]                       &= \opop{T}[A]\opop{T}[B]  \\
@@ -49,20 +49,20 @@ $(\lambda x . x x) A \rightarrow_\beta (\lambda x . x x) A' \rightarrow_\beta A'
 
 Давайте теперь проследим связь комбинаторов с логикой. Выведем типы у $\comb S$ и $\comb K$:
 \begin{align*}
-    \comb S &= \lambda x y z . x z (y z) : (\alpha \rightarrow \beta \rightarrow \gamma) \rightarrow
-        (\alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \gamma) \\
-    \comb K &= \lambda x y . x : \alpha \rightarrow \beta \rightarrow \alpha
+    \comb S &= \lambda x y z . x z (y z) : (\alpha \to \beta \to \gamma) \to
+        (\alpha \to \beta) \to (\alpha \to \gamma) \\
+    \comb K &= \lambda x y . x : \alpha \to \beta \to \alpha
 \end{align*}
 Это похоже на вторую и первую схемы аксиом в ИИВ.
 Понятно, что изоморфизм Карри-Ховарда переносится и на комбинаторы, так как это сокращения для $\lambda$-выражений.
 Роль modus ponens будет исполнять редукция.
 Посмотрим на другие комбинаторы:
 \begin{alignat*}{4}
-    \comb I&=\lambda x.x         &&: \alpha \rightarrow \alpha \\
-    \comb B&=\lambda x y z.x(yz) &&:(\alpha\rightarrow\beta)\rightarrow(\beta \rightarrow\gamma) \rightarrow (\alpha \rightarrow \gamma) \\
-    \comb C&=\lambda x y z.x z y &&:(\alpha \rightarrow\beta\rightarrow \gamma)\rightarrow (\beta \rightarrow \alpha \rightarrow \gamma) \\
-    \comb K&=\lambda x y . x     &&: \alpha \rightarrow \beta \rightarrow \alpha \\
-    \comb W&=\lambda x y . x y y &&: (\alpha \rightarrow \alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \beta)
+    \comb I&=\lambda x.x         &&: \alpha \to \alpha \\
+    \comb B&=\lambda x y z.x(yz) &&:(\alpha\to\beta)\to(\beta \to\gamma) \to (\alpha \to \gamma) \\
+    \comb C&=\lambda x y z.x z y &&:(\alpha \to\beta\to \gamma)\to (\beta \to \alpha \to \gamma) \\
+    \comb K&=\lambda x y . x     &&: \alpha \to \beta \to \alpha \\
+    \comb W&=\lambda x y . x y y &&: (\alpha \to \alpha \to \beta) \to (\alpha \to \beta)
 \end{alignat*}
 
 У последних двух комбинаторов есть отличительная особенность. $\comb K$ "<убивает"> один аргумент, а $\comb W$ "--- размножает.
@@ -78,8 +78,8 @@ $(\lambda x . x x) A \rightarrow_\beta (\lambda x . x x) A' \rightarrow_\beta A'
     \infer{\Delta, \Gamma \vdash A}{\Gamma, \Delta \vdash A} \qquad
     \infer{\Gamma, A \vdash B}{\Gamma, A, A \vdash B} \qquad
     \infer{\Gamma, A \vdash B}{\Gamma \vdash B} \\
-    \infer{\Gamma \vdash A \rightarrow B}{\Gamma, A \vdash B} \qquad
-    \infer{\Gamma, \Delta \vdash B}{\Gamma \vdash A \rightarrow B && \Delta \vdash A} \\
+    \infer{\Gamma \vdash A \to B}{\Gamma, A \vdash B} \qquad
+    \infer{\Gamma, \Delta \vdash B}{\Gamma \vdash A \to B && \Delta \vdash A} \\
     \infer{\Gamma, \Delta \vdash A \times B}{\Gamma \vdash A && \Delta \vdash B} \qquad
     \infer{\Gamma, \Delta \vdash C}{\Gamma \vdash A \times B && \Delta, A, B \vdash C}\\
     \infer{\Gamma \vdash A + B}{\Gamma \vdash A} \qquad
@@ -167,7 +167,7 @@ $(\lambda x . x x) A \rightarrow_\beta (\lambda x . x x) A' \rightarrow_\beta A'
 
 Интуционисткую логику можно вложить в линейную логику путем определения интуционистких связок через линейные:
 \begin{align*}
-    A \rightarrow B &= \oc A \multimap B \\
+    A \to B &= \oc A \multimap B \\
     A \times B      &= A \with B \\
     A + B           &= \oc A \oplus \oc B
 \end{align*}
@@ -177,13 +177,13 @@ $(\lambda x . x x) A \rightarrow_\beta (\lambda x . x x) A' \rightarrow_\beta A'
 \centering
 \begin{tabular}{Sc Sc} \toprule
 	Схема аксиом в ИИВ & Представление в линейной логике \\ \midrule
-	$\infer[]{\Gamma \vdash A \rightarrow B}{\Gamma, A \vdash B}$ &
+	$\infer[]{\Gamma \vdash A \to B}{\Gamma, A \vdash B}$ &
 	$\infer[]{\Gamma \vdash \oc A \multimap B}{
 		\infer[]{\Gamma, \pair{\oc A} \vdash B}{
 			\infer[]{\pair{\oc A} \vdash \oc A}{} && \Gamma, [A] \vdash B
 		}
 	}$ \\ \midrule
-	$\infer[]{\Gamma, \Delta \vdash B}{\Gamma \vdash A \rightarrow B && \Delta \vdash A}$ &
+	$\infer[]{\Gamma, \Delta \vdash B}{\Gamma \vdash A \to B && \Delta \vdash A}$ &
 	$\infer[]{\Gamma, [\Delta] \vdash B}{
 		\Gamma \vdash \oc A \multimap B && \infer[]{[\Delta] \vdash \oc A}{[\Delta] \vdash A}
 	}$ \\ \bottomrule

@@ -11,14 +11,14 @@
         A &= \left\{ x \in \left\{0;1\right\} \mid x = 0 \vee S \right\} \\
         B &= \left\{ x \in \left\{0;1\right\} \mid x = 1 \vee S \right\}
     \end{align*}
-    Аксиома выбора утверждает $f : \left\{A, B\right\} \rightarrow \{0, 1\}$
+    Аксиома выбора утверждает $f : \left\{A, B\right\} \to \{0, 1\}$
     \[
-        f(A) \in A \with f(B) \in B \rightarrow (f(A) = 0 \vee S) \with (f(B) = 1 \vee S) \equiv (f(A) = 0 \with f(B) = 1) \vee S
+        f(A) \in A \with f(B) \in B \to (f(A) = 0 \vee S) \with (f(B) = 1 \vee S) \equiv (f(A) = 0 \with f(B) = 1) \vee S
     \]
     \[
-        \infer{\neg (f(A) = f(B)) \rightarrow \neg S}
-        {\infer{S \rightarrow f(A) = f(B)}
-        {\infer{S \rightarrow A = B}
+        \infer{\neg (f(A) = f(B)) \to \neg S}
+        {\infer{S \to f(A) = f(B)}
+        {\infer{S \to A = B}
         {\infer{\neg (f(A) = f(B)) \vee S }
         {}}}}
     \]
@@ -27,7 +27,7 @@
 
 Другая формулировка аксиомы выбора:
 \[
-    (\forall a \in A . \exists b \in B . Q(a, b)) \rightarrow \exists f : A \rightarrow B . \forall a \in A . Q(a, f(a))
+    (\forall a \in A . \exists b \in B . Q(a, b)) \to \exists f : A \to B . \forall a \in A . Q(a, f(a))
 \]
 $Q(a, b) = b \in a$.
 
@@ -35,13 +35,13 @@ $Q(a, b) = b \in a$.
 
 \begin{definition}
     \[
-        \left<C : Type, Eq : C \rightarrow C \rightarrow Type, P : \mathrm{IsEquivalence}~Eq\right>
+        \left<C : Type, Eq : C \to C \to Type, P : \mathrm{IsEquivalence}~Eq\right>
     \]
     $Eq$ "--- отношение эквивалентности, $P$ "--- доказательство этого факта.
 \end{definition}
 \begin{definition}[экстенциональность]
     \[
-        f : \left< A, =_A, P_A\right> \rightarrow \left<B, =_B, P_B\right>
+        f : \left< A, =_A, P_A\right> \to \left<B, =_B, P_B\right>
     \]
     $f$ экстенсиональна ($\mathrm{Ext}~f$), если из $x =_A y$ следует $f x =_B f y$
 \end{definition}

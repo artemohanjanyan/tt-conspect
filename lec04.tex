@@ -27,13 +27,13 @@
 
 \begin{definition}[$S$-подстановка]
     \[
-        S : A \rightarrow A
+        S : A \to A
     \]
     Причём $S$ "--- id почти везде (везде кроме конечного количества).
 \end{definition}
 
 \begin{definition}[естественное обобщение]
-    Естественное обобщение "--- такая подстановка $S : A \rightarrow A$, получаемая из $S : X \rightarrow A$, что
+    Естественное обобщение "--- такая подстановка $S : A \to A$, получаемая из $S : X \to A$, что
     $S\left(f\left(A_1 \dots A_n\right)\right) = f\left(S(f_1) \ldots S(f_n)\right)$
 \end{definition}
 
@@ -43,12 +43,12 @@
 \begin{example}
     Пусть
     \[
-        \sigma = \beta\rightarrow\alpha\rightarrow\beta \qquad \tau = (\gamma\rightarrow\gamma)\rightarrow\delta
+        \sigma = \beta\to\alpha\to\beta \qquad \tau = (\gamma\to\gamma)\to\delta
     \]
     Их унификатор это
     \[
-        S = [\beta \coloneqq \gamma\rightarrow\gamma, \delta \coloneqq \alpha\rightarrow\gamma\rightarrow\gamma]
-        \qquad S(\sigma) \equiv S(\tau) = (\gamma\rightarrow\gamma)\rightarrow\alpha\rightarrow\gamma\rightarrow\gamma
+        S = [\beta \coloneqq \gamma\to\gamma, \delta \coloneqq \alpha\to\gamma\to\gamma]
+        \qquad S(\sigma) \equiv S(\tau) = (\gamma\to\gamma)\to\alpha\to\gamma\to\gamma
     \]
 \end{example}
 Задача решения уравнение в алгебраических термах "--- унификация.
@@ -154,8 +154,8 @@
     \begin{tabular}{l l l} \toprule
         Вид $M$         & $E_m$                                                 & $\tau_m$                         \\ \midrule
         $x$             & $\varnothing$                                         & $\alpha_x$ "--- новая переменная \\ \midrule
-        $PR$            & $E_p \cup E_r \cup \set{\tau_p=\tau_r\rightarrow\pi}$ & $\pi$ "--- новая переменная      \\ \midrule
-        $\lambda x . P$ & $E_p$                                                 & $\tau_x\rightarrow\tau_p$        \\ \bottomrule
+        $PR$            & $E_p \cup E_r \cup \set{\tau_p=\tau_r\to\pi}$ & $\pi$ "--- новая переменная      \\ \midrule
+        $\lambda x . P$ & $E_p$                                                 & $\tau_x\to\tau_p$        \\ \bottomrule
     \end{tabular}
     \end{center}
     Решим построенную систему уравнений.
@@ -186,60 +186,60 @@ $\alpha$-эквивалентного исходному.
             & & & & $M = x$ \\
             & & & & $E = \varnothing$ \\
             & & & & $\tau = \beta$ \\ \cmidrule{5-5}
-            & & & $E = \set{\alpha = \beta \rightarrow \gamma}$ & \\
+            & & & $E = \set{\alpha = \beta \to \gamma}$ & \\
             & & & $\tau = \gamma$ & \\ \cmidrule{4-5}
             $E = \begin{cases}
-              \alpha=\beta\rightarrow\gamma \\
-              \alpha=\gamma\rightarrow\delta
+              \alpha=\beta\to\gamma \\
+              \alpha=\gamma\to\delta
             \end{cases}\mkern-18mu$ &
             $E = \begin{cases}
-                \alpha=\beta\rightarrow\gamma \\
-                \alpha=\gamma\rightarrow\delta
+                \alpha=\beta\to\gamma \\
+                \alpha=\gamma\to\delta
             \end{cases}\mkern-18mu$ &
             $E = \begin{cases}
-                \alpha=\beta\rightarrow\gamma \\
-                \alpha=\gamma\rightarrow\delta
+                \alpha=\beta\to\gamma \\
+                \alpha=\gamma\to\delta
             \end{cases}\mkern-18mu$ & & \\[1.2em]
-            $\tau = \alpha\rightarrow(\beta\rightarrow\delta)$ &
-            $\tau = \beta\rightarrow\delta$ &
+            $\tau = \alpha\to(\beta\to\delta)$ &
+            $\tau = \beta\to\delta$ &
             $\tau = \delta$ & & \\ \bottomrule
         \end{tabular}
     \end{center}
     Затем решим полученную систему уравнений:
     \[
         \begin{cases}
-            \alpha=\beta\rightarrow\gamma \\
-            \alpha=\gamma\rightarrow\delta
+            \alpha=\beta\to\gamma \\
+            \alpha=\gamma\to\delta
         \end{cases} \mkern-18mu
         \implies
         \begin{cases}
-            \alpha=\beta\rightarrow\gamma \\
-            \beta\rightarrow\gamma=\gamma\rightarrow\delta
+            \alpha=\beta\to\gamma \\
+            \beta\to\gamma=\gamma\to\delta
         \end{cases} \mkern-18mu
         \implies
         \begin{cases}
-            \alpha=\beta\rightarrow\gamma \\
+            \alpha=\beta\to\gamma \\
             \beta=\gamma \\
             \gamma=\delta
         \end{cases} \mkern-18mu
         \implies
         \begin{cases}
-            \alpha=\beta\rightarrow\delta \\
+            \alpha=\beta\to\delta \\
             \beta=\delta \\
             \gamma=\delta
         \end{cases} \mkern-18mu
         \implies
         \begin{cases}
-            \alpha=\delta\rightarrow\delta \\
+            \alpha=\delta\to\delta \\
             \beta=\delta \\
             \gamma=\delta
         \end{cases}
     \]
-    Получаем подстановку $S = \left[\alpha\coloneqq\delta\rightarrow\delta, \beta\coloneqq\delta, \gamma\coloneqq\delta\right]$.
+    Получаем подстановку $S = \left[\alpha\coloneqq\delta\to\delta, \beta\coloneqq\delta, \gamma\coloneqq\delta\right]$.
     Применяя её к $\tau$ получаем тип выражения:
     \begin{gather*}
-        S(\tau) = (\delta\rightarrow\delta)\rightarrow(\delta\rightarrow\delta) \\
-        \lambda f \lambda x . f (f x) : (\delta\rightarrow\delta)\rightarrow(\delta\rightarrow\delta)
+        S(\tau) = (\delta\to\delta)\to(\delta\to\delta) \\
+        \lambda f . \lambda x . f (f x) : (\delta\to\delta)\to(\delta\to\delta)
     \end{gather*}
 \end{example}
 

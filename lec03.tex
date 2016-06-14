@@ -3,13 +3,13 @@
 \begin{definition}[тип]
     $T = \{\alpha, \beta, \gamma, \ldots\}$ "--- множество типов.
     $\sigma$, $\tau$ "--- метапеременные для типов.
-    Если $\sigma$, $\tau$ "--- типы, то $\sigma \rightarrow \tau$ "--- тип.
+    Если $\sigma$, $\tau$ "--- типы, то $\sigma \to \tau$ "--- тип.
     \begin{bnf}
     \[
-        \Pi ::= T | \Pi \rightarrow \Pi | (\Pi)
+        \Pi ::= T | \Pi \to \Pi | (\Pi)
     \]
     \end{bnf}
-    $\left(\rightarrow\right)$ правоассоциативна.
+    $\left(\to\right)$ правоассоциативна.
 \end{definition}
 
 \begin{definition}[контекст] Контекст "--- $\Gamma$.
@@ -28,16 +28,16 @@
             {}$
         \item $\infer[]
             {\Gamma \vdash M N : \tau}
-            {\Gamma \vdash M:\sigma \rightarrow \tau && \Gamma \vdash N:\sigma}$
+            {\Gamma \vdash M:\sigma \to \tau && \Gamma \vdash N:\sigma}$
         \item $\infer[(x \notin \dom(\Gamma))]
-            {\Gamma \vdash \lambda x . M : \sigma \rightarrow \tau}
+            {\Gamma \vdash \lambda x . M : \sigma \to \tau}
             {\Gamma, x : \sigma \vdash M : \tau}$
     \end{enumerate}
     Если $\lambda$-выражение типизируется этими трёмя правилами, то говорят, что оно типизируется по Карри.
 \end{definition}
 
 \begin{lemma}[subject reduction]
-    Если $\Gamma \vdash M : \sigma$ и $M \rightarrow_{\beta}N$, то $\Gamma \vdash N : \sigma$.
+    Если $\Gamma \vdash M : \sigma$ и $M \to_{\beta}N$, то $\Gamma \vdash N : \sigma$.
 \end{lemma}
 
 \begin{corollary}
@@ -51,26 +51,26 @@
 
 \begin{example} Несколько доказательств:
     \begin{enumerate}
-        \item $\lambda x . x : \alpha \rightarrow \alpha$:
+        \item $\lambda x . x : \alpha \to \alpha$:
         \[
             \infer[(3)]
-                {\vdash \lambda x . x : \alpha \rightarrow \alpha}
+                {\vdash \lambda x . x : \alpha \to \alpha}
                 { \infer[(1)]
                     {x : \alpha \vdash x : \alpha}
                     {}
                 }
         \]
 
-        \item $\lambda f . \lambda x . f x : (\alpha \rightarrow \beta) \rightarrow \alpha \rightarrow \beta$:
+        \item $\lambda f . \lambda x . f x : (\alpha \to \beta) \to \alpha \to \beta$:
         \[
             \infer[(3)]
-                { \vdash \lambda f . \lambda x . f x : (\alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \beta) }
+                { \vdash \lambda f . \lambda x . f x : (\alpha \to \beta) \to (\alpha \to \beta) }
                 { \infer[(3)]
-                    { f : \alpha \rightarrow \beta \vdash \lambda x . f x : \alpha \rightarrow \beta }
+                    { f : \alpha \to \beta \vdash \lambda x . f x : \alpha \to \beta }
                     { \infer[(2)]
-                        {f : \alpha \rightarrow \beta; x : \alpha \vdash f x : \beta}
+                        {f : \alpha \to \beta; x : \alpha \vdash f x : \beta}
                         {
-                            \infer[(1)]{ \Gamma \vdash f : \alpha \rightarrow \beta }{} &&
+                            \infer[(1)]{ \Gamma \vdash f : \alpha \to \beta }{} &&
                             \infer[(1)]{ \Gamma \vdash x : \alpha }{}
                         }
                     }
@@ -80,9 +80,9 @@
         \item \begin{proof}[$\combl \Omega$ и $\comb Y$ не типизируемы] Допустим обратное.
         Тогда в выводе должен будет присутствовать вывод подвыражения $xx$:
         \[
-            \infer{\Gamma, x : \sigma \rightarrow \tau, x : \sigma \vdash x x : \tau}
-            {  \infer{\Gamma, x : \sigma \rightarrow \tau, x : \sigma \vdash x : \sigma \rightarrow \tau}{}
-            && \infer{\Gamma, x : \sigma \rightarrow \tau, x : \sigma \vdash x : \sigma}{}
+            \infer{\Gamma, x : \sigma \to \tau, x : \sigma \vdash x x : \tau}
+            {  \infer{\Gamma, x : \sigma \to \tau, x : \sigma \vdash x : \sigma \to \tau}{}
+            && \infer{\Gamma, x : \sigma \to \tau, x : \sigma \vdash x : \sigma}{}
             }
         \]
         Однако первое правило вывода запрещает повторение переменных в контексте. Значит, такой вывод не может быть корректным.
@@ -96,11 +96,11 @@
 Правилом 1 выводится тип обособленных переменных, правилом 2 выводится тип аппликаций, правилом 3 "--- абстракций.
 
 \begin{lemma}[отсутствие subject expansion]
-    Неверно, что если $M \rightarrow_{\beta} N$, $\Gamma \vdash N : \sigma$, то $\Gamma \vdash M : \sigma$.
+    Неверно, что если $M \to_{\beta} N$, $\Gamma \vdash N : \sigma$, то $\Gamma \vdash M : \sigma$.
 \end{lemma}
 Например, для $\comb K a \combl\Omega$.
 
-В общем случае тип не уникален. Например, одновременно $\vdash \lambda x . x : \alpha \rightarrow \alpha$ и $\vdash \lambda x . x : (\beta \rightarrow \beta) \rightarrow (\beta \rightarrow \beta)$.
+В общем случае тип не уникален. Например, одновременно $\vdash \lambda x . x : \alpha \to \alpha$ и $\vdash \lambda x . x : (\beta \to \beta) \to (\beta \to \beta)$.
 
 \begin{definition}[сильная нормализация] \label{strong-normalization}
     Назовём исчисление сильно-нормализуемым, если любая последовательность $\beta$-редукций неизбежно приводит к нормальной форме.
@@ -131,9 +131,9 @@
             {}$
         \item $\infer[]
             {\Gamma \vdash_{\xx} M N : \tau}
-            {\Gamma \vdash_{\xx} M:\sigma \rightarrow \tau && \Gamma \vdash_{\xx} N:\sigma}$
+            {\Gamma \vdash_{\xx} M:\sigma \to \tau && \Gamma \vdash_{\xx} N:\sigma}$
         \item $\infer[(x \notin \dom(\Gamma))]
-            {\Gamma \vdash_{\xx} \lambda x^{\sigma} . M : \sigma \rightarrow \tau}
+            {\Gamma \vdash_{\xx} \lambda x^{\sigma} . M : \sigma \to \tau}
             {\Gamma, x : \sigma \vdash_{\xx} M : \tau}$
     \end{enumerate}
 
@@ -151,7 +151,7 @@
 \end{definition}
 
 \begin{lemma}[subject reduction по Чёрчу]
-    Пусть $\Gamma \vdash_{\xx} M : \sigma$ и $\abs{M} \rightarrow_{\beta} N$.
+    Пусть $\Gamma \vdash_{\xx} M : \sigma$ и $\abs{M} \to_{\beta} N$.
     Тогда найдётся такое $H$, что $\abs{H} = N$, $\Gamma \vdash_{\xx} H:\sigma$.
 \end{lemma}
 
@@ -169,7 +169,7 @@
 
 \begin{theorem}[о стирании] \ 
     \begin{enumerate}
-        \item Если $M \rightarrow_{\beta} N$ и $\Gamma \vdash_{\xx} M : \sigma$, то $\abs{M} \rightarrow_{\beta} \abs{N}$.
+        \item Если $M \to_{\beta} N$ и $\Gamma \vdash_{\xx} M : \sigma$, то $\abs{M} \to_{\beta} \abs{N}$.
         \item Если $\Gamma \vdash_{\xx} M : \sigma$, то $\Gamma \vdash_{к} \abs{M} : \sigma$.
     \end{enumerate}
 \end{theorem}
@@ -177,7 +177,7 @@
 \begin{theorem}[о поднятии]
     Пусть $P \in \Lambda_{\xx}$, $M, N \in \Lambda_{\rr}$.
     \begin{enumerate}
-        \item Если $M \rightarrow_{\beta} N$, $\abs{P} = M$, то найдётся такое $Q$, что $\abs{Q} = N$, $P \rightarrow_{\beta} Q$.
+        \item Если $M \to_{\beta} N$, $\abs{P} = M$, то найдётся такое $Q$, что $\abs{Q} = N$, $P \to_{\beta} Q$.
         \item Если $\Gamma \vdash_{\rr} M : \sigma$, то найдётся такое $P \in \Lambda_{\xx}$, что
                 $\Gamma \vdash_{\xx} P : \sigma$, $\abs{P} = M$.
     \end{enumerate}
@@ -191,14 +191,14 @@
 Первый "--- тип "<пары">. Пара хранит в себе два значения. Пусть $A : \sigma$ и $B : \tau$, тогда:
 \begin{gather*}
     \pair{A,B} : \sigma \with \tau \\
-    \pi_1 : \sigma\with\tau\rightarrow\sigma \qquad \pi_2 : \sigma\with\tau\rightarrow\tau
+    \pi_1 : \sigma\with\tau\to\sigma \qquad \pi_2 : \sigma\with\tau\to\tau
 \end{gather*}
 $\pi_1$ и $\pi_2$ это функции для доступа к элементам пары, левая и правая проекции.
 Например, $\pi_2 \pair{\overline 7,\overline 5} =_\beta \overline 5$.
 
-Второй "--- алгебраический тип данных. Пусть $T : \sigma\vee\tau$, $L : \sigma\rightarrow\pi$, $R : \tau\rightarrow\pi$. Тогда
+Второй "--- алгебраический тип данных. Пусть $T : \sigma\vee\tau$, $L : \sigma\to\pi$, $R : \tau\to\pi$. Тогда
 \[
-    \case{T}{L}{R} : \pi \qquad \inj_1 : \sigma\rightarrow\sigma\vee\tau \qquad \inj_2 : \tau\rightarrow\sigma\vee\tau
+    \case{T}{L}{R} : \pi \qquad \inj_1 : \sigma\to\sigma\vee\tau \qquad \inj_2 : \tau\to\sigma\vee\tau
 \]
 Если $A : \sigma$ и $B : \tau$, то $\inj_1 A$ и $\inj_2 B$ имеют тип $\sigma\vee\tau$.
 $\inj_1$ и $\inj_2$ это левая и правая инъекции.
@@ -219,11 +219,11 @@ $\inj_1$ и $\inj_2$ это левая и правая инъекции.
 \begin{tabular}{Sc@{\hspace{1.5cm}} Sc} \toprule
     ИИВ & Типизированное $\lambda$-исчисление \\ \midrule
 
-    $\infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \rightarrow \psi && \Gamma \vdash \varphi}$ &
-    $\infer{\Gamma \vdash AB : \psi}{\Gamma \vdash A : \varphi \rightarrow \psi && \Gamma \vdash B : \varphi}$ \\ \addlinespace
+    $\infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \to \psi && \Gamma \vdash \varphi}$ &
+    $\infer{\Gamma \vdash AB : \psi}{\Gamma \vdash A : \varphi \to \psi && \Gamma \vdash B : \varphi}$ \\ \addlinespace
 
-    $\infer{\Gamma \vdash \varphi \rightarrow \psi}{\Gamma, \varphi \vdash \psi}$ &
-    $\infer{\Gamma \vdash \lambda x^\varphi . A : \varphi \rightarrow \psi}{\Gamma, x : \varphi \vdash A : \psi}$ \\ \midrule
+    $\infer{\Gamma \vdash \varphi \to \psi}{\Gamma, \varphi \vdash \psi}$ &
+    $\infer{\Gamma \vdash \lambda x^\varphi . A : \varphi \to \psi}{\Gamma, x : \varphi \vdash A : \psi}$ \\ \midrule
 
     $\infer{\Gamma \vdash \varphi \with \psi}{\Gamma \vdash \varphi && \Gamma \vdash \psi}$ &
     $\infer{\Gamma \vdash \left<A,B\right> : \varphi \with \psi}{\Gamma \vdash A : \varphi && \Gamma \vdash B : \psi}$ \\ \addlinespace
@@ -240,10 +240,10 @@ $\inj_1$ и $\inj_2$ это левая и правая инъекции.
     $\infer{\Gamma \vdash \varphi \vee \psi}{\Gamma \vdash \psi}$ &
     $\infer{\Gamma \vdash \inj_2 A : \varphi \vee \psi}{\Gamma \vdash A : \psi}$ \\ \addlinespace
 
-    $\infer{\Gamma \vdash \varphi \vee \psi \rightarrow \pi}
-        {\Gamma \vdash \varphi \rightarrow \pi && \Gamma \vdash \psi \rightarrow \pi}$ &
+    $\infer{\Gamma \vdash \varphi \vee \psi \to \pi}
+        {\Gamma \vdash \varphi \to \pi && \Gamma \vdash \psi \to \pi}$ &
     $\infer{\Gamma \vdash \case{T}{A}{B} : \pi}{\Gamma \vdash T : \varphi \vee \psi &&
-        \Gamma \vdash A : \varphi \rightarrow \pi && \Gamma \vdash B : \psi \rightarrow \pi}$ \\ \bottomrule
+        \Gamma \vdash A : \varphi \to \pi && \Gamma \vdash B : \psi \to \pi}$ \\ \bottomrule
 \end{tabular}
 \caption{Соответствие правил вывода}
 \label{correspondence-table}
@@ -289,16 +289,16 @@ $\inj_1$ и $\inj_2$ это левая и правая инъекции.
 
         \item Вывод заканчивается правилом
         \[
-            \infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \rightarrow \psi && \Gamma \vdash \varphi}
+            \infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \to \psi && \Gamma \vdash \varphi}
         \]
-        По индукционному предположению $\Delta \vdash M : \varphi \rightarrow \psi$ и $\Delta \vdash N : \varphi$. Тогда
+        По индукционному предположению $\Delta \vdash M : \varphi \to \psi$ и $\Delta \vdash N : \varphi$. Тогда
         \[
-            \infer{\Delta \vdash MN : \psi}{\Delta \vdash A : \varphi \rightarrow \psi && \Delta \vdash B : \varphi}
+            \infer{\Delta \vdash MN : \psi}{\Delta \vdash A : \varphi \to \psi && \Delta \vdash B : \varphi}
         \]
 
         \item Вывод заканчивается правилом
         \[
-            \infer{\Gamma \vdash \varphi \rightarrow \psi}{\Gamma,\varphi \vdash \psi}
+            \infer{\Gamma \vdash \varphi \to \psi}{\Gamma,\varphi \vdash \psi}
         \]
         \begin{enumerate}[label=\roman*.]
             \item Пусть $\varphi \in \Gamma$. Тогда по индукционному предположению $\Delta \vdash M : \psi$.
@@ -309,7 +309,7 @@ $\inj_1$ и $\inj_2$ это левая и правая инъекции.
         \end{enumerate}
         Тогда
         \[
-            \infer{\Delta \vdash \lambda x^\varphi . M : \varphi \rightarrow \psi}{\Delta, x : \varphi \vdash M : \psi}
+            \infer{\Delta \vdash \lambda x^\varphi . M : \varphi \to \psi}{\Delta, x : \varphi \vdash M : \psi}
             \qedhere
         \]
     \end{enumerate}

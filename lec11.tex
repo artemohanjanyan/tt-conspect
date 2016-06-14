@@ -7,11 +7,11 @@
 \begin{alignat*}{2}
 	s ::= &\ x \\
 			  | &\ \lambda\pair{x}.s | s\pair{s} \\
-			  | &\ \oc s | \caseb{s}{\oc x \rightarrow s} \\
-			  | &\ \pair{s,s} | \caseb{s}{\pair{x,x} \rightarrow s} \\
+			  | &\ \oc s | \caseb{s}{\oc x \to s} \\
+			  | &\ \pair{s,s} | \caseb{s}{\pair{x,x} \to s} \\
 			  | &\ \ppair{s,s} | \fst \pair{s} | \snd \pair{s} \\
 			  | &\ \inl \pair{s} | \inr \pair{s}|
-                    \casec{s}{\inl \pair{x} \rightarrow s}{\inr \pair{x} \rightarrow s}
+                    \casec{s}{\inl \pair{x} \to s}{\inr \pair{x} \to s}
 \end{alignat*}
 \end{bnf}
 Будем типизировать это $\lambda$-исчисление линейными высказываниями. Выпишем аксиомы:
@@ -22,13 +22,13 @@
 		{[\Gamma]\vdash \oc s : \oc A}
 		{[\Gamma]\vdash s : A} \qquad
 	\infer[]
-		{\Gamma, \Delta\vdash \caseb{s}{\oc x \rightarrow t} : B}
+		{\Gamma, \Delta\vdash \caseb{s}{\oc x \to t} : B}
 		{\Gamma\vdash s : \oc A && \Delta, [x : A]\vdash t : B} \\
 	\infer[]
 		{\Gamma, \Delta\vdash \pair{s, t} : A \otimes B}
 		{\Gamma \vdash s : A && \Delta\vdash t : B} \qquad
 	\infer[]
-		{\Gamma, \Delta \vdash \caseb{s}{\pair{x, y} \rightarrow t} : C}
+		{\Gamma, \Delta \vdash \caseb{s}{\pair{x, y} \to t} : C}
 		{\Gamma\vdash s : A \otimes B && \Delta, \pair{x : A}, \pair{y : B} \vdash t : C} \\
 	\infer[]{\Gamma \vdash \ppair{s, t} : A \with B}{\Gamma \vdash s : A && \Gamma \vdash t : B} \qquad
 	\infer[]{\Gamma \vdash \fst \pair{s} : A}{\Gamma \vdash s : A \with B} \qquad
@@ -38,13 +38,13 @@
 	\infer[]{\Gamma \vdash \inl \pair{s} : A \oplus B}{\Gamma \vdash s : A} \qquad
 	\infer[]{\Gamma \vdash \inr \pair{s} : A \oplus B}{\Gamma \vdash s : B} \\
 	\infer[]
-		{\Gamma, \Delta \vdash \casec{s}{\inl \pair{x} \rightarrow t}{\inr \pair{y} \rightarrow v} : C}
+		{\Gamma, \Delta \vdash \casec{s}{\inl \pair{x} \to t}{\inr \pair{y} \to v} : C}
 		{\Gamma \vdash s : A \oplus B && \Delta, \pair{x : A} \vdash t : C && \Delta, \pair{y : B} \vdash v : C}
 \end{gather*}
 \end{@empty}
 Вложим просто типизируемое $\lambda$-исчисление в линейные типы.
 \begin{align*}
-	\lambda x.s &= \lambda\pair{x'}.\caseb{x'}{\oc x \rightarrow s} \\
+	\lambda x.s &= \lambda\pair{x'}.\caseb{x'}{\oc x \to s} \\
 	st          &= s\pair{\oc t}
 \end{align*}
 \begin{example}[Ломаем линейные типы]
@@ -56,11 +56,11 @@
 		\infer[]{[f : A \multimap B], [g : A\multimap B]\vdash \lambda x.\pair{f\pair{x}, g\pair{x}} : \oc A \multimap B \otimes B}{
 			\infer[]{
 				[f : A \multimap B], [g : A \multimap B], \pair{x' : \oc A}
-				\vdash \caseb{x'}{\oc x \rightarrow \pair{f\pair{x}, g\pair{x}} : B \otimes B}
+				\vdash \caseb{x'}{\oc x \to \pair{f\pair{x}, g\pair{x}} : B \otimes B}
 			}{
 				\infer[]{
 					\pair{x' : \oc A}, [f : A \multimap B], [g : A \multimap B]
-				\vdash \caseb{x'}{\oc x \rightarrow \pair{f\pair{x}, g\pair{x}} : B \otimes B}
+				\vdash \caseb{x'}{\oc x \to \pair{f\pair{x}, g\pair{x}} : B \otimes B}
 				}{
 					\pair{x' : \oc A} \vdash x' : A &&
 					\infer[]{[f : A \multimap B], [g : A \multimap B], [x : A]\vdash \pair{f\pair{x}, g\pair{x}} : B \otimes B}{
@@ -96,18 +96,18 @@
 		\kappa ::= &\ T && \qquad \text{Базовый тип} \\
 				 | &\ U && \qquad \text{Аттрибут уникальности} \\
 				 | &\ * && \qquad \text{Тип} \\
-				 | &\ \kappa \rightarrow \kappa
+				 | &\ \kappa \to \kappa
 	\end{alignat*}
 	\end{bnf}
 \end{definition}
 \begin{definition}[Типовые константы]\ \\
 	\begin{tabular}{llll}
 		$\mathtt{Int}$, $\mathtt{Bool}$ & :: & $T$ & Базовые типы \\
-		$\rightarrow$                   & :: & $* \rightarrow * \rightarrow T$ & Коструктор функций \\
+		$\to$                   & :: & $* \to * \to T$ & Коструктор функций \\
 		$\bullet, \times$               & :: & $U$ & Уникальный, не уникальный \\
-		$\vee, \wedge$                  & :: & $U \rightarrow U \rightarrow U$ & Дизьюнкия, коньюнкция аттрибутов \\
-		$\neg$                          & :: & $U \rightarrow U$ & Отрицание аттрибута \\
-		$\mathtt{Attr}$                 & :: & $T \rightarrow U \rightarrow *$ & Конструктор типа
+		$\vee, \wedge$                  & :: & $U \to U \to U$ & Дизьюнкия, коньюнкция аттрибутов \\
+		$\neg$                          & :: & $U \to U$ & Отрицание аттрибута \\
+		$\mathtt{Attr}$                 & :: & $T \to U \to *$ & Конструктор типа
 	\end{tabular}
 \end{definition}
 С помощью типовых констант мы можем делать различные типы разных родов. 
@@ -118,7 +118,7 @@
 
 Немного сахара:
 \[
-	\attr{t}{u} \equiv t^u \qquad \attr{(a \rightarrow b)}{u} \equiv a \xrightarrow{u} b
+	\attr{t}{u} \equiv t^u \qquad \attr{(a \to b)}{u} \equiv a \xrightarrow{u} b
 \]
 
 Грамматика выражений будет похожа на классическую грамматику выражений, за исключением того,
@@ -193,7 +193,7 @@ $\Gamma$ и $\fv$ отображают переменные в типы.
 	Очевидно, она делает тоже самое, что и функция $\mathtt{dup}$. 
 	
 	Давайте установим тип функции $\mathtt{const}$. 
-	Сначала запишем ее тип без указания аттрибутов уникальности над стрелочками: $t^u \rightarrow s^v \rightarrow t^u$.
+	Сначала запишем ее тип без указания аттрибутов уникальности над стрелочками: $t^u \to s^v \to t^u$.
 	Если мы частично применим функцию $\mathtt{const}$, передав в нее переменную уникального типа,
 	то мы должны получить функцию $(\mathtt{const}~x)$ уникального типа.
 	Если бы это было не так, то мы смогли бы полученную функцию применить в нескольких местах, и,

@@ -13,9 +13,9 @@
 \begin{align*}
     \restr{\Gamma \vdash x : \tau} \ &=\  \Gamma(x) = \tau \\
     \restr{\Gamma \vdash \lambda x . e : \tau} \ &=\ 
-        \exists \alpha_1 \alpha_2 . (\restr{\Gamma, x : \alpha_1\vdash e:\alpha_2} \land \alpha_1\rightarrow\alpha_2=\tau) \\
+        \exists \alpha_1 \alpha_2 . (\restr{\Gamma, x : \alpha_1\vdash e:\alpha_2} \land \alpha_1\to\alpha_2=\tau) \\
     \restr{\Gamma \vdash e_1 e_2 : \tau} \ &=\ 
-        \exists\alpha.(\restr{\Gamma\vdash e_1 :\alpha\rightarrow\tau} \land \restr{\Gamma\vdash e_2 : \alpha})
+        \exists\alpha.(\restr{\Gamma\vdash e_1 :\alpha\to\tau} \land \restr{\Gamma\vdash e_2 : \alpha})
 \end{align*}
 Где $\alpha_1, \alpha_2, \alpha \notin \FV(\Gamma, \tau)$.
 
@@ -28,7 +28,7 @@
     Тогда $H = \cup_{i=0}^{\infty} H_i$ "--- эрбановский универсум.
 \end{definition}
 
-Пусть $\varphi : T \rightarrow H$ ($T$ "--- множество типов).
+Пусть $\varphi : T \to H$ ($T$ "--- множество типов).
 
 \begin{theorem}
     $\varphi$ "--- решение $\restr{\Gamma\vdash e : \tau}$ т.и.т.т., когда $(\varphi\Gamma, \varphi\tau)$ "--- типизация $e$.
@@ -37,9 +37,9 @@
 \begin{example}
     \begin{align*}
         \restr{\vdash \lambda x . x : \sigma}
-        &= \exists \alpha_1 \alpha_2. (\restr{x : \alpha_1 \vdash x : \alpha_2} \land \alpha_1\rightarrow\alpha_2 = \sigma) \\
-        &= \exists \alpha_1 \alpha_2. (\set{x : \alpha_1}(x) = \alpha_2 \land \alpha_1\rightarrow\alpha_2 = \sigma) \\
-        &= \exists \alpha_1 \alpha_2. (\alpha_1 = \alpha_2 \land \alpha_1\rightarrow\alpha_2 = \sigma)
+        &= \exists \alpha_1 \alpha_2. (\restr{x : \alpha_1 \vdash x : \alpha_2} \land \alpha_1\to\alpha_2 = \sigma) \\
+        &= \exists \alpha_1 \alpha_2. (\set{x : \alpha_1}(x) = \alpha_2 \land \alpha_1\to\alpha_2 = \sigma) \\
+        &= \exists \alpha_1 \alpha_2. (\alpha_1 = \alpha_2 \land \alpha_1\to\alpha_2 = \sigma)
     \end{align*}
 \end{example}
 
@@ -50,7 +50,7 @@
     C ::= \ldots | x = \tau | \deff{x : \tau}{C}
 \]
 \end{bnf}%
-Теперь решением будет не только $\varphi : T \rightarrow H$, но и $\psi : X \rightarrow H$ ($X$ "--- множество переменных).
+Теперь решением будет не только $\varphi : T \to H$, но и $\psi : X \to H$ ($X$ "--- множество переменных).
 Решение будет удовлетворять ограничению $x = \tau$, если $\psi x = \varphi \tau$.
 Решение будет удовлетворять ограничению $\deff{x:\tau}{C}$, если $C$ удовлетворено при $\varphi$ и $\psi[x \coloneqq \varphi(\tau)]$.
 
@@ -58,9 +58,9 @@
 \begin{align*}
     \restr{x : \tau} \ &=\  x = \tau \\
     \restr{\lambda x . e : \tau} \ &=\ 
-        \exists \alpha_1 \alpha_2 . (\deff{x : \alpha_1}{\restr{e:\alpha_2}} \land \alpha_1\rightarrow\alpha_2=\tau) \\
+        \exists \alpha_1 \alpha_2 . (\deff{x : \alpha_1}{\restr{e:\alpha_2}} \land \alpha_1\to\alpha_2=\tau) \\
     \restr{e_1 e_2 : \tau} \ &=\ 
-        \exists\alpha.(\restr{e_1 :\alpha\rightarrow\tau} \land \restr{e_2 : \alpha})
+        \exists\alpha.(\restr{e_1 :\alpha\to\tau} \land \restr{e_2 : \alpha})
 \end{align*}
 
 Теперь расширим наш алгоритм на систему Хиндли-Милнера. Языком ограничений будет
@@ -76,9 +76,9 @@
 \begin{align*}
     \restr{x : \tau} \ &=\  x = \tau \\
     \restr{\lambda x . e : \tau} \ &=\ 
-        \exists \alpha_1 \alpha_2 . (\deff{x : \alpha_1}{\restr{e:\alpha_2}} \land \alpha_1\rightarrow\alpha_2=\tau) \\
+        \exists \alpha_1 \alpha_2 . (\deff{x : \alpha_1}{\restr{e:\alpha_2}} \land \alpha_1\to\alpha_2=\tau) \\
     \restr{e_1 e_2 : \tau} \ &=\ 
-        \exists\alpha.(\restr{e_1 :\alpha\rightarrow\tau} \land \restr{e_2 : \alpha}) \\
+        \exists\alpha.(\restr{e_1 :\alpha\to\tau} \land \restr{e_2 : \alpha}) \\
     \restr{\lett{x = e_1}{e_2}} \ &=\ \deflet{x : \forall \alpha[\restr{e_1 : \alpha}].\alpha}
         {\restr{e_2:\tau}}
 \end{align*}
@@ -116,8 +116,8 @@ data List a = Nil | Cons a (List a)
 Будем считать типы $\mu \alpha . T$ и $T[\alpha \coloneqq \mu \alpha.T]$ изоморфными.
 Введём две операции:
 \begin{align*}
-    \comb{fold}   &: T[\alpha \coloneqq \mu \alpha.T] \rightarrow \mu \alpha . T \\
-    \comb{unfold} &: \mu \alpha . T \rightarrow T[\alpha \coloneqq \mu \alpha.T]
+    \comb{fold}   &: T[\alpha \coloneqq \mu \alpha.T] \to \mu \alpha . T \\
+    \comb{unfold} &: \mu \alpha . T \to T[\alpha \coloneqq \mu \alpha.T]
 \end{align*}
 Разница в том, что изорекурсивные типы нужно сворачивать и разворачивать вручную, мы не считаем их равными.
 
