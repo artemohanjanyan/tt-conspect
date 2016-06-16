@@ -14,10 +14,11 @@
 
 \begin{definition}[контекст] Контекст "--- $\Gamma$.
 \begin{gather*}
-    \Gamma = \{ \Lambda_{1} : \sigma_{1},\ \Lambda_{2} : \sigma_{2}\ \ldots\ \Lambda_{n} : \sigma_{n} \} \\
-    \abs{\Gamma} = \{ \sigma_{1},\ \sigma_{2}\ \ldots\ \sigma_{n} \} \\
-    \dom \Gamma = \{ \Lambda_{1},\ \Lambda_{2}\ \ldots\ \Lambda_{n} \}
+    \Gamma = \{ \Lambda_{1} : \sigma_{1} \ldots \Lambda_{n} : \sigma_{n} \} \\
+    \abs{\Gamma} = \{ \sigma_{1} \ldots \sigma_{n} \} \\
+    \dom \Gamma = \{ \Lambda_{1} \ldots \Lambda_{n} \}
 \end{gather*}
+Если $i \neq j$, то $\Lambda_i \neq \Lambda_j$.
 \end{definition}
 
 \begin{definition}[типизируемость по Карри]
@@ -123,8 +124,8 @@
     \[
         \Lambda_{\xx} ::= x | \lambda x^{\sigma}.\Lambda_{\xx} | (\Lambda_{\xx}) | \Lambda_{\xx} \Lambda_{\xx}
     \]
-    \end{bnf}
-    Правила:
+    \end{bnf}%
+    Правила вывода:
     \begin{enumerate}
         \item $\infer[(x \notin \dom(\Gamma))]
             {\Gamma, x:\sigma \vdash_{\xx} x:\sigma}
@@ -139,7 +140,7 @@
 
 \end{definition}
 
-\begin{definition}
+\begin{definition}[стирание] Функцией стирания называется следующая функция из $\Lambda_\xx$ в $\Lambda$:
 \[
     \abs{\Lambda_{\xx}} =
     \begin{cases}
@@ -161,11 +162,12 @@
             $N \twoheadrightarrow_{\beta} \abs{P}$ и $T \twoheadrightarrow_{\beta} \abs{P}$.
 \end{theorem}
 
-\begin{lemma}[уникальность типов] \label{uniqueness}
-    Если $\Gamma \vdash_\xx M : \gamma$ и $\Gamma \vdash_\xx M : \tau$, то $\sigma = \tau$.
-\end{lemma}
+Единственное отличие исчисления по Чёрчу от исчисления по Карри "--- это типизация всех абстракций.
+Из этого вытекает следующая лемма:
 
-Лемма \ref{uniqueness} показывает, чем исчисление по Чёрчу отличается исчислением по Карри.
+\begin{lemma}[уникальность типов] \label{uniqueness}
+    Если $\Gamma \vdash_\xx M : \sigma$ и $\Gamma \vdash_\xx M : \tau$, то $\sigma = \tau$.
+\end{lemma}
 
 \begin{theorem}[о стирании] \ 
     \begin{enumerate}
