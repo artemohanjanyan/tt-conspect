@@ -1,35 +1,63 @@
 \section{\texorpdfstring{Теорема Диаконеску}{}}
 
+\epigraph{Believe me.}
+
 \begin{theorem}
     Аксиома выбора влечёт закон исключённого третьего.
 \end{theorem}
 
 \begin{proof}
-    Пусть есть формула $S$. Докажем $S \vee \neg S$.
-    Например,
-    \begin{align*}
-        A &= \left\{ x \in \left\{0;1\right\} \mid x = 0 \vee S \right\} \\
-        B &= \left\{ x \in \left\{0;1\right\} \mid x = 1 \vee S \right\}
-    \end{align*}
-    Аксиома выбора утверждает $f : \left\{A, B\right\} \to \{0, 1\}$
+    Для любого утверждения $P$ по аксиоме выделения мы можем построить два множества:
     \[
-        f(A) \in A \with f(B) \in B \to (f(A) = 0 \vee S) \with (f(B) = 1 \vee S) \equiv (f(A) = 0 \with f(B) = 1) \vee S
+        A = \set{x \in \set{0, 1} \mid \left(x = 0\right) \lor P} \qquad
+        B = \set{x \in \set{0, 1} \mid \left(x = 1\right) \lor P}
     \]
+    По аксиоме выбора мы знаем, что их декартово произведение непусто.
+    Иначе говоря, существует фукнция $f : \set{A, B} \to \set{0, 1}$, что
     \[
-        \infer{\neg (f(A) = f(B)) \to \neg S}
-        {\infer{S \to f(A) = f(B)}
-        {\infer{S \to A = B}
-        {\infer{\neg (f(A) = f(B)) \vee S }
-        {}}}}
+        f(A) \in A \with f(B) \in B
     \]
-\todo
+    Это, по определению двух множеств, эквивалентно
+    \[
+        \left(f(A) = 0 \vee P\right) \with \left(f(B) = 1 \vee P\right)
+    \]
+    Из этого следует, что
+    \begin{gather}
+        \left(f(A) \neq f(B)\right) \vee P \label{firstOption} \tag{$*$}
+    \end{gather}
+    Однако, по принципу объёмности $P \to \left(A=B\right)$. Значит, $P \to \left(f(A) = f(B)\right)$. Значит,
+    \begin{gather}
+        \left(f(A) \neq f(B)\right) \to \neg P \label{secondOption} \tag{$**$}
+    \end{gather}
+    Из \ref{firstOption} и \ref{secondOption} можно вывести $P \vee \neg P$.
 \end{proof}
 
-Другая формулировка аксиомы выбора:
-\[
-    (\forall a \in A . \exists b \in B . Q(a, b)) \to \exists f : A \to B . \forall a \in A . Q(a, f(a))
-\]
-$Q(a, b) = b \in a$.
+%\begin{proof}
+%    Пусть есть формула $S$. Докажем $S \vee \neg S$.
+%    Например,
+%    \begin{align*}
+%        A &= \left\{ x \in \left\{0;1\right\} \mid x = 0 \vee S \right\} \\
+%        B &= \left\{ x \in \left\{0;1\right\} \mid x = 1 \vee S \right\}
+%    \end{align*}
+%    Аксиома выбора утверждает $f : \left\{A, B\right\} \to \{0, 1\}$
+%    \[
+%        f(A) \in A \with f(B) \in B \to (f(A) = 0 \vee S) \with (f(B) = 1 \vee S) \equiv (f(A) = 0 \with f(B) = 1) \vee S
+%    \]
+%    \[
+%        \infer{\neg (f(A) = f(B)) \to \neg S}
+%        {\infer{S \to f(A) = f(B)}
+%        {\infer{S \to A = B}
+%        {\infer{\neg (f(A) = f(B)) \vee S }
+%        {}}}}
+%    \]
+%\todo
+%\end{proof}
+
+%Другая формулировка аксиомы выбора:
+%\[
+%    (\forall a \in A . \exists b \in B . Q(a, b)) \to \exists f : A \to B . \forall a \in A . Q(a, f(a))
+%\]
+%$Q(a, b) = b \in a$.
 
 \subsection{\texorpdfstring{Сетоид}{Setoid}}
 

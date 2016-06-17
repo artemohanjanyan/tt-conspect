@@ -24,7 +24,7 @@
         {\Gamma \vdash \abstype{\alpha}{x:\varphi}{M}{N:\psi}}
         {\Gamma \vdash M : \exists \alpha . \varphi && \Gamma, x : \varphi \vdash N : \psi}
 \]
-Если вспомнить, что квантор существования выразим через квантор всеобщности, то можно попытаться записать типы выражений
+Если вспомнить, что квантор существования выразим через квантор всеобщности, то можно записать типы выражений
 \texttt{pack} и \texttt{abstype} через квантор существования и выразить их без расширения языка.
 \begin{gather*}
     \pack{M, \theta}{\exists \alpha . \varphi} =

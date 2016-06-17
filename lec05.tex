@@ -108,7 +108,8 @@ $\bot$ утверждает "<любое утверждение верно">, ч
     \begin{tabular}{l l l} \toprule
         & Просто типизированное $\lambda$-исчисление & Система $F$ \\ \midrule
         Тип & $\pi_1:\alpha\with\beta\to\alpha$ & $\pi_1:\forall \alpha . \forall \beta . \alpha \with \beta \to \alpha$ \\
-        Выражение & $\pi_1 = \lambda p . p \comb T$ & $\pi_1 = \Lambda \varphi . \Lambda \psi . \lambda p^{\varphi\with\psi} . p \comb T$
+        Выражение & $\pi_1 = \lambda p . p \comb T$ & $\pi_1 = \Lambda \varphi . \Lambda \psi . \lambda p^{\varphi\with\psi} .
+                p \varphi \comb T$
         \\ \bottomrule
     \end{tabular}
     \end{center}
@@ -121,6 +122,29 @@ $\bot$ утверждает "<любое утверждение верно">, ч
         \item Классическая $\beta$-редукция: $\left(\lambda x^\sigma.M\right)^{\sigma\to\tau} X \to_\beta M [x:=X] : \tau$
     \end{enumerate}
 \end{definition}
+
+Выразим несколько функций:
+\begin{enumerate}
+    \item Левая инъекция:
+    \[
+        \inj_1 = \Lambda \varphi . \Lambda \psi . \lambda x^\varphi .
+            \underline{\Lambda \alpha . \lambda f^{\varphi\to\alpha}.\lambda g^{\psi\to\alpha}.f x}
+    \]
+    Можно заметить, что подчёркнутый терм имеет тип $\varphi \vee \psi$.
+    \item Для ясности приведём (довольно бесполезное) выражение $\mathtt{case}$:
+    \[
+        \case{T^{\varphi\vee\psi}}{A^{\varphi\to\alpha}}{B^{\psi\to\alpha}} = T \alpha A B
+    \]
+    \item Конструктор пары:
+    \[
+        \pair{a^\varphi, b^\psi} = \Lambda \varphi . \Lambda \psi . \lambda a^\varphi . \lambda b^\psi .
+            \Lambda \alpha . \lambda f^{\varphi\to\psi\to\alpha} . f a b
+    \]
+    \item Правая проекция:
+    \[
+        \pi_2 = \Lambda \varphi . \Lambda \psi . \lambda p^{\varphi \with \psi}.p\psi\left(\lambda x^\varphi\lambda y^\psi.y\right)
+    \]
+\end{enumerate}
 
 \begin{theorem}[изоморфизм Карри-Ховарда для системы $F$]
     $\Gamma \vdash_F M :\tau$ т.и.т.т., когда $\abs{\Gamma} \vdash \tau$ в интуиционистском исчислении предикатов второго порядка.

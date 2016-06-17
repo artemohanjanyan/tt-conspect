@@ -26,9 +26,15 @@ $(\lambda x . x x) A \to_\beta (\lambda x . x x) A' \to_\beta A' A'$
 \end{center}
 
 С помощью каждой из этих двух систем можно выразить любое $\lambda$-выражение без свободных переменных.
+Пусть
+\[
+\begin{bnf}
+    \Lambda_{SK} ::= S | K | I | x
+\end{bnf}
+\]
 
 \begin{proof}[Докажем \ref{SK-basis}] \newcommand{\opop}{\operatorname}
-    Определим $\opop T : \Lambda \to \Lambda_{SK} \cup \left\{ \text{свободные переменные} \right\}$:
+    Определим $\opop T : \Lambda \to \Lambda_{SK}$:
     \begin{align*}
         \opop T[x]                         &= x \\
         \opop T[A B]                       &= \opop{T}[A]\opop{T}[B]  \\
@@ -41,6 +47,11 @@ $(\lambda x . x x) A \to_\beta (\lambda x . x x) A' \to_\beta A' A'$
     $\opop T[\lambda\text{-выражение}]$ завершается и не содержит абстракций.
     Можно проверить, что $\opop T[A] =_\beta A$.
 \end{proof}
+
+Например, $\overline 4$, преобразованная приведённым алгоритмом, будет выглядеть так:
+\[
+    \overline 4 = \comb S \left(\comb S \left(\comb K \comb S\right) \left(\comb S \left(\comb K \comb K\right) \comb I\right)\right) \left(\comb S \left(\comb S \left(\comb K \comb S\right) \left(\comb S \left(\comb K \comb K\right) \comb I\right)\right) \left(\comb S \left(\comb S \left(\comb K \comb S\right) \left(\comb S \left(\comb K \comb K\right) \comb I\right)\right) \left(\comb S \left(\comb S \left(\comb K \comb S\right) \left(\comb S \left(\comb K \comb K\right) \comb I\right)\right) \left(\comb K \comb I\right)\right)\right)\right)
+\]
 
 Для доказательства аналогичной теоремы для базиса $\comb{BCKW}$ достаточно выразить через них комбинаторы $\comb S$ и $\comb K$:
 \[
