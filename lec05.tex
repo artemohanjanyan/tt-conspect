@@ -6,7 +6,7 @@
 Хотелось бы найти золотую середину.
 
 С этого раздела начинается поиск оптимальной типовой системы,
-которая удовлетворяла бы все наши потребности,
+которая удовлетворяла бы все наши потребности
 и могла бы быть основой для языка программирования.
 
 \subsection{\texorpdfstring{Интуиционистское исчисление предикатов второго порядка}{Second order intuitionistic logic}}
@@ -15,7 +15,7 @@
     \begin{bnf}
     \[
         \Phi ::= (\Phi) | p | \Phi \to \Phi | \forall p . \Phi \color{gray}
-            \underbrace{| \exists p . \Phi | \bot | \Phi \with \Phi | \Phi \vee \Phi}_{\text{не существенные}}
+            \underbrace{| \exists p . \Phi | \bot | \Phi \with \Phi | \Phi \vee \Phi}_{\text{несущественные}}
     \]
     \end{bnf}
 \end{definition}
@@ -29,7 +29,7 @@
     И для квантора существования:
     \[
         \infer{\Gamma \vdash \exists p . \varphi}{\Gamma \vdash \varphi \left[p \coloneqq \psi\right]} \qquad
-        \infer[(p \notin \FV(\Gamma, \psi))]{\Gamma \vdash \psi}{\Gamma \vdash \exists p . \varphi && \Gamma, \varphi \vdash \psi}
+        \infer[(p \notin \FV(\Gamma, \psi)),]{\Gamma \vdash \psi}{\Gamma \vdash \exists p . \varphi && \Gamma, \varphi \vdash \psi}
     \]
     где $\FV(\Gamma)$ "--- множество свободных переменных всех выражений из $\Gamma$.
 \end{definition}
@@ -44,7 +44,7 @@ $\bot$ "--- это критерий противоречивости,
     \bot \equiv \forall p . p
 \]
 Такое выражение естественным образом соответствует нашим требованиям,
-так как пользуясь правилом вывода для квантора всеобщности из такого $\bot$ можно вывести любое выражение.
+так как, пользуясь правилом вывода для квантора всеобщности, из такого $\bot$ можно вывести любое выражение.
 
 Приведём выражение для конъюнкции:
 \[

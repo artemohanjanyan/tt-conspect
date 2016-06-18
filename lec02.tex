@@ -85,7 +85,7 @@ $\beta$-редукция не обладает ромбовидным свойс
     \todo % TODO
 \end{proof}
 
-При этом, обратное, очевидно, не всегда верно (рисунок \ref{no-reverse}).
+При этом обратное, очевидно, не всегда верно (рисунок \ref{no-reverse}).
 \begin{figure}[ht]
     \centering
     \begin{tikzpicture}[>={Stealth[black]}]
@@ -263,7 +263,7 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
                 \[
                     \infer{\Delta' \vdash \beta}{\Delta' \vdash \alpha \to \beta && \Delta' \vdash \alpha}
                 \]
-                Значит, $\Delta' \Vdash \beta$, по индуционному предположению. Тогда и $\Delta' \Vdash \alpha\to\beta$.
+                Значит, $\Delta' \Vdash \beta$ по индуционному предположению. Тогда и $\Delta' \Vdash \alpha\to\beta$.
             \item Пусть $\Delta \Vdash \alpha\to\beta$.
                 Пусть $\Delta'$ "--- замыкание относительно выводимости $\Delta \cup \set \alpha$.
                 Тогда $\Delta' \Vdash \beta$. Тогда $\Delta' \vdash \beta$ по предположению индукции.
