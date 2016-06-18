@@ -125,7 +125,7 @@ $\beta$-редукция это вычисление функции, подст�
 \end{gather*}
 
 Похоже на тип \mintinline{Pascal}{boolean}, не правда ли?
-\begin{example}
+\begin{example} Отрицание истины это ложь:
     \[
         \Not \T = (\reduction{\lambda{}a}.a\F\T)\reduction\T \to_{\beta}
             \T\F\T = (\reduction{\lambda{}x}.\lambda{}y.x)\reduction\F\T \to_{\beta}

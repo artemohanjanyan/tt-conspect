@@ -31,26 +31,29 @@
         \infer{\Gamma \vdash \exists p . \varphi}{\Gamma \vdash \varphi \left[p \coloneqq \psi\right]} \qquad
         \infer[(p \notin \FV(\Gamma, \psi))]{\Gamma \vdash \psi}{\Gamma \vdash \exists p . \varphi && \Gamma, \varphi \vdash \psi}
     \]
-    Где $\FV(\Gamma)$ "--- множество свободных переменных всех выражений из $\Gamma$.
+    где $\FV(\Gamma)$ "--- множество свободных переменных всех выражений из $\Gamma$.
 \end{definition}
 
-Напомним, что в логике второго порядка переменные под кванторами могут быть любыми другими выражениями,
-а не только значениями из предметного множества.
+Напомним, что в логике второго порядка переменные под кванторами соответствуют любым выражениям,
+а не только значениям из предметного множества.
 
-Последние четыре связки можно выразить через первые:
-\begin{align*}
-    \bot & \equiv \forall p . p \\
-    \varphi \with \psi & \equiv \forall a . ((\varphi \to \psi \to a) \to a) \\
-    \varphi \vee \psi & \equiv \forall a . (\varphi \to a) \to (\psi \to a) \to a \\
-    \exists x . \tau & \equiv \forall a . (\forall x . \tau \to a) \to a
-\end{align*}
+Последние четыре связки можно выразить через первые.
+$\bot$ "--- это критерий противоречивости,
+из него можно вывести любое утверждение. Это можно выразить так:
+\[
+    \bot \equiv \forall p . p
+\]
+Такое выражение естественным образом соответствует нашим требованиям,
+так как пользуясь правилом вывода для квантора всеобщности из такого $\bot$ можно вывести любое выражение.
 
-$\bot$ утверждает "<любое утверждение верно">, что является критерием противоречивости.
-
-Выражение конъюнкции можно читать как "<если всё, что выводимо из $\set{\varphi,\psi}$, выполняется,
+Приведём выражение для конъюнкции:
+\[
+    \varphi \with \psi \equiv \forall a . ((\varphi \to \psi \to a) \to a)
+\]
+Его можно читать как "<если всё, что выводимо из $\set{\varphi,\psi}$, выполняется,
 то тогда выполняется $\varphi\with\psi$">.
-Также для неё можно проверить, что правила вывода действительно выводятся через такое определение.
-Например, можно вывести $\varphi$ из $\varphi\with\psi\equiv\forall\gamma.(\varphi\to\psi\to\gamma)\to\gamma$:
+Также для такого выражения можно проверить, что правила вывода конъюнкции действительно выводятся через такое определение.
+Например, выведем $\varphi$ из $\varphi\with\psi$:
 \[
     \infer{\Gamma \vdash \varphi}
     {
@@ -64,11 +67,18 @@ $\bot$ утверждает "<любое утверждение верно">, ч
     }
 \]
 
+Выражение для дизъюнкции:
+\[
+    \varphi \vee \psi \equiv \forall a . (\varphi \to a) \to (\psi \to a) \to a
+\]
 Формулу для дизъюнкции можно читать как "<$\varphi \vee \psi$ выполняется,
-если любое $a$, которое выводимо из $\varphi$ или из $\psi$, выполняется">.
+если любое $a$, которое выводимо как из $\varphi$, так и из $\psi$, выполняется">.
 Ещё её можно понимать как следствие из формулы де Моргана $\varphi\vee\psi=\neg(\neg\varphi\with\neg\psi)$.
 
-Формула для квантора существования получается из того, что $\exists x . \tau = \neg \forall x . \neg \tau$.
+Формула для квантора существования получается из того, что $\exists x . \tau = \neg \forall x . \neg \tau$:
+\[
+    \exists x . \tau \equiv \forall a . (\forall x . \tau \to a) \to a
+\]
 
 \subsection{\texorpdfstring{Система $F$}{System F}}
 \begin{definition}[тип в системе $F$]
@@ -103,13 +113,15 @@ $\bot$ утверждает "<любое утверждение верно">, ч
     \end{gather*}
 \end{definition}
 
+Полиморфная абстракция "--- это явное указание того, что вместо каких-то типов мы можем подставить любые выражения.
+
 \begin{example} Левая проекция:
     \begin{center}
     \begin{tabular}{l l l} \toprule
         & Просто типизированное $\lambda$-исчисление & Система $F$ \\ \midrule
         Тип & $\pi_1:\alpha\with\beta\to\alpha$ & $\pi_1:\forall \alpha . \forall \beta . \alpha \with \beta \to \alpha$ \\
-        Выражение & $\pi_1 = \lambda p . p \comb T$ & $\pi_1 = \Lambda \varphi . \Lambda \psi . \lambda p^{\varphi\with\psi} .
-                p \varphi \comb T$
+        Выражение & $\pi_1 = \lambda p . p \comb T$ & $\pi_1 = \Lambda \alpha . \Lambda \beta . \lambda p^{\alpha\with\beta} .
+                p \alpha \comb T$
         \\ \bottomrule
     \end{tabular}
     \end{center}
@@ -135,6 +147,7 @@ $\bot$ утверждает "<любое утверждение верно">, ч
     \[
         \case{T^{\varphi\vee\psi}}{A^{\varphi\to\alpha}}{B^{\psi\to\alpha}} = T \alpha A B
     \]
+    Результат всего выражения имеет тип $\alpha$, который мы явно передали в выражение абстрактного типа данных $T$.
     \item Конструктор пары:
     \[
         \pair{a^\varphi, b^\psi} = \Lambda \varphi . \Lambda \psi . \lambda a^\varphi . \lambda b^\psi .
@@ -146,8 +159,8 @@ $\bot$ утверждает "<любое утверждение верно">, ч
     \]
 \end{enumerate}
 
-Кроме того, в системе $F$ можно задать общий тип для чёрчевского нумерала: $\forall \alpha.(\alpha\to\alpha)\to\alpha\to\alpha$.
-\todo
+В системе $F$ можно задать общий тип для чёрчевского нумерала: $\forall \alpha.(\alpha\to\alpha)\to\alpha\to\alpha$.
+Тип $\alpha$ можно менять в зависимости от того, как нумерал используется.
 
 \begin{theorem}[изоморфизм Карри-Ховарда для системы $F$]
     $\Gamma \vdash_F M :\tau$ т.и.т.т., когда $\abs{\Gamma} \vdash \tau$ в интуиционистском исчислении предикатов второго порядка.
@@ -191,5 +204,5 @@ $\Lambda \beta . \lambda a^{\forall \alpha . \alpha} . a ((\forall \alpha.\alpha
 %\]
 
 \begin{theorem}
-    $F$ \hyperref[strong-normalization]{сильно нормализуемо}.
+    $F$ \hyperref[strong-normalization]{сильно нормализуема}.
 \end{theorem}
