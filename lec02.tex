@@ -162,9 +162,9 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
 \end{definition}
 Если добавить меморизацию к нормальному порядку редукции, то мы получим "<ленивые вычисления">.
 То есть, если значение выражения запрашивается много раз, то вычисляться оно будет только один раз.
-Например, пусть $\comb{Mul2} = \lambda a . \comb{Add} a a$.
-Тогда при вычислении $\comb{Mul2} (\comb{Add} \mathinner{\overline 2} \overline 2)$ в $\comb{Mul2}$ будет передана ссылка
-на выражение $\comb{Add} \mathinner{\overline 2} \overline 2$,
+Например, пусть $\func{Mul2} = \lambda a . \func{Add} a a$.
+Тогда при вычислении $\func{Mul2} (\func{Add} \mathinner{\overline 2} \overline 2)$ в $\func{Mul2}$ будет передана ссылка
+на выражение $\func{Add} \mathinner{\overline 2} \overline 2$,
 во время первого запроса значения выражение будет вычислено и результат будет сохранён по ссылке,
 и во время второго запроса будет возвращён уже посчитанный результат.
 
@@ -268,7 +268,7 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
                 Пусть $\Delta'$ "--- замыкание относительно выводимости $\Delta \cup \set \alpha$.
                 Тогда $\Delta' \Vdash \beta$. Тогда $\Delta' \vdash \beta$ по предположению индукции.
                 \[
-                    \infer{\Delta' \vdash \alpha \to \beta}{\Delta', \alpha \vdash \beta} 
+                    \infer{\Delta' \vdash \alpha \to \beta}{\Delta', \alpha \vdash \beta}
                     \qedhere
                 \]
         \end{enumerate}

@@ -1,20 +1,18 @@
 \subsection*{\texorpdfstring{Экзистенциальные типы}{Existential types}}
 
 \todo
-Допустим, у нас есть абстрактный тип данных "<Стек">: \\
+Допустим, у нас есть абстрактный тип данных "<Стек"> $\alpha$ и операции над ним: \\
 \begin{tabular}{l l}
-    $\comb{empty}$ & $: \alpha$ \\
-    $\comb{push}$  & $: \alpha\with\nu\to\alpha$ \\
-    $\comb{pop}$   & $: \alpha\to\alpha\with\nu$ \\
+    $\func{empty}$ & $: \alpha$ \\
+    $\func{push}$  & $: \alpha\with\nu\to\alpha$ \\
+    $\func{pop}$   & $: \alpha\to\alpha\with\nu$ \\
 \end{tabular} \\
 Можно попробовать сказать это так: $\mathtt{stack} =
-    \alpha \with (\alpha\with\nu\to\alpha) \with (\alpha\to\alpha\with\nu)$.
-Но проблема в том, что у нас есть только интерфейс стека, а не его реализация. Поэтому лучше будет сказать так:
+    \alpha \with (\alpha\with\nu\to\alpha) \with (\alpha\to\alpha\with\nu)$, где вместо $\alpha$ будет записан тип написанного нами стека.
+Однако, проблема в том, что мы можем захотеть скрыть полный тип $\alpha$, так как в нём будут быть описаны детали реализации.
+Нам хотелось бы дать только интерфейс стека, без его реализации. Это можно сказать так:
     $\exists \alpha . \alpha \with (\alpha\with\nu\to\alpha) \with (\alpha\to\alpha\with\nu)$.
-То есть существует какое-то $\alpha$, реазизовывающее требуемый интерфейс.
-\todo 
-
-\ 
+То есть существует какое-то $\alpha$, реализующее требуемый интерфейс.
 
 По аналогии с правилом удаления квантора существования, можно определить правила вывода для выражений экзистенциальных типов:
 \[
@@ -32,7 +30,7 @@
     \abstype{\alpha}{x : \varphi}{M}{N}:\psi =
         M \psi (\Lambda \alpha . \lambda x ^ \varphi . N)
 \end{gather*}
-Можно показать, что $\abstype{\alpha}{x:\varphi}{(\pack{M,\theta}{\exists\alpha .\varphi})}{N}$
+Покажем, что $\abstype{\alpha}{x:\varphi}{(\pack{M,\theta}{\exists\alpha .\varphi})}{N}$
         редуцируется в $N[\alpha\coloneqq\theta][x\coloneqq M]$:
 \begin{align*}
     \abstype{\alpha}{x:\varphi}{(\pack{M,\theta}{\exists\alpha .\varphi})}{N}

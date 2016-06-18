@@ -70,7 +70,7 @@
     \varsigma &::= \forall \overline\alpha[C] . \tau
 \end{align*}
 \end{bnf}%
-где $x \preceq \tau$ означает, что $x$ "--- экземпляр $\tau$, а $\varsigma$ "--- типовая схема.
+где $x \preceq \tau$ означает, что $\tau$ "--- подтип $x$, а $\varsigma$ "--- типовая схема.
 
 Сам алгоритм:
 \begin{align*}
@@ -86,7 +86,7 @@
 \\ \todo
 
 \subsection{\texorpdfstring{Рекурсивные типы}{Recursive types}}
-Допустим, мы хотим представить список. Все знают, что список это 
+Допустим, мы хотим представить список. Все знают, что список это
 \begin{minted}{Haskell}
 data List a = Nil | Cons a (List a)
 \end{minted}
@@ -116,8 +116,8 @@ data List a = Nil | Cons a (List a)
 Будем считать типы $\mu \alpha . T$ и $T[\alpha \coloneqq \mu \alpha.T]$ изоморфными.
 Введём две операции:
 \begin{align*}
-    \comb{fold}   &: T[\alpha \coloneqq \mu \alpha.T] \to \mu \alpha . T \\
-    \comb{unfold} &: \mu \alpha . T \to T[\alpha \coloneqq \mu \alpha.T]
+    \func{fold}   &: T[\alpha \coloneqq \mu \alpha.T] \to \mu \alpha . T \\
+    \func{unfold} &: \mu \alpha . T \to T[\alpha \coloneqq \mu \alpha.T]
 \end{align*}
 Разница в том, что изорекурсивные типы нужно сворачивать и разворачивать вручную, мы не считаем их равными.
 

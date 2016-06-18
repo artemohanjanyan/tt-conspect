@@ -8,7 +8,7 @@ $(\lambda x . x x) A \to_\beta (\lambda x . x x) A' \to_\beta A' A'$
 С другой стороны, реальный мир на самом деле не таков, в нём есть побочные эффекты.
 % A(b(), unique_ptr<C>(new C))
 
-\subsection{\texorpdfstring{Комбинаторы и логика}{Combinators and logic}}
+\subsection{\texorpdfstring{Комбинаторная логика}{Combinatory logic}}
 
 Историческая справка. Известные нам комбинаторы $\comb S$ и $\comb K$ придумал Моисей Шейнфинкель,
 ещё до Карри с его $\lambda$-исчислением.
@@ -28,13 +28,11 @@ $(\lambda x . x x) A \to_\beta (\lambda x . x x) A' \to_\beta A' A'$
 С помощью каждой из этих двух систем можно выразить любое $\lambda$-выражение без свободных переменных.
 Пусть
 \[
-\begin{bnf}
-    \Lambda_{SK} ::= S | K | I | x
-\end{bnf}
+    \Lambda_{\comb{SK}} ::= x \mid \comb S \mid \comb K \mid \comb I \mid (\Lambda_{\comb{SK}} \Lambda_{\comb{SK}})
 \]
 
 \begin{proof}[Докажем \ref{SK-basis}] \newcommand{\opop}{\operatorname}
-    Определим $\opop T : \Lambda \to \Lambda_{SK}$:
+    Определим $\opop T : \Lambda \to \Lambda_{\comb{SK}}$:
     \begin{align*}
         \opop T[x]                         &= x \\
         \opop T[A B]                       &= \opop{T}[A]\opop{T}[B]  \\
@@ -48,9 +46,9 @@ $(\lambda x . x x) A \to_\beta (\lambda x . x x) A' \to_\beta A' A'$
     Можно проверить, что $\opop T[A] =_\beta A$.
 \end{proof}
 
-Например, $\overline 4$, преобразованная приведённым алгоритмом, будет выглядеть так:
+Например, $\overline 4$ после преобразования приведённым алгоритмом, очевидно, будет выглядеть так:
 \[
-    \overline 4 = \comb S \left(\comb S \left(\comb K \comb S\right) \left(\comb S \left(\comb K \comb K\right) \comb I\right)\right) \left(\comb S \left(\comb S \left(\comb K \comb S\right) \left(\comb S \left(\comb K \comb K\right) \comb I\right)\right) \left(\comb S \left(\comb S \left(\comb K \comb S\right) \left(\comb S \left(\comb K \comb K\right) \comb I\right)\right) \left(\comb S \left(\comb S \left(\comb K \comb S\right) \left(\comb S \left(\comb K \comb K\right) \comb I\right)\right) \left(\comb K \comb I\right)\right)\right)\right)
+    \overline 4 =_\beta \comb S (\comb S (\comb K \comb S) (\comb S (\comb K \comb K) \comb I)) (\comb S (\comb S (\comb K \comb S) (\comb S (\comb K \comb K) \comb I)) (\comb S (\comb S (\comb K \comb S) (\comb S (\comb K \comb K) \comb I)) (\comb S (\comb S (\comb K \comb S) (\comb S (\comb K \comb K) \comb I)) (\comb K \comb I))))
 \]
 
 Для доказательства аналогичной теоремы для базиса $\comb{BCKW}$ достаточно выразить через них комбинаторы $\comb S$ и $\comb K$:

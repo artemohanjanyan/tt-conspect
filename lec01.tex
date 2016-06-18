@@ -115,9 +115,9 @@ $\beta$-редукция это вычисление функции, подст�
 \subsection{\texorpdfstring{Числа Чёрча}{Church numerals}}
 \epigraph{Хотите знать, что такое истина?}{Д.Г.}
 
-\newcommand{\T}{\comb{T}}
-\newcommand{\F}{\comb{F}}
-\newcommand{\Not}{\comb{Not}}
+\newcommand{\T}{\func{T}}
+\newcommand{\F}{\func{F}}
+\newcommand{\Not}{\func{Not}}
 \begin{gather*}
     \T   = \lambda{}x\lambda{}y.x \qquad
     \F   = \lambda{}x\lambda{}y.y \\
@@ -139,13 +139,13 @@ $\beta$-редукция это вычисление функции, подст�
 
 Можно продолжить:
 \[
-    \comb{And} = \lambda{}a.\lambda{}b.ab\F \qquad
-    \comb{Or}  = \lambda{}a.\lambda{}b.a\T b
+    \func{And} = \lambda{}a.\lambda{}b.ab\F \qquad
+    \func{Or}  = \lambda{}a.\lambda{}b.a\T b
 \]
-Разберём $\comb{And}$. Он принимает два аргумента.
-Если первый аргумент это истина, то тогда результат $\comb{And}$ равен второму аргументу.
-Если первый аргумент это ложь, то тогда результат $\comb{And}$ это ложь, и от второго аргумента не зависит.
-Это и записано в выражении. $\comb{Or}$ разбирается аналогично.
+Разберём $\func{And}$. Он принимает два аргумента.
+Если первый аргумент это истина, то тогда результат $\func{And}$ равен второму аргументу.
+Если первый аргумент это ложь, то тогда результат $\func{And}$ это ложь, и от второго аргумента не зависит.
+Это и записано в выражении. $\func{Or}$ разбирается аналогично.
 
 Попробуем определить числа:
 \begin{definition}[чёрчевский нумерал]
@@ -188,23 +188,23 @@ $\beta$-редукция это вычисление функции, подст�
 
 Арифметические операции:
 \begin{align*}
-    \comb{IsZero} &= \lambda{}n.n\mathinner{(\lambda{}x.\F)}\T &\qquad
-    \comb{Add}    &= \lambda{}a.\lambda{}b.\lambda{}f.\lambda{}x.a \mathinner{f} (b \mathinner{f} x) &\qquad
-    \comb{Pow}    &= \lambda{}a.\lambda{}b.b \mathinner{(\comb{Mul} a)} \mathinner{\overline{1}} \\
-    \comb{IsEven} &= \lambda{}n.n \Not \T &\qquad
-    \comb{Mul}    &= \lambda{}a.\lambda{}b.a \mathinner{(\comb{Add} b)} \mathinner{\overline{0}} &\qquad
-    \comb{Pow'}   &= \lambda{}a.\lambda{}b.b a
+    \func{IsZero} &= \lambda{}n.n\mathinner{(\lambda{}x.\F)}\T &\qquad
+    \func{Add}    &= \lambda{}a.\lambda{}b.\lambda{}f.\lambda{}x.a \mathinner{f} (b \mathinner{f} x) &\qquad
+    \func{Pow}    &= \lambda{}a.\lambda{}b.b \mathinner{(\func{Mul} a)} \mathinner{\overline{1}} \\
+    \func{IsEven} &= \lambda{}n.n \Not \T &\qquad
+    \func{Mul}    &= \lambda{}a.\lambda{}b.a \mathinner{(\func{Add} b)} \mathinner{\overline{0}} &\qquad
+    \func{Pow'}   &= \lambda{}a.\lambda{}b.b a
 \end{align*}
 Для того, чтобы определить $(-1)$, сначала определим "<пару">:
 \[
     \left<a,b\right> = \lambda f.f \mathinner{a} b \qquad
-    \comb{First} = \lambda p . p \T \qquad
-    \comb{Second} = \lambda p . p \F
+    \func{First} = \lambda p . p \T \qquad
+    \func{Second} = \lambda p . p \F
 \]%
 Затем $n$ раз применим функцию $f\left(\left<a,b\right>\right) = \left<b,b+1\right>$ и возьмём первый элемент пары:
 \[
-    (-1) = \lambda n . \comb{First}
-        (n \mathinner{(\lambda p . \left<\left(\comb{Second} p\right), \mathinner{(+1)} (\comb{Second} p)\right>)}
+    (-1) = \lambda n . \func{First}
+        (n \mathinner{(\lambda p . \left<\left(\func{Second} p\right), \mathinner{(+1)} (\func{Second} p)\right>)}
         \langle\overline{0},\overline{0}\rangle)
 \]
 
@@ -259,21 +259,21 @@ $\combl\Omega$ не имеет нормальной формы.
 \end{proof}
 
 Таким образом, с помощью $\comb Y$-комбинатора можно определять рекурсивные функции.
-\begin{example} Определим факториал $\comb{Fact}$ с помощью вспомогательной функции $\comb{Fact'}$.
+\begin{example} Определим факториал $\func{Fact}$ с помощью вспомогательной функции $\func{Fact'}$.
 \begin{align*}
-    \comb{Fact'} &= \lambda{} f n . \comb{IsZero} n \mathinner{\overline{1}}
-                    (\comb{Mul} n \mathinner{(f \mathinner{(\mathinner{(-1)} n))}}) \\
-    \comb{Fact} &= \comb Y \comb{Fact'} \\
-    \comb{Fact} \overline 3 &=_\beta \comb Y \comb{Fact'} \overline 3 =_\beta \comb{Fact'} \mathinner{(\comb Y \comb{Fact'})} \overline 3
-                \\&=_\beta \comb{IsZero} \overline 3 \mathinner{\overline{1}}
-                    (\comb{Mul} \overline 3 \mathinner{(\comb Y \comb{Fact'} \mathinner{(\mathinner{(-1)} \overline 3)})})
-                =_\beta \comb{Mul} \overline 3 \mathinner{(\comb Y \comb{Fact'} \mathinner{(\mathinner{(-1)} \overline 3)})}
-                =_\beta \comb{Mul} \overline 3 \mathinner{(\comb Y \comb{Fact'} \overline 2)} \\&=_\beta \ldots
-                =_\beta \comb{Mul} \overline 3 \mathinner{(\comb{Mul} \overline 2 \mathinner{(\comb Y \comb{Fact'} \overline 1)})}
-                =_\beta \ldots =_\beta \comb{Mul} \overline 3 \mathinner{(\comb{Mul} \overline 2 \mathinner{(
-                    \comb{Mul} \overline 1 \mathinner{(\comb Y \comb{Fact'} \overline 0)})})} =_\beta \ldots \\
-                &=_\beta \comb{Mul} \overline 3 \mathinner{(\comb{Mul} \overline 2 \mathinner{( 
-                    \comb{Mul} \mathinner{\overline 1} \overline 1)})}
+    \func{Fact'} &= \lambda{} f n . \func{IsZero} n \mathinner{\overline{1}}
+                    (\func{Mul} n \mathinner{(f \mathinner{(\mathinner{(-1)} n))}}) \\
+    \func{Fact} &= \func Y \func{Fact'} \\
+    \func{Fact} \overline 3 &=_\beta \comb Y \func{Fact'} \overline 3 =_\beta \func{Fact'} \mathinner{(\comb Y \func{Fact'})} \overline 3
+                \\&=_\beta \func{IsZero} \overline 3 \mathinner{\overline{1}}
+                    (\func{Mul} \overline 3 \mathinner{(\comb Y \func{Fact'} \mathinner{(\mathinner{(-1)} \overline 3)})})
+                =_\beta \func{Mul} \overline 3 \mathinner{(\comb Y \func{Fact'} \mathinner{(\mathinner{(-1)} \overline 3)})}
+                =_\beta \func{Mul} \overline 3 \mathinner{(\comb Y \func{Fact'} \overline 2)} \\&=_\beta \ldots
+                =_\beta \func{Mul} \overline 3 \mathinner{(\func{Mul} \overline 2 \mathinner{(\comb Y \func{Fact'} \overline 1)})}
+                =_\beta \ldots =_\beta \func{Mul} \overline 3 \mathinner{(\func{Mul} \overline 2 \mathinner{(
+                    \func{Mul} \overline 1 \mathinner{(\comb Y \func{Fact'} \overline 0)})})} =_\beta \ldots \\
+                &=_\beta \func{Mul} \overline 3 \mathinner{(\func{Mul} \overline 2 \mathinner{(
+                    \func{Mul} \mathinner{\overline 1} \overline 1)})}
                 =_\beta \overline 6
 \end{align*}
 \end{example}
