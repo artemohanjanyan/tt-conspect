@@ -1,7 +1,7 @@
 \subsection{\texorpdfstring{Исчисление по Карри}{Curry-style}}
 
 \begin{definition}[тип]
-    $T = \{\alpha, \beta, \gamma, \ldots\}$ "--- множество типов.
+    $T = \{\alpha, \beta, \gamma \ldots\}$ "--- множество типов.
     $\sigma$, $\tau$ "--- метапеременные для типов.
     Если $\sigma$, $\tau$ "--- типы, то $\sigma \to \tau$ "--- тип.
     \begin{bnf}
@@ -119,7 +119,7 @@
 
 \subsection{\texorpdfstring{Исчисление по Чёрчу}{Church-style}}
 
-\begin{definition}[типизация по Чёрчу]
+\begin{definition}[типизация по Чёрчу] Расширим грамматику:
     \begin{bnf}
     \[
         \Lambda_{\xx} ::= x | \lambda x^{\sigma}.\Lambda_{\xx} | (\Lambda_{\xx}) | \Lambda_{\xx} \Lambda_{\xx}
@@ -198,7 +198,7 @@
 $\pi_1$ и $\pi_2$ это функции для доступа к элементам пары, левая и правая проекции.
 Например, $\pi_2 \pair{\overline 7,\overline 5} =_\beta \overline 5$.
 
-Второй "--- алгебраический тип данных. Пусть $T : \sigma\vee\tau$, $L : \sigma\to\pi$, $R : \tau\to\pi$. Тогда
+Второй "--- алгебраический тип данных. Пусть $T : \sigma\vee\tau$, $L : \sigma\to\pi$, $R : \tau\to\pi$. Тогда:
 \[
     \case{T}{L}{R} : \pi \qquad \inj_1 : \sigma\to\sigma\vee\tau \qquad \inj_2 : \tau\to\sigma\vee\tau
 \]
@@ -247,7 +247,7 @@ $\inj_1$ и $\inj_2$ "--- это левая и правая инъекции.
     $\infer{\Gamma \vdash \case{T}{A}{B} : \pi}{\Gamma \vdash T : \varphi \vee \psi &&
         \Gamma \vdash A : \varphi \to \pi && \Gamma \vdash B : \psi \to \pi}$ \\ \bottomrule
 \end{tabular}
-\caption{Соответствие правил вывода}
+\caption{Соответствие правил вывода.}
 \label{correspondence-table}
 \end{table}
 
@@ -255,12 +255,12 @@ $\inj_1$ и $\inj_2$ "--- это левая и правая инъекции.
 \centering
 \begin{tabular}{Sl Sl} \toprule
     Интуиционистская логика & $\lambda$-исчисление \\ \midrule
-    выражение & тип \\
-    доказательство & терм (программа) \\
-    предположение & свободная переменная \\
-    импликация & абстракция (функция) \\ \bottomrule
+    Выражение & Тип \\
+    Доказательство & Терм (программа) \\
+    Предположение & Свободная переменная \\
+    Импликация & Абстракция (функция) \\ \bottomrule
 \end{tabular}
-\caption{Соответствие сущностей}
+\caption{Соответствие сущностей.}
 \label{correspondence-terms-table}
 \end{table}
 
@@ -273,14 +273,14 @@ $\inj_1$ и $\inj_2$ "--- это левая и правая инъекции.
 \end{theorem}
 
 %% долг с предыдущей лекции
-\begin{proof}
+\begin{proof}~
 \begin{enumerate}
     \item Индукция по выводу $\Delta \vdash_\xx M : \sigma$. Заменяем каждое правило в выводе соответствующим правилом из ИИВ и получаем доказательство $\abs\Delta \vdash \sigma$.
 
     \item Индукция по структуре вывода $\Gamma \vdash \sigma$. Пусть $\Gamma = \{\sigma_{1}, \sigma_{2} \ldots\}$,
-        $\Delta = \{x_{1}:\sigma_{1}, x_{2}:\sigma_{2}, \ldots \}$.
+        $\Delta = \{x_{1}:\sigma_{1}, x_{2}:\sigma_{2} \ldots \}$.
     \begin{enumerate}[label=(\asbuk*)]
-        \item Вывод имеет вид
+        \item Вывод имеет вид:
         \[
             \infer{\Gamma, \varphi \vdash \varphi}{}
         \]
@@ -289,7 +289,7 @@ $\inj_1$ и $\inj_2$ "--- это левая и правая инъекции.
             \item Если $\varphi \notin \Gamma$, то $\infer{\Delta, x : \varphi \vdash x : \varphi}{}$.
         \end{enumerate}
 
-        \item Вывод заканчивается правилом
+        \item Вывод заканчивается правилом:
         \[
             \infer{\Gamma \vdash \psi}{\Gamma \vdash \varphi \to \psi && \Gamma \vdash \varphi}
         \]
@@ -298,7 +298,7 @@ $\inj_1$ и $\inj_2$ "--- это левая и правая инъекции.
             \infer{\Delta \vdash MN : \psi}{\Delta \vdash A : \varphi \to \psi && \Delta \vdash B : \varphi}
         \]
 
-        \item Вывод заканчивается правилом
+        \item Вывод заканчивается правилом:
         \[
             \infer{\Gamma \vdash \varphi \to \psi}{\Gamma,\varphi \vdash \psi}
         \]
@@ -309,7 +309,7 @@ $\inj_1$ и $\inj_2$ "--- это левая и правая инъекции.
 
             \item Пусть $\varphi \notin \Gamma$. Тогда по индукционному предположению $\Delta, x : \varphi \vdash M : \psi$.
         \end{enumerate}
-        Тогда
+        Тогда:
         \[
             \infer{\Delta \vdash \lambda x^\varphi . M : \varphi \to \psi}{\Delta, x : \varphi \vdash M : \psi}
             \qedhere

@@ -86,11 +86,16 @@ $\lambda{}x.A$ связывает все свободные вхождения $
 \end{example}
 
 \begin{definition}
-    Множество $\lambda$-термов $\boldsymbol{\Lambda}$ назовём множеством классов эквивалентности $\Lambda$ по $(=_{\alpha})$.
+    Множество $\lambda$-термов $\boldsymbol{\Lambda}$ назовём множеством классов эквивалентности $\Lambda$ по $(=_{\alpha})\footnotemark$.
 \end{definition}
+\footnotetext
+{Если $\circ$ "--- двухместный оператор, то $\left(\circ\right)$ "--- это обозначение функции $\left(\circ\right) a b = a \circ b$.
+$\left(a \operatorname{\circ}\right)$ и $\left(\operatorname\circ b\right)$ это "<сечения"> оператора, передача ему одного из аргументов.
+Например, $\left(\operatorname\div 3\right)$ "--- это функция деления на три,
+а $\left(2^\wedge\right)$ "--- это функция возведения двойки в степень.}
 
 \begin{definition}[$\beta$-редукция]
-    $A\to_{\beta}B$ (состоят в отношении $\beta$-редукции), если выполняется одно из условий:
+    $A\to_{\beta}B$ ($A$ и $B$ состоят в отношении $\beta$-редукции), если выполняется одно из условий:
     \begin{enumerate}
         \item $A\equiv{}PQ$, $B\equiv{}RS$ и либо $P\to_{\beta}R$ и $Q=_{\alpha}S$,
             либо $P=_{\alpha}R$ и $Q\to_{\beta}S$.
@@ -101,10 +106,10 @@ $\lambda{}x.A$ связывает все свободные вхождения $
 
 $\beta$-редукция "--- это вычисление функции, подстановка её аргумента.
 
-\begin{example} $(\lambda x . x y) a \to_\beta a y$
+\begin{example} $(\lambda x . x y) a \to_\beta a y$.
 \end{example}
 
-Будем обозначать транзитивно-рефлексивное замыкание $\to_\beta$ как $\twoheadrightarrow_{\beta}$
+Будем обозначать транзитивно-рефлексивное замыкание $\left(\to_\beta\right)$ как $\left(\twoheadrightarrow_{\beta}\right)$
 и называть его $\beta$-редуцируемостью.
 Также для удобства введём сокращение записи:
 \[
@@ -161,7 +166,7 @@ $\beta$-редукция "--- это вычисление функции, под
 
 \begin{example}
 \[
-    \overline{3} = \lambda f . \lambda x . f (f (f x))
+    \overline{3} = \lambda f . \lambda x . f \left(f \left(f x\right)\right)
 \]
 \end{example}
 

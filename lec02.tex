@@ -151,7 +151,7 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
     \node at (2, 0) (B)  {$a$};
 
     \path (A) edge [loop left] node[auto] {$\reduction{\combl\Omega}$} ()
-              edge             node[auto] {$\reduction{\comb K}$}      (B);
+              edge [->>]       node[auto] {$\reduction{\comb K}$}      (B);
 \end{tikzpicture}
 \caption{Редукция $\Omega$ обращает выражение в себя.}
 \label{infred}
@@ -171,7 +171,7 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
 \begin{definition}[аппликативный порядок редукции]
     Редукция самого левого $\beta$-редекса из самых вложенных.
 \end{definition}
-Ещё это называют "<энергичными вычислениями">.
+Такой порядок редукции ещё называют "<энергичными вычислениями">.
 
 \begin{statement}
     Если нормальная форма существует, она может быть достигнута нормальным порядком редукции.
@@ -179,16 +179,20 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
 
 \subsection{\texorpdfstring{Парадокс Карри}{Curry's paradox}}
 
-Попробуем построить логику на основе $\lambda$-исчисления.
-Введём комбнатор-импликацию, обозначим $(\supset)$. Введём M.P. и правила:
+Попробуем наивно построить логику на основе $\lambda$-исчисления.
+Введём комбнатор-импликацию, обозначим $(\supset)$.
+Довольно естественно требовать он нашего исчисления M.P. и следующие схемы аксиом:
 \begin{enumerate}
     \item $A \supset A$
     \item $(A \supset (A \supset B)) \supset (A \supset B)$
     \item $A =_{\beta} B$, тогда $A \supset B$
 \end{enumerate}
 
+Не смотря на кажущуюся простоту, данная логика уже противоречива.
 Покажем, как в полученной логике можно доказать любое утверждение.
-Введём обозначение: $\comb Y_{\supset a} \equiv \comb Y (\lambda t . t \supset a) =_{\beta} \comb Y (\lambda t . t \supset a) \supset a$.
+Введём обозначение: $\comb Y_{\supset a} \equiv \comb Y (\lambda t . t \supset a)
+=_\beta (\lambda t . t \supset a) (\comb Y (\lambda t . t \supset a))
+=_{\beta} \comb Y (\lambda t . t \supset a) \supset a$.
 
 \begin{tabular}{lll}
     1) & $\comb Y_{\supset a} \supset \comb Y_{\supset a}$ & (схема аксиом) \\
@@ -200,7 +204,7 @@ $\comb I$ выражается через $\comb S$ и $\comb K$: $\comb I = \co
     7) & $a$ & (M.P.)
 \end{tabular}
 
-Получается, что данная логика противоречива. Показать это нам дал возможность тот факт,
+Сделать это нам дал возможность тот факт,
 что в нашей логике с помощью $\comb Y$-комбинатора мы можем ссылаться в утверждении на само себя.
 Аналогично можно прийти к парадоксальному выводу из высказывания "<если это утверждение верно, то русалки существуют"> на нашем мета-языке.
 
