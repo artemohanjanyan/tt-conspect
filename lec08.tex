@@ -141,10 +141,10 @@ $\mintinline{C}{[]}: * \to \mathtt{int} \to *$ это $\lambda P \underline \ome
 row sep=3em, column sep=3em,
 text height=1.5ex,
 text depth=0.25ex]{
-            & \lambda\omega             &              & \lambda P \omega             \\
-\lambda 2   &                           & \lambda P 2                                \\
-            & \lambda\underline{\omega} &              & \lambda P \underline{\omega} \\
-\lambda{\to}&                           & \lambda P  \\
+\phantom{\lambda P \underline{\omega}} & \lambda\omega & \phantom{\lambda P \underline{\omega}} & \lambda P \omega             \\
+\lambda 2   &   \phantom{\lambda P \underline{\omega}} & \lambda P 2                                                           \\
+            & \lambda\underline{\omega}                &                                        & \lambda P \underline{\omega} \\
+\lambda{\to}&                                          & \lambda P                                                             \\
 };
 \path[-{Latex[length=2.5mm, width=1.5mm]}]
 (m-1-2) edge (m-1-4)
