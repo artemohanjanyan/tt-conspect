@@ -76,11 +76,11 @@
     \varsigma &::= \forall \overline\alpha[C] . \tau
 \end{align*}
 \end{bnf}%
-где $x \preceq \tau$ означает, что $\tau$ "--- подтип $x$, а $\varsigma$ "--- типовая схема.
+где $x \preceq \tau$ означает, что $\tau$ "--- подтип типовой схемы переменной $x$, а $\varsigma$ "--- типовая схема.
 
 Сам алгоритм:
 \begin{align*}
-    \restr{x : \tau} \ &=\  x = \tau \\
+    \restr{x : \tau} \ &=\  x \preceq \tau \\
     \restr{\lambda x . e : \tau} \ &=\ 
         \exists \alpha_1 \alpha_2 . (\deff{x : \alpha_1}{\restr{e:\alpha_2}} \land \alpha_1\to\alpha_2=\tau) \\
     \restr{e_1 e_2 : \tau} \ &=\ 
