@@ -1,6 +1,6 @@
 all: build/main.pdf
 
-build/main.pdf: main.tex
+build/main.pdf: main.tex lec*.tex
 	mkdir -p build
 	rubber --pdf --warn all --unsafe --into build main.tex
 
