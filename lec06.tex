@@ -105,18 +105,19 @@ $\forall\alpha.\alpha\to\alpha$ "--- политип, $\forall\alpha.\alpha\to\fo
     \Lambda ::= x | \lambda x . \Lambda | \Lambda \Lambda | (\Lambda) | \lett{x=\Lambda}{\Lambda}
 \]
 \end{bnf}%
+Будем обозначать контекст $\Gamma$ без типа $x$ как $\Gamma_x$.
 Правила вывода:
 \inferspacing
 \begin{gather*}
-    \infer[\text{(Тавтология)}]{\Gamma, x : \sigma \vdash x : \sigma}{} \qquad
+    \infer[\text{(Тавтология, $x : \sigma \in \Gamma$)}]{\Gamma \vdash x : \sigma}{} \qquad
     \infer[\text{(Уточнение, $\sigma'$ "--- подтип $\sigma$)}]{\Gamma \vdash e : \sigma'}{\Gamma \vdash e : \sigma} \\
     \infer[\text{(Обобщение, $\alpha\notin\FV(\Gamma)$)}]{\Gamma \vdash e : \forall \alpha . \sigma}{\Gamma \vdash e : \sigma} \qquad
-    \infer[\text{(Абстракция)}]{\Gamma \vdash \lambda x . e : \sigma \to \tau}{\Gamma, x : \sigma \vdash e : \tau} \\
+    \infer[\text{(Абстракция)}]{\Gamma \vdash \lambda x . e : \tau' \to \tau}{\Gamma_x, x : \tau' \vdash e : \tau} \\
     \infer[\text{(Применение)}]
-        {\Gamma \vdash e e' : \tau}{\Gamma \vdash e : \sigma \to \tau && \Gamma \vdash e' : \sigma} \qquad
+        {\Gamma \vdash e e' : \tau}{\Gamma \vdash e : \tau' \to \tau && \Gamma \vdash e' : \tau'} \qquad
     \infer[\text{(Let)}]
         {\Gamma \vdash \lett{x=e}{e':\tau}}
-        {\Gamma \vdash e : \sigma && \Gamma, x : \sigma \vdash e' : \tau}
+        {\Gamma \vdash e : \sigma && \Gamma_x, x : \sigma \vdash e' : \tau}
 \end{gather*}
 \end{definition}
 
@@ -147,8 +148,7 @@ $\forall\alpha.\alpha\to\alpha$ "--- политип, $\forall\alpha.\alpha\to\fo
 \]
 
 В алгоритме будем пользоваться \hyperref[unificator]{унификацией} ($U(\tau_1, \tau_2)$ "--- унификатор $\tau_1$ и $\tau_2$),
-будем обозначать контекст $\Gamma$ без типа $x$ как $\Gamma_x$
-и определим замыкание всех несвязанных типовых переменных в контексте:
+определим замыкание всех несвязанных типовых переменных в контексте:
 \[
     \overline{\Gamma}(\tau) = \forall \alpha_1 \ldots \forall \alpha_n . \tau
 \]
