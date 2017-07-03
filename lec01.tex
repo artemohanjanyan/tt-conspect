@@ -94,12 +94,15 @@ $\left(a \operatorname{\circ}\right)$ и $\left(\operatorname\circ b\right)$ э�
 Например, $\left(\operatorname\div 3\right)$ "--- это функция деления на три,
 а $\left(2^\wedge\right)$ "--- это функция возведения двойки в степень.}
 
+В дальнейшем мы будем по умолчанию подразумевать возможность $\alpha$-эквивалентности,
+и под выражением из $\Lambda$ будем иметь в виду любое выражение из соответствующего класса из $\boldsymbol\Lambda$.
+
 \begin{definition}[$\beta$-редукция]
     $A\to_{\beta}B$ ($A$ и $B$ состоят в отношении $\beta$-редукции), если выполняется одно из условий:
     \begin{enumerate}
         \item $A\equiv{}PQ$, $B\equiv{}RS$ и либо $P\to_{\beta}R$ и $Q=_{\alpha}S$,
             либо $P=_{\alpha}R$ и $Q\to_{\beta}S$.
-        \item $A\equiv{}\lambda{}x.P$, $B\equiv{}\lambda x.Q$, $P\to_{\beta}Q$ ($x$ из какого-то класса из $\boldsymbol{\Lambda}$).
+        \item $A\equiv{}\lambda{}x.P$, $B\equiv{}\lambda x.Q$, $P\to_{\beta}Q$.
         \item $A\equiv{}(\lambda{}x.P)Q$, $B\equiv{}P [x\coloneqq{}Q]$, $Q$ свободно для подстановки в $P$ вместо $x$.
     \end{enumerate}
 \end{definition}
@@ -107,6 +110,10 @@ $\left(a \operatorname{\circ}\right)$ и $\left(\operatorname\circ b\right)$ э�
 $\beta$-редукция "--- это вычисление функции, подстановка её аргумента.
 
 \begin{example} $(\lambda x . x y) a \to_\beta a y$.
+\end{example}
+
+\begin{example} $(\lambda x.\lambda y.x) y \to_\beta \lambda y' . y$, так как
+    $(\lambda x.\lambda y.x) y =_\alpha (\lambda x.\lambda y'.x) y$.
 \end{example}
 
 Будем обозначать транзитивно-рефлексивное замыкание $\left(\to_\beta\right)$ как $\left(\twoheadrightarrow_{\beta}\right)$
